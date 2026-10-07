@@ -50,7 +50,7 @@ function payuResponseHash(p,salt){
   const hashString=[salt,p.status].join("|")+"||||||"+[p.udf5||"",p.udf4||"",p.udf3||"",p.udf2||"",p.udf1||"",p.email||"",p.firstname||"",p.productinfo||"",p.amount||"",p.txnid||"",p.key||""].join("|");
   return sha512(hashString);
 }
-function publicBaseUrl(req){return (process.env.PUBLIC_URL||(`${req.protocol}://${req.get("host")}`)).replace(/\\/$/,"")}
+function publicBaseUrl(req){return (process.env.PUBLIC_URL||(`${req.protocol}://${req.get("host")}`)).replace(/\/$/,"")}
 function markPayment(txnid,payload){
   const b=bookings.find(x=>x.id===txnid); const o=orders.find(x=>x.id===txnid);
   const target=b||o; if(!target)return false;
@@ -63,7 +63,7 @@ function markPayment(txnid,payload){
 app.post("/api/payu/create",(q,r)=>{
   if(!process.env.PAYU_KEY||!process.env.PAYU_SALT)return r.status(503).json({error:"PayU is not configured. Add PAYU_KEY and PAYU_SALT on the server."});
   const body=q.body||{}, amount=Number(body.amount);
-  const name=String(body.firstname||body.customerName||"").trim(), email=String(body.email||"").trim(), phone=String(body.phone||body.customerPhone||"").replace(/\\D/g,"");
+  const name=String(body.firstname||body.customerName||"").trim(), email=String(body.email||"").trim(), phone=String(body.phone||body.customerPhone||"").replace(/\D/g,"");
   if(!Number.isFinite(amount)||amount<=0||!name||phone.length<10||!email)return r.status(400).json({error:"Valid name, email, phone and amount are required"});
   const txnid=String(body.txnid||body.bookingId||body.orderId||("AS"+Date.now()+Math.random().toString(36).slice(2,7))).replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
   const params={key:process.env.PAYU_KEY,txnid,amount:amount.toFixed(2),productinfo:String(body.productinfo||"Astrological Solutions"),firstname:name,lastname:String(body.lastname||""),email,phone,udf1:String(body.udf1||""),udf2:String(body.udf2||""),udf3:String(body.udf3||""),udf4:String(body.udf4||""),udf5:String(body.udf5||"")};
