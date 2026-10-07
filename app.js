@@ -178,6 +178,12 @@ function initSolarLoader(){
     camera.aspect=W()/H();camera.updateProjectionMatrix();renderer.setSize(W(),H());
     system.scale.setScalar(scale());
   });
+  }catch(e){
+    console.warn("Solar loader fallback",e);
+    clearTimeout(hardStop);
+    loader.classList.add("fallback");
+    setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden";},900);
+  }
 }
 initSolarLoader();
 
