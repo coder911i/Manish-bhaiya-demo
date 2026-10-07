@@ -100,3 +100,18 @@ app.post("/api/payment/verify",(q,r)=>{
   if(ok)markPayment(txnid,payload);
   r.status(ok?200:400).json({verified:ok});
 });
+
+// Vercel/Node serverless entrypoint: export the Express application.
+// The local listener only runs when this file is executed directly.
+app.use((err,req,res,next)=>{
+  console.error("Unhandled request error",err);
+  if(res.headersSent) return next(err);
+  res.status(500).json({error:"Internal server error"});
+});
+
+module.exports=app;
+
+if(require.main===module){
+  const port=process.env.PORT||3000;
+  app.listen(port,()=>console.log("Astrological Solutions running on http://localhost:"+port));
+}
