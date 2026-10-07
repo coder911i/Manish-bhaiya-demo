@@ -108,111 +108,29 @@ function enable3DCardDepth(){
 setTimeout(enable3DCardDepth,600);
 
 function initSolarLoader(){
-  const host=document.getElementById("solar-loader");
-  const loader=document.getElementById("loader");
+  const host=document.getElementById("solar-loader"),loader=document.getElementById("loader");
   if(!host||!loader)return;
-  const hardStop=setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden"},7000);
-  if(!window.THREE){clearTimeout(hardStop);loader.style.opacity="0";loader.style.visibility="hidden";return;}
-  const W=()=>window.innerWidth,H=()=>window.innerHeight;
+  const hardStop=setTimeout(()=>{loader.classList.add("solar-exit");setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden"},900)},7000);
   try{
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(42,W()/H(),.1,220);
-  camera.position.set(0,0,26);
-  const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));
-  renderer.setSize(W(),H()); if("outputColorSpace" in renderer && THREE.SRGBColorSpace) renderer.outputColorSpace=THREE.SRGBColorSpace; else if("outputEncoding" in renderer && THREE.sRGBEncoding) renderer.outputEncoding=THREE.sRGBEncoding;
-  host.innerHTML="";host.appendChild(renderer.domElement);
-
-  const system=new THREE.Group();
-  system.position.set(0,0,0);
-  const scale=()=>W()<600?.62:W()<900?.78:1;
-  system.scale.setScalar(scale());
-  scene.add(system);
-
-  // Procedural 3D sun — geometry/material only, no generated artwork.
-  const sun=new THREE.Mesh(
-    new THREE.SphereGeometry(2.05,64,64),
-    new THREE.MeshStandardMaterial({color:0xffc83d,emissive:0xffa500,emissiveIntensity:1.8,roughness:.42,metalness:.02})
-  ); system.add(sun);
-  const sunGlow=new THREE.Mesh(new THREE.SphereGeometry(2.55,48,48),
-    new THREE.MeshBasicMaterial({color:0xffd45a,transparent:true,opacity:.13,depthWrite:false}));
-  system.add(sunGlow);
-
-  const data=[
-    {r:3.2,s:.27,c:0xb7aa8d,sp:.030},{r:4.3,s:.42,c:0xd2a36d,sp:.023},
-    {r:5.6,s:.52,c:0x6f8b91,sp:.019},{r:7.0,s:.42,c:0xb86f4e,sp:.015},
-    {r:8.8,s:.78,c:0xd1aa69,sp:.010,ring:true},{r:10.5,s:.66,c:0xbaa48c,sp:.007}
-  ];
-  const planets=[];
-  data.forEach((p,i)=>{
-    const orbit=new THREE.Mesh(new THREE.TorusGeometry(p.r,.012,8,192),
-      new THREE.MeshBasicMaterial({color:0xc9ad63,transparent:true,opacity:.24,depthWrite:false}));
-    orbit.rotation.x=Math.PI/2; system.add(orbit);
-    const planet=new THREE.Mesh(new THREE.SphereGeometry(p.s,32,32),
-      new THREE.MeshStandardMaterial({color:p.c,roughness:.72,metalness:.08}));
-    planet.userData={r:p.r,a:i*1.05,sp:p.sp,y:(i-2.5)*.045};
-    system.add(planet);planets.push(planet);
-    if(p.ring){
-      const rings=new THREE.Mesh(new THREE.RingGeometry(.95,1.42,96),
-        new THREE.MeshStandardMaterial({color:0xb99a62,side:THREE.DoubleSide,transparent:true,opacity:.62,roughness:.8}));
-      rings.rotation.x=.42;planet.add(rings);
+    if(window.THREE){
+      const W=()=>Math.max(window.innerWidth,320),H=()=>Math.max(window.innerHeight,500);
+      const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(42,W()/H(),.1,220);
+      camera.position.set(0,0,26);
+      const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
+      renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(W(),H());
+      if("outputColorSpace" in renderer&&THREE.SRGBColorSpace)renderer.outputColorSpace=THREE.SRGBColorSpace;else if("outputEncoding" in renderer&&THREE.sRGBEncoding)renderer.outputEncoding=THREE.sRGBEncoding;
+      renderer.domElement.style.position="absolute";renderer.domElement.style.inset="0";renderer.domElement.style.zIndex="0";host.appendChild(renderer.domElement);
+      const system=new THREE.Group();scene.add(system);
+      const sun=new THREE.Mesh(new THREE.SphereGeometry(2,32,32),new THREE.MeshBasicMaterial({color:0xffc52e}));system.add(sun);
+      const data=[3.2,4.3,5.6,7,8.8,10.5];
+      data.forEach((r,i)=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.014,6,128),new THREE.MeshBasicMaterial({color:0xd6b25e,transparent:true,opacity:.35}));ring.rotation.x=Math.PI/2;system.add(ring);const p=new THREE.Mesh(new THREE.SphereGeometry(.25+i*.07,16,16),new THREE.MeshBasicMaterial({color:[0xb8ae9c,0xd49563,0x78989d,0xbd7352,0xd0aa6d,0xb7a48d][i]}));p.userData={r,a:i,sp:.012+i*.003};system.add(p)});
+      scene.add(new THREE.AmbientLight(0xffffff,.8));
+      const starsGeo=new THREE.BufferGeometry(),pos=[];for(let i=0;i<900;i++){const r=55+Math.random()*60,t=Math.random()*6.28,u=Math.random()*2-1,s=Math.sqrt(1-u*u);pos.push(r*s*Math.cos(t),r*s*Math.sin(t),r*u)}starsGeo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));scene.add(new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0xffe9ad,size:.055,opacity:.7,transparent:true})));
+      function draw(){requestAnimationFrame(draw);system.rotation.y+=.001;system.children.forEach(x=>{if(x.userData.r){x.userData.a+=x.userData.sp;x.position.set(Math.cos(x.userData.a)*x.userData.r,0,Math.sin(x.userData.a)*x.userData.r)}});renderer.render(scene,camera)}draw();
+      addEventListener("resize",()=>{camera.aspect=W()/H();camera.updateProjectionMatrix();renderer.setSize(W(),H())});
     }
-    if(i===2||i===5){
-      const moon=new THREE.Mesh(new THREE.SphereGeometry(.11,16,16),new THREE.MeshStandardMaterial({color:0xc8c0ae,roughness:.9}));
-      moon.userData={parent:planet,rad:p.s+.48,a:i,sp:.035}; system.add(moon);
-      planet.userData.moon=moon;
-    }
-  });
-
-  // Asteroid belt gives the scene physical depth.
-  const belt=new THREE.Mesh(new THREE.TorusGeometry(7.9,.18,10,220),
-    new THREE.MeshBasicMaterial({color:0xb99b5d,transparent:true,opacity:.22}));
-  belt.rotation.x=Math.PI/2;system.add(belt);
-
-  // Deep star field.
-  const starGeo=new THREE.BufferGeometry(),pos=[];
-  for(let i=0;i<2200;i++){const radius=65+Math.random()*80,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);pos.push(radius*Math.sin(ph)*Math.cos(th),radius*Math.sin(ph)*Math.sin(th),radius*Math.cos(ph))}
-  starGeo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
-  const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffedbd,size:.045,transparent:true,opacity:.9}));
-  scene.add(stars);
-
-  scene.add(new THREE.AmbientLight(0xffedc9,.28));
-  const sunLight=new THREE.PointLight(0xffc44b,110,90);scene.add(sunLight);
-
-  let t=0,done=false;
-  function animate(){
-    if(done)return;requestAnimationFrame(animate);t+=.008;
-    sun.rotation.y+=.0035;sunGlow.scale.setScalar(1+Math.sin(t*2.2)*.035);
-    planets.forEach(p=>{
-      p.userData.a+=p.userData.sp;
-      p.position.set(Math.cos(p.userData.a)*p.userData.r,Math.sin(p.userData.a*.65)*p.userData.y,Math.sin(p.userData.a)*p.userData.r);
-      if(p.userData.moon){
-        const m=p.userData.moon;m.userData.a+=m.userData.sp;
-        m.position.set(Math.cos(m.userData.a)*m.userData.rad,0,Math.sin(m.userData.a)*m.userData.rad);
-      }
-    });
-    belt.rotation.z+=.0015;system.rotation.y+=.0007;stars.rotation.y-=.00012;
-    renderer.render(scene,camera);
-  }
-  animate();
-
-  // Every fresh page load starts here. No localStorage/session gate.
-  setTimeout(()=>{
-    loader.classList.add("solar-exit");
-    setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden";done=true;},1100);
-  },4800);
-
-  clearTimeout(hardStop);
-  window.addEventListener("resize",()=>{
-    camera.aspect=W()/H();camera.updateProjectionMatrix();renderer.setSize(W(),H());
-    system.scale.setScalar(scale());
-  });
-  }catch(e){
-    console.warn("Solar loader fallback",e);
-    clearTimeout(hardStop);
-    loader.classList.add("fallback");
-    setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden";},900);
-  }
+  }catch(e){console.warn("3D solar enhancement fallback",e)}
+  setTimeout(()=>{loader.classList.add("solar-exit");setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden";clearTimeout(hardStop)},900)},4800);
 }
 initSolarLoader();
 
