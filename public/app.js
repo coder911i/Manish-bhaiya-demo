@@ -117,19 +117,20 @@ function initSolarLoader(){
       const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(42,W()/H(),.1,220);
       camera.position.set(0,0,26);
       const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
-      renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(W(),H());
+      renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(W(),H());renderer.setClearColor(0x000000,0);
       if("outputColorSpace" in renderer&&THREE.SRGBColorSpace)renderer.outputColorSpace=THREE.SRGBColorSpace;else if("outputEncoding" in renderer&&THREE.sRGBEncoding)renderer.outputEncoding=THREE.sRGBEncoding;
-      renderer.domElement.style.position="absolute";renderer.domElement.style.inset="0";renderer.domElement.style.zIndex="0";host.appendChild(renderer.domElement);
+      renderer.domElement.style.position="absolute";renderer.domElement.style.inset="0";renderer.domElement.style.zIndex="3";renderer.domElement.style.opacity="1";host.appendChild(renderer.domElement);
       const system=new THREE.Group();scene.add(system);
       const sun=new THREE.Mesh(new THREE.SphereGeometry(2,32,32),new THREE.MeshBasicMaterial({color:0xffc52e}));system.add(sun);
       const data=[3.2,4.3,5.6,7,8.8,10.5];
       data.forEach((r,i)=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.014,6,128),new THREE.MeshBasicMaterial({color:0xd6b25e,transparent:true,opacity:.35}));ring.rotation.x=Math.PI/2;system.add(ring);const p=new THREE.Mesh(new THREE.SphereGeometry(.25+i*.07,16,16),new THREE.MeshBasicMaterial({color:[0xb8ae9c,0xd49563,0x78989d,0xbd7352,0xd0aa6d,0xb7a48d][i]}));p.userData={r,a:i,sp:.012+i*.003};system.add(p)});
       scene.add(new THREE.AmbientLight(0xffffff,.8));
       const starsGeo=new THREE.BufferGeometry(),pos=[];for(let i=0;i<900;i++){const r=55+Math.random()*60,t=Math.random()*6.28,u=Math.random()*2-1,s=Math.sqrt(1-u*u);pos.push(r*s*Math.cos(t),r*s*Math.sin(t),r*u)}starsGeo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));scene.add(new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0xffe9ad,size:.055,opacity:.7,transparent:true})));
+      loader.classList.add("webgl-ready");
       function draw(){requestAnimationFrame(draw);system.rotation.y+=.001;system.children.forEach(x=>{if(x.userData.r){x.userData.a+=x.userData.sp;x.position.set(Math.cos(x.userData.a)*x.userData.r,0,Math.sin(x.userData.a)*x.userData.r)}});renderer.render(scene,camera)}draw();
       addEventListener("resize",()=>{camera.aspect=W()/H();camera.updateProjectionMatrix();renderer.setSize(W(),H())});
     }
-  }catch(e){console.warn("3D solar enhancement fallback",e)}
+  }catch(e){loader.classList.remove("webgl-ready");console.warn("3D solar enhancement fallback",e)}
   setTimeout(()=>{loader.classList.add("solar-exit");setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden";clearTimeout(hardStop)},900)},4800);
 }
 initSolarLoader();
