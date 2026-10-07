@@ -1,0 +1,99 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+enum ConsultantType { ASTROLOGER NUMEROLOGIST VASTU }
+enum BookingStatus { PENDING_PAYMENT CONFIRMED COMPLETED CANCELLED }
+enum PaymentStatus { PENDING PAID FAILED REFUNDED }
+enum OrderStatus { PAYMENT_PENDING CONFIRMED PACKED SHIPPED DELIVERED CANCELLED RTO }
+enum Fulfillment { PREPAID COD }
+
+model Consultant {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  type ConsultantType
+  bio String?
+  experienceYears Int @default(0)
+  rating Float @default(0)
+  price Int
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings Booking[]
+}
+
+model Booking {
+  id String @id @default(cuid())
+  customerName String
+  customerPhone String
+  customerEmail String?
+  concern String
+  consultantId String
+  consultant Consultant @relation(fields:[consultantId], references:[id])
+  slot DateTime
+  amount Int
+  paymentStatus PaymentStatus @default(PENDING)
+  status BookingStatus @default(PENDING_PAYMENT)
+  razorpayOrderId String?
+  razorpayPaymentId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([consultantId, slot])
+}
+
+model Product {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  category String
+  description String?
+  price Int
+  compareAt Int?
+  stock Int @default(0)
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items OrderItem[]
+}
+
+model Order {
+  id String @id @default(cuid())
+  customerName String
+  phone String
+  email String?
+  address Json
+  fulfillment Fulfillment
+  subtotal Int
+  discount Int @default(0)
+  shipping Int @default(0)
+  total Int
+  paymentStatus PaymentStatus @default(PENDING)
+  status OrderStatus @default(PAYMENT_PENDING)
+  couponCode String?
+  razorpayOrderId String?
+  razorpayPaymentId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items OrderItem[]
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields:[orderId], references:[id], onDelete:Cascade)
+  productId String
+  product Product @relation(fields:[productId], references:[id])
+  quantity Int
+  unitPrice Int
+}
+
+model Offer {
+  id String @id @default(cuid())
+  code String @unique
+  title String
+  type String
+  value Int
+  active Boolean @default(true)
+  minOrder Int @default(0)
+  createdAt DateTime @default(now())
+}
