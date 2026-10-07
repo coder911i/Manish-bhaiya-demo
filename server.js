@@ -54,9 +54,11 @@ function publicBaseUrl(req){return (process.env.PUBLIC_URL||(`${req.protocol}://
 function markPayment(txnid,payload){
   const b=bookings.find(x=>x.id===txnid); const o=orders.find(x=>x.id===txnid);
   const target=b||o; if(!target)return false;
+  if(target.paymentStatus==="PAID" && payload.status==="success")return true;
   target.paymentStatus=payload.status==="success"?"PAID":"FAILED";
   target.status=payload.status==="success"?(b?"CONFIRMED":"CONFIRMED"):(b?"PENDING_PAYMENT":"PAYMENT_PENDING");
   target.payuTxnId=payload.txnid; target.payuId=payload.mihpayid||null; target.paymentMode=payload.mode||null;
+  if(o&&payload.status==="success"&&Array.isArray(o.items)){o.items.forEach(i=>{const p=products.find(x=>x.id===i.productId);if(p)p.stock=Math.max(0,p.stock-i.quantity)})}
   target.paymentUpdatedAt=new Date().toISOString(); return true;
 }
 
