@@ -30,7 +30,7 @@ model Booking {
   concern String
   consultantId String
   consultant Consultant @relation(fields:[consultantId], references:[id])
-  slot DateTime
+  slot String
   amount Int
   paymentStatus PaymentStatus @default(PENDING)
   status BookingStatus @default(PENDING_PAYMENT)
@@ -72,8 +72,10 @@ model Order {
   paymentStatus PaymentStatus @default(PENDING)
   status OrderStatus @default(PAYMENT_PENDING)
   couponCode String?
-  razorpayOrderId String?
-  razorpayPaymentId String?
+  payuTxnId String?
+  payuId String?
+  paymentMode String?
+  paymentUpdatedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   items OrderItem[]
