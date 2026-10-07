@@ -12,7 +12,36 @@ function openCart(){
   panel.innerHTML='<button class="modal-close" onclick="closeModal()">×</button><div class="eyebrow">YOUR BAG</div><h2>Ready to check out.</h2>'+body+(cart.length?'<div class="checkout-fields"><input id="shopName" placeholder="Full name" autocomplete="name"><input id="shopPhone" placeholder="Mobile number" inputmode="tel" maxlength="10" autocomplete="tel"><input id="shopEmail" placeholder="Email address" type="email" autocomplete="email"><input id="shopAddress" placeholder="Delivery address" autocomplete="street-address"></div><div class="pay-box"><div><span>Prepaid offer</span><strong>Save ₹100</strong></div><button class="pay-btn" onclick="startProductPayU()">Continue with PayU →</button></div>':'');
   modal.classList.add("open");
 }
-function init3D(){const host=document.getElementById("hero-canvas");if(!host||!window.THREE)return;const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(40,host.clientWidth/host.clientHeight,.1,100);camera.position.z=7;const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(host.clientWidth,host.clientHeight);host.appendChild(renderer.domElement);const group=new THREE.Group();scene.add(group);const geo=new THREE.IcosahedronGeometry(2.05,3);const mat=new THREE.MeshPhysicalMaterial({color:0x7254ff,metalness:.45,roughness:.16,transmission:.15,clearcoat:1,clearcoatRoughness:.1,wireframe:false});const orb=new THREE.Mesh(geo,mat);group.add(orb);const ring=new THREE.Mesh(new THREE.TorusGeometry(2.65,.012,16,180),new THREE.MeshBasicMaterial({color:0x9b82ff,transparent:true,opacity:.55}));ring.rotation.x=.65;group.add(ring);const ring2=ring.clone();ring2.rotation.x=1.2;ring2.rotation.y=.6;ring2.scale.setScalar(.86);group.add(ring2);const pts=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({color:0xb9aaff,size:.018,transparent:true,opacity:.7}));const arr=[];for(let i=0;i<900;i++){const r=4.5;arr.push((Math.random()-.5)*r,(Math.random()-.5)*r,(Math.random()-.5)*r)}pts.geometry.setAttribute("position",new THREE.Float32BufferAttribute(arr,3));group.add(pts);const a=new THREE.AmbientLight(0x7777aa,1.8);scene.add(a);const l=new THREE.PointLight(0xa68bff,5,15);l.position.set(3,3,4);scene.add(l);let mx=0,my=0;host.addEventListener("pointermove",e=>{mx=(e.clientX/innerWidth-.5)*.5;my=(e.clientY/innerHeight-.5)*.3});function tick(){requestAnimationFrame(tick);group.rotation.y+=(mx-group.rotation.y)*.03;group.rotation.x+=(my-group.rotation.x)*.03;orb.rotation.x+=.002;orb.rotation.y+=.004;ring.rotation.z+=.003;ring2.rotation.z-=.002;pts.rotation.y-=.0005;renderer.render(scene,camera)}tick();window.addEventListener("resize",()=>{camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight)})}init3D();
+function init3D(){
+  const host=document.getElementById("hero-canvas");
+  if(!host||!window.THREE)return;
+  try{
+    const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(42,Math.max(host.clientWidth,1)/Math.max(host.clientHeight,1),.1,200);
+    camera.position.set(0,2.2,15);
+    const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.8)); renderer.setSize(host.clientWidth,host.clientHeight);
+    if("outputColorSpace" in renderer&&THREE.SRGBColorSpace)renderer.outputColorSpace=THREE.SRGBColorSpace;
+    else if("outputEncoding" in renderer&&THREE.sRGBEncoding)renderer.outputEncoding=THREE.sRGBEncoding;
+    host.innerHTML="";host.appendChild(renderer.domElement);
+    const system=new THREE.Group();scene.add(system);
+    const sun=new THREE.Mesh(new THREE.SphereGeometry(2.0,64,64),new THREE.MeshStandardMaterial({color:0xffc73a,emissive:0xffa300,emissiveIntensity:1.7,roughness:.4}));
+    system.add(sun);
+    system.add(new THREE.Mesh(new THREE.SphereGeometry(2.45,48,48),new THREE.MeshBasicMaterial({color:0xffd65a,transparent:true,opacity:.12,depthWrite:false})));
+    const data=[{r:3.1,s:.24,c:0xb7aa8d,sp:.024},{r:4.2,s:.36,c:0xd2a36d,sp:.019},{r:5.4,s:.46,c:0x718e91,sp:.015},{r:6.8,s:.39,c:0xb86f4e,sp:.012},{r:8.4,s:.7,c:0xd1aa69,sp:.008,ring:true}];
+    const planets=[];
+    data.forEach((p,i)=>{
+      const o=new THREE.Mesh(new THREE.TorusGeometry(p.r,.012,8,180),new THREE.MeshBasicMaterial({color:0xb89438,transparent:true,opacity:.25}));o.rotation.x=Math.PI/2;system.add(o);
+      const m=new THREE.Mesh(new THREE.SphereGeometry(p.s,28,28),new THREE.MeshStandardMaterial({color:p.c,roughness:.72}));m.userData={r:p.r,a:i*1.2,sp:p.sp};system.add(m);planets.push(m);
+      if(p.ring){const rr=new THREE.Mesh(new THREE.RingGeometry(.8,1.2,72),new THREE.MeshStandardMaterial({color:0xb99a62,side:THREE.DoubleSide,transparent:true,opacity:.6}));rr.rotation.x=.5;m.add(rr)}
+    });
+    scene.add(new THREE.AmbientLight(0xffe9bf,.4));const light=new THREE.PointLight(0xffc44b,100,80);scene.add(light);
+    const starsGeo=new THREE.BufferGeometry(),pos=[];for(let i=0;i<1600;i++){const r=45+Math.random()*60,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos.push(r*Math.sin(p)*Math.cos(t),r*Math.sin(p)*Math.sin(t),r*Math.cos(p))}starsGeo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));const stars=new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0x8f7332,size:.045,transparent:true,opacity:.55}));scene.add(stars);
+    let mx=0,my=0;host.addEventListener("pointermove",e=>{const r=host.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5});
+    function tick(){requestAnimationFrame(tick);system.rotation.y+=.001;stars.rotation.y-=.0001;planets.forEach(p=>{p.userData.a+=p.userData.sp;p.position.set(Math.cos(p.userData.a)*p.userData.r,Math.sin(p.userData.a)*.22,Math.sin(p.userData.a)*p.userData.r)});system.rotation.x+=(my*.12-system.rotation.x)*.03;system.rotation.z+=(mx*.08-system.rotation.z)*.03;sun.rotation.y+=.0025;renderer.render(scene,camera)}tick();
+    addEventListener("resize",()=>{camera.aspect=Math.max(host.clientWidth,1)/Math.max(host.clientHeight,1);camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight)});
+  }catch(e){console.warn("3D hero fallback",e)}
+}
+init3D();
 
 // Production-ready demo integration layer
 async function api(path, options={}){const res=await fetch(path,{headers:{"Content-Type":"application/json",...(options.headers||{})},...options});const data=await res.json();if(!res.ok)throw new Error(data.error||"Request failed");return data}
