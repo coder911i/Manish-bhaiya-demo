@@ -218,3 +218,19 @@ body{font-family:"DM Sans",sans-serif}
 #solar-loader canvas{opacity:1!important;z-index:3!important}
 #solar-loader.webgl-ready .solar-fallback{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 @media(max-width:600px){#solar-loader .fallback-orbit{transform:none!important}}
+
+/* DEMO POLISH — instant solar system + authentic editorial imagery */
+#hero-canvas{position:relative;overflow:visible}
+.hero-solar-fallback{position:absolute;left:50%;top:50%;width:min(520px,82vw);height:min(520px,82vw);transform:translate(-50%,-50%);z-index:2;pointer-events:none;filter:drop-shadow(0 30px 70px #8a641e25)}
+.hero-solar-fallback .hero-sun{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px;border-radius:50%;background:radial-gradient(circle at 33% 28%,#fff8bd,#ffd43b 38%,#efad18 67%,#a45d08);box-shadow:0 0 30px #ffd54a,0 0 80px #f6b51e88,0 0 150px #f6b51e33}
+.hero-solar-fallback .hero-orbit{position:absolute;left:50%;top:50%;width:var(--w);height:var(--h);margin:calc(var(--h)/-2) 0 0 calc(var(--w)/-2);border:1px solid #a9863d66;border-radius:50%;transform:rotateX(64deg);animation:heroOrbit var(--speed) linear infinite}
+.hero-solar-fallback .hero-orbit i{position:absolute;left:50%;top:0;width:var(--p);height:var(--p);margin:calc(var(--p)/-2);border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff1c4,#b9894c 48%,#68502d);box-shadow:0 0 12px #cda85c55}
+.ho1{--w:150px;--h:90px;--p:8px;--speed:5s}.ho2{--w:220px;--h:130px;--p:11px;--speed:7s}.ho3{--w:300px;--h:180px;--p:13px;--speed:10s}.ho4{--w:390px;--h:235px;--p:10px;--speed:14s}.ho5{--w:480px;--h:290px;--p:18px;--speed:20s}.ho5 i{background:#c6a36a}
+@keyframes heroOrbit{to{transform:rotateX(64deg) rotateZ(360deg)}}
+.expert-photo:before{content:"";position:absolute;z-index:3;left:50%;top:23%;width:9px;height:22px;transform:translateX(-50%);background:linear-gradient(#c51e19 0 65%,#d99a18 66% 100%);border-radius:55% 55% 45% 45%;filter:drop-shadow(0 2px 3px #0005)}
+.expert-photo{background-position:center top;filter:saturate(.9) contrast(1.02)}
+.product-grid{grid-template-columns:repeat(4,1fr)}
+.product-card .product-img{background-color:#eadfca}
+.product-meta h3{font-family:"DM Sans",sans-serif;font-weight:600;letter-spacing:-.2px}
+@media(max-width:900px){.hero-solar-fallback{width:430px;height:430px}.ho5{--w:390px;--h:235px}}
+@media(max-width:600px){.hero-solar-fallback{width:320px;height:320px}.hero-solar-fallback .hero-sun{width:62px;height:62px;margin:-31px}.ho1{--w:95px;--h:58px}.ho2{--w:145px;--h:88px}.ho3{--w:195px;--h:118px}.ho4{--w:250px;--h:150px}.ho5{--w:305px;--h:185px}.ho5 i{width:14px;height:14px}.hero-visual{height:330px}}
