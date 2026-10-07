@@ -87,7 +87,7 @@ function initSolarLoader(){
   camera.position.set(0,0,26);
   const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));
-  renderer.setSize(W(),H()); renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.setSize(W(),H()); if("outputColorSpace" in renderer && THREE.SRGBColorSpace) renderer.outputColorSpace=THREE.SRGBColorSpace; else if("outputEncoding" in renderer && THREE.sRGBEncoding) renderer.outputEncoding=THREE.sRGBEncoding;
   host.innerHTML="";host.appendChild(renderer.domElement);
 
   const system=new THREE.Group();
