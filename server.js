@@ -155,13 +155,13 @@ app.get("/api/admin/products",adminGuard,(q,r)=>r.json(products.map(adminProduct
 app.post("/api/admin/products",adminGuard,(q,r)=>{
   const v=q.body||{};if(!v.name)return r.status(400).json({error:"Product name is required"});
   const slug=slugify(v.slug||v.name);if(products.some(x=>x.slug===slug))return r.status(409).json({error:"Product slug already exists"});
-  const x={id:"p"+Date.now(),name:String(v.name),slug,category:String(v.category||"General"),description:String(v.description||""),price:Math.max(1,Math.round(Number(v.price||0))),compareAt:Number(v.compareAt||0)||null,stock:Math.max(0,Math.round(Number(v.stock||0))),active:v.active!=="false"&&v.active!==false};
+  const x={id:"p"+Date.now(),name:String(v.name),slug,category:String(v.category||"General"),description:String(v.description||""),price:Math.max(1,Math.round(Number(v.price||0))),compareAt:Number(v.compareAt||0)||null,stock:Math.max(0,Math.round(Number(v.stock||0))),active:v.active!=="false"&&v.active!==false,image:String(v.image||""),badge:String(v.badge||"PREPAID"),variants:Array.isArray(v.variants)?v.variants:String(v.variants||"Standard").split(",").map(s=>s.trim()).filter(Boolean),customOptions:Array.isArray(v.customOptions)?v.customOptions:String(v.customOptions||"Gift wrap").split(",").map(s=>s.trim()).filter(Boolean)};
   products.push(x);r.status(201).json(x);
 });
 app.patch("/api/admin/products/:id",adminGuard,(q,r)=>{
   const x=products.find(v=>v.id===q.params.id);if(!x)return r.status(404).json({error:"Product not found"});
   const slug=slugify(q.body.slug||x.slug);if(products.some(v=>v.id!==x.id&&v.slug===slug))return r.status(409).json({error:"Product slug already exists"});
-  Object.assign(x,{...q.body,id:x.id,slug,price:Math.max(1,Math.round(Number(q.body.price??x.price))),compareAt:Number(q.body.compareAt??x.compareAt)||null,stock:Math.max(0,Math.round(Number(q.body.stock??x.stock))),active:q.body.active==="false"?false:q.body.active===false?false:true});
+  Object.assign(x,{...q.body,id:x.id,slug,price:Math.max(1,Math.round(Number(q.body.price??x.price))),compareAt:Number(q.body.compareAt??x.compareAt)||null,stock:Math.max(0,Math.round(Number(q.body.stock??x.stock))),active:q.body.active==="false"?false:q.body.active===false?false:true,image:String(q.body.image??x.image??""),badge:String(q.body.badge??x.badge??"PREPAID"),variants:Array.isArray(q.body.variants)?q.body.variants:String(q.body.variants??(x.variants||["Standard"])).split(",").map(s=>s.trim()).filter(Boolean),customOptions:Array.isArray(q.body.customOptions)?q.body.customOptions:String(q.body.customOptions??(x.customOptions||[])).split(",").map(s=>s.trim()).filter(Boolean)});
   r.json(x);
 });
 app.delete("/api/admin/products/:id",adminGuard,(q,r)=>{
