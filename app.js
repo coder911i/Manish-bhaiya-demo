@@ -55,8 +55,9 @@ async function startProductPayU(){
     if(!cart.length)return;
     const name=document.getElementById("shopName")?.value.trim(),phone=document.getElementById("shopPhone")?.value.trim(),email=document.getElementById("shopEmail")?.value.trim(),address=document.getElementById("shopAddress")?.value.trim();
     if(!name||phone.length!==10||!email||!address)return alert("Please complete name, 10-digit mobile, email and delivery address.");
-    if(cart.some(x=>!x.id))return alert("Please refresh the collection and add the product again.");
-    const items=cart.map(x=>({productId:x.id,quantity:1}));
+    const catalog=await api("/api/products");
+    const items=cart.map(x=>{const p=catalog.find(v=>v.name===x.name);return {productId:p?.id,quantity:1}});
+    if(items.some(x=>!x.productId))return alert("One product is no longer available. Please refresh the collection.");
     const o=await api("/api/orders",{method:"POST",body:JSON.stringify({customerName:name,phone,email,address:{line1:address,country:"India"},items,fulfillment:"PREPAID"})});
     const p=await api("/api/payu/create",{method:"POST",body:JSON.stringify({orderId:o.id,amount:o.total,productinfo:"Astrological Solutions Store Order",firstname:name,phone,email,udf1:"store",udf2:o.id})});
     submitPayU(p.endpoint,p.params);
