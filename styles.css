@@ -108,3 +108,81 @@ footer{background:#f4edd9;border-color:#e4dbc1}
 
 /* Production checkout */
 .checkout-fields{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}.checkout-fields input{width:100%;padding:13px 14px;border-radius:12px;border:1px solid #29283a;background:#11111a;color:#fff;outline:none}.checkout-fields input:focus{border-color:#8066ff;box-shadow:0 0 0 3px #8066ff18}.pay-btn{width:100%;border:0;border-radius:14px;padding:15px 18px;background:#ffd21a;color:#111;font-weight:800;cursor:pointer;margin-top:12px}.pay-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px #ffd21a33}.cart-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #242331}.cart-item img{width:58px;height:58px;border-radius:10px;object-fit:cover;background:#161620}.cart-item small{display:block;color:#777486;margin-top:4px}@media(max-width:600px){.checkout-fields{gap:8px}.checkout-fields input{font-size:16px}}
+
+/* 2026 PREMIUM 3D REFINEMENT */
+:root{--content-max:1320px}
+body{font-family:"DM Sans",sans-serif}
+.nav{height:86px;padding:0 max(28px,5vw);display:flex;align-items:center;justify-content:space-between}
+.nav-left,.nav-right{display:flex;align-items:center;gap:28px;min-width:260px}
+.nav-right{justify-content:flex-end}
+.brand-center{position:absolute!important;left:50%;top:43px;transform:translate(-50%,-50%);z-index:4;text-align:center;justify-content:center;flex-direction:column;gap:4px;font-size:9px;letter-spacing:2px;line-height:1}
+.brand-center .brand-mark{width:26px;height:26px;margin:auto;font-size:13px}
+.brand-center b{font-size:10px;letter-spacing:2.4px}
+.nav nav{display:flex;gap:25px}
+.nav-extra{color:inherit;text-decoration:none;font-size:13px;opacity:.75}
+.hero,.section,.final-cta{width:min(100%,var(--content-max));margin-inline:auto}
+.hero{min-height:900px;grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr);padding-left:36px;padding-right:36px}
+.hero-copy{max-width:650px}
+.hero h1{font-family:"Playfair Display",serif;font-weight:500}
+.hero-visual{height:640px}
+.hero-visual canvas{filter:drop-shadow(0 35px 55px #7b5c2520)}
+.section{padding-left:36px;padding-right:36px}
+.section-head h2,.how>h2,.final-cta h2{font-family:"Playfair Display",serif}
+.need-card,.expert-card,.product-card,.how-card,.service-depth-grid article{box-shadow:0 18px 50px #7c652016, inset 0 1px #ffffff80}
+.need-card:hover,.expert-card:hover,.product-card:hover,.how-card:hover,.service-depth-grid article:hover{transform:translateY(-8px) perspective(900px) rotateX(1deg);box-shadow:0 35px 90px #735c2526, inset 0 1px #fff}
+.need-card,.expert-card,.product-card,.how-card,.service-depth-grid article{backface-visibility:hidden}
+.cosmic-intro{display:grid;grid-template-columns:1.15fr .85fr;gap:70px;align-items:center;padding-top:100px;padding-bottom:110px}
+.cosmic-copy h2{font:500 clamp(42px,5vw,70px)/1.03 "Playfair Display",serif;letter-spacing:-2px;margin:16px 0 25px}
+.cosmic-copy p{max-width:680px;color:var(--muted);line-height:1.85;font-size:15px}
+.cosmic-points{display:flex;gap:22px;flex-wrap:wrap;margin-top:32px}
+.cosmic-points span{font-size:11px;color:#756b5b}.cosmic-points b{color:var(--gold);margin-right:7px}
+.cosmic-stage{min-height:420px;display:grid;place-items:center;position:relative;border:1px solid var(--line);border-radius:34px;background:radial-gradient(circle,#fffdf6,#efe4c9);overflow:hidden;box-shadow:inset 0 1px #fff,0 30px 80px #80672a15}
+.cosmic-stage>span{position:absolute;bottom:24px;left:26px;font-size:9px;letter-spacing:2px;color:#88795b;line-height:1.7}.cosmic-stage>span b{color:#9c730c}
+.mini-solar{width:280px;height:280px;position:relative;transform-style:preserve-3d;animation:solarFloat 8s ease-in-out infinite}
+.mini-solar .sun{position:absolute;width:76px;height:76px;border-radius:50%;left:102px;top:102px;background:radial-gradient(circle at 35% 30%,#fff6b0,#f5c33e 48%,#bd7c0b);box-shadow:0 0 45px #f0b52d88,0 0 100px #f0b52d33}
+.mini-solar .orbit{position:absolute;border:1px solid #b7923b55;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%) rotateX(65deg);animation:orbitSpin 12s linear infinite}
+.mini-solar .o1{width:120px;height:120px}.mini-solar .o2{width:190px;height:190px;animation-duration:17s}.mini-solar .o3{width:260px;height:260px;animation-duration:24s}
+.mini-solar .planet{position:absolute;width:11px;height:11px;border-radius:50%;background:#a98028;left:50%;top:50%;transform-origin:-60px 0;animation:planetSpin 7s linear infinite}
+.mini-solar .p1{animation-duration:7s}.mini-solar .p2{transform-origin:-95px 0;animation-duration:12s;background:#78909a}.mini-solar .p3{transform-origin:-130px 0;animation-duration:18s;background:#c47d54}
+@keyframes solarFloat{50%{transform:translateY(-8px) rotateX(4deg)}}@keyframes orbitSpin{to{transform:translate(-50%,-50%) rotateX(65deg) rotateZ(360deg)}}@keyframes planetSpin{to{transform:rotateZ(360deg)}}
+.service-depth{padding-top:90px;padding-bottom:130px}
+.service-depth-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.service-depth-grid article{position:relative;min-height:280px;padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,#fffdf6,#f0e5cf);transition:.45s;overflow:hidden}
+.service-depth-grid article:after{content:"";position:absolute;width:170px;height:170px;right:-80px;bottom:-90px;border-radius:50%;background:#d8a91e16;filter:blur(4px)}
+.service-depth-grid span{font-size:10px;color:#aa7e0d;letter-spacing:1px}
+.service-depth-grid h3{font:500 29px "Playfair Display",serif;margin:40px 0 12px}
+.service-depth-grid p{font-size:12px;line-height:1.8;color:#786e5e;max-width:330px}
+.service-depth-grid b{display:block;margin-top:20px;font-size:9px;letter-spacing:1px;color:#a1802f}
+#loader{overflow:hidden;background:radial-gradient(circle at center,#2b220d 0%,#100d07 48%,#070604 100%);place-items:center}
+#solar-loader{position:absolute;inset:0;display:grid;place-items:center}
+#solar-loader canvas{width:100%!important;height:100%!important;display:block}
+.loader-overlay{position:relative;z-index:3;pointer-events:none;text-align:center}
+.loader-word{font-family:"DM Sans",sans-serif;font-weight:700;letter-spacing:4px;text-shadow:0 2px 20px #000}
+.loader-sub{font-family:"DM Sans",sans-serif;color:#c7b88e!important;letter-spacing:2.5px!important}
+.solar-fallback{width:260px;height:260px;position:relative;animation:fallbackDrift 6s ease-in-out infinite;transform-style:preserve-3d}
+.fallback-sun{position:absolute;width:62px;height:62px;left:99px;top:99px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7b8,#f4bf2c 48%,#a96706);box-shadow:0 0 35px #ffc83d,0 0 100px #f5b51d66}
+.fallback-orbit{position:absolute;left:50%;top:50%;border:1px solid #d8b44b77;border-radius:50%;transform:translate(-50%,-50%) rotateX(67deg);animation:fallbackOrbit 9s linear infinite}
+.fo1{width:100px;height:100px}.fo2{width:175px;height:175px;animation-duration:14s}.fo3{width:250px;height:250px;animation-duration:20s}
+.fallback-planet{position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;background:#d8c18b;transform-origin:-50px 0;animation:fallbackPlanet 7s linear infinite}
+.fp1{animation-duration:7s}.fp2{transform-origin:-87px 0;animation-duration:11s;background:#8e9b92}.fp3{transform-origin:-125px 0;animation-duration:17s;background:#c98055}.fp4{transform-origin:-100px 0;animation-duration:13s;background:#e0c06a}
+@keyframes fallbackOrbit{to{transform:translate(-50%,-50%) rotateX(67deg) rotateZ(360deg)}}@keyframes fallbackPlanet{to{transform:rotateZ(360deg)}}@keyframes fallbackDrift{50%{transform:scale(1.04) rotateX(4deg)}}
+@media(max-width:900px){
+ .nav{padding:0 18px}.nav-left{min-width:auto}.nav-right{min-width:auto}.nav-right .nav-extra{display:none}
+ .nav nav{display:none}.menu{display:block}.brand-center{top:42px}.brand-center .brand-mark{width:23px;height:23px}
+ .hero{grid-template-columns:1fr;padding:120px 24px 70px;min-height:auto}.hero-visual{height:430px;order:-1}.hero-copy{text-align:center;margin:auto}.hero-copy>p{margin-left:auto;margin-right:auto}
+ .hero-actions{justify-content:center}.hero-trust{justify-content:center}
+ .section{padding-left:24px;padding-right:24px}.cosmic-intro{grid-template-columns:1fr;gap:35px;padding-top:75px}.cosmic-stage{min-height:360px}
+ .service-depth-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+ .nav{height:72px}.brand-center{top:36px;font-size:7px;letter-spacing:1.4px}.brand-center b{font-size:8px;letter-spacing:1.8px}.brand-center .brand-mark{width:22px;height:22px}
+ .hero{padding:105px 18px 60px}.hero h1{font-size:49px;letter-spacing:-2px}.hero-visual{height:300px}.hero-visual canvas{min-height:300px}
+ .floating-chip,.orb-label{font-size:7px}.chip-top{top:8%;right:0}.chip-bottom{bottom:9%;left:0}
+ .section{padding:70px 18px}.cosmic-intro{padding-top:65px}.cosmic-copy h2{font-size:43px}.cosmic-stage{min-height:320px;border-radius:24px}.mini-solar{transform:scale(.82)}
+ .service-depth-grid{grid-template-columns:1fr}.service-depth-grid article{min-height:250px}
+ .section-head h2,.how>h2,.final-cta h2{font-size:43px}.final-cta{padding-left:18px;padding-right:18px}
+ #loader .loader-word{font-size:9px;letter-spacing:2.5px}.loader-sub{font-size:7px!important}
+ #solar-loader{min-height:100svh}.solar-fallback{width:220px;height:220px;transform:scale(.88)}
+ .fallback-sun{width:52px;height:52px;left:84px;top:84px}.fo1{width:88px;height:88px}.fo2{width:150px;height:150px}.fo3{width:210px;height:210px}
+ .fp1{transform-origin:-44px 0}.fp2{transform-origin:-75px 0}.fp3{transform-origin:-105px 0}.fp4{transform-origin:-84px 0}
+}
