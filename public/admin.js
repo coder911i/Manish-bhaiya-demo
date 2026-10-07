@@ -1,3 +1,11 @@
+let authReady=false;
+function showAdminLogin(){
+  if(document.getElementById("adminLogin"))return;
+  const d=document.createElement("div");d.id="adminLogin";d.innerHTML='<div class="admin-login-card"><div class="login-brand">ASTROLOGICAL <b>SOLUTIONS</b></div><small>SECURE ADMIN ACCESS</small><h1>Welcome back.</h1><input id="loginEmail" type="email" placeholder="Admin email" autocomplete="username"><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password"><button id="loginBtn">Sign in securely</button><p id="loginError"></p></div>';
+  document.body.appendChild(d);
+  document.getElementById("loginBtn").onclick=async()=>{const btn=document.getElementById("loginBtn");btn.disabled=true;try{const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:document.getElementById("loginEmail").value,password:document.getElementById("loginPassword").value})});const x=await r.json();if(!r.ok)throw Error(x.error||"Login failed");d.remove();authReady=true;loadStats()}catch(e){document.getElementById("loginError").textContent=e.message;btn.disabled=false}};
+}
+async function api(path,opt={}){const r=await fetch(path,{headers:{"Content-Type":"application/json"},...opt});const d=await r.json();if(r.status===401){showAdminLogin();throw Error("Please sign in to continue")}if(!r.ok)throw Error(d.error||"Request failed");return d}
 const titles={overview:"Overview",consultants:"Consultants",products:"Products",bookings:"Bookings",orders:"Orders",offers:"Offers",content:"Website CMS"};
 const $=s=>document.querySelector(s);
 async function api(path,opt={}){const r=await fetch(path,{headers:{"Content-Type":"application/json"},...opt});const d=await r.json();if(!r.ok)throw Error(d.error||"Request failed");return d}
