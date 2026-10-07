@@ -37,3 +37,16 @@ async function createBookingAndPay(consultantId,amount){
   }catch(e){panel.innerHTML='<div class="success"><h2>Something went wrong.</h2><p>'+e.message+'</p><button class="ghost" onclick="closeModal()">Close</button></div>'}
 }
 loadLiveCatalog();
+
+/* Premium pointer-driven 3D card depth */
+function enable3DCardDepth(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  document.querySelectorAll(".need-card,.expert-card,.product-card,.how-card").forEach(card=>{
+    card.addEventListener("pointermove",e=>{
+      const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform="perspective(900px) rotateX("+(-y*5)+"deg) rotateY("+(x*6)+"deg) translateY(-7px) translateZ(8px)";
+    });
+    card.addEventListener("pointerleave",()=>card.style.transform="");
+  });
+}
+setTimeout(enable3DCardDepth,600);
