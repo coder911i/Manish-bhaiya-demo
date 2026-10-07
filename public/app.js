@@ -83,7 +83,7 @@ function initSolarLoader(){
   const loader=document.getElementById("loader");
   if(!host||!loader)return;
   const hardStop=setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden"},7000);
-  if(!window.THREE){clearTimeout(hardStop);return;}
+  if(!window.THREE){clearTimeout(hardStop);loader.style.opacity="0";loader.style.visibility="hidden";return;}
   const W=()=>window.innerWidth,H=()=>window.innerHeight;
   try{
   const scene=new THREE.Scene();
