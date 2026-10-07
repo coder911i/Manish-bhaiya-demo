@@ -6,15 +6,20 @@
 <title>Astrological Solutions — Guidance, Crafted Around You</title>
 <meta name="description" content="Premium astrology, numerology and vastu consultations with verified experts.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="loader"><div id="solar-loader"></div><div class="loader-overlay"><div class="loader-word">ASTROLOGICAL <span>SOLUTIONS</span></div><div class="loader-sub">READING THE STARS · CRAFTING CLARITY</div><div class="loader-line"><i></i></div></div></div>
+<div id="loader"><div id="solar-loader"><div class="solar-fallback" aria-hidden="true"><i class="fallback-sun"></i><i class="fallback-orbit fo1"></i><i class="fallback-orbit fo2"></i><i class="fallback-orbit fo3"></i><i class="fallback-planet fp1"></i><i class="fallback-planet fp2"></i><i class="fallback-planet fp3"></i><i class="fallback-planet fp4"></i></div></div><div class="loader-overlay"><div class="loader-word">ASTROLOGICAL <span>SOLUTIONS</span></div><div class="loader-sub">READING THE STARS · CRAFTING CLARITY</div><div class="loader-line"><i></i></div></div></div>
 <div class="noise"></div>
-<header class="nav"><a class="brand" href="#"><span class="brand-mark">✦</span><span>ASTROLOGICAL<br><b>SOLUTIONS</b></span></a>
-<nav><a href="services.html">Services</a><a href="#consult">Consult</a><a href="#experts">Experts</a><a href="#store">Store</a><a href="about.html">About</a><a href="faq.html">FAQ</a></nav>
-<button class="nav-cta" onclick="scrollToId('consult')">Book a consultation <span>↗</span></button><button class="menu">☰</button></header>
+<header class="nav">
+  <div class="nav-left">
+    <button class="menu" aria-label="Open menu">☰</button>
+    <nav><a href="services.html">Services</a><a href="#consult">Consult</a><a href="#experts">Experts</a><a href="#store">Store</a></nav>
+  </div>
+  <a class="brand brand-center" href="#" aria-label="Astrological Solutions home"><span class="brand-mark">✦</span><span>ASTROLOGICAL<br><b>SOLUTIONS</b></span></a>
+  <div class="nav-right"><a href="about.html" class="nav-extra">About</a><a href="faq.html" class="nav-extra">FAQ</a><button class="nav-cta" onclick="scrollToId('consult')">Book a consultation <span>↗</span></button></div>
+</header>
 
 <main>
 <section class="hero">
@@ -26,8 +31,18 @@
 <div class="hero-visual"><div id="hero-canvas"></div><div class="orb-label l1">YOUR<br>JOURNEY</div><div class="orb-label l2">01 — 12</div><div class="floating-chip chip-top">✦ PERSONALIZED INSIGHTS</div><div class="floating-chip chip-bottom">⌁ AVAILABLE TODAY</div></div>
 </section>
 
-<section class="marquee"><div>ASTROLOGY <i>✦</i> NUMEROLOGY <i>✦</i> VASTU <i>✦</i> KUNDLI <i>✦</i> REMEDIES <i>✦</i> ASTROLOGY <i>✦</i> NUMEROLOGY <i>✦</i> VASTU</div></section>
+<section class="marquee"><div>VEDIC ASTROLOGY <i>✦</i> NUMEROLOGY <i>✦</i> VASTU SHASTRA <i>✦</i> KUNDLI <i>✦</i> RELATIONSHIPS <i>✦</i> CAREER <i>✦</i> REMEDIES <i>✦</i> VEDIC ASTROLOGY <i>✦</i> NUMEROLOGY <i>✦</i> VASTU SHASTRA <i>✦</i> KUNDLI</div></section>
 
+<section class="cosmic-intro section">
+    <div class="cosmic-copy">
+      <div class="eyebrow">THE ASTROLOGICAL SOLUTIONS APPROACH</div>
+      <h2>Guidance that begins with your <em>question.</em></h2>
+      <p>Astrology is most useful when it helps you understand a moment, not when it overwhelms you with predictions. Our consultation experience brings together astrology, numerology and vastu in a clear, personal format so you can ask what is actually on your mind.</p>
+      <p>Whether you are navigating a relationship, considering a career move, planning a marriage, choosing a name or looking for balance in your home, start with the area where you need clarity. We help you reach the right practitioner and make the next step simple.</p>
+      <div class="cosmic-points"><span><b>01</b> Personal context</span><span><b>02</b> Experienced guidance</span><span><b>03</b> Clear next steps</span></div>
+    </div>
+    <div class="cosmic-stage"><div class="mini-solar"><i class="sun"></i><i class="orbit o1"></i><i class="orbit o2"></i><i class="orbit o3"></i><i class="planet p1"></i><i class="planet p2"></i><i class="planet p3"></i></div><span>READ THE PATTERN<br><b>NOT THE NOISE</b></span></div>
+  </section>
 <section id="consult" class="section consult"><div class="section-head"><div><div class="eyebrow">01 / CONSULTATION</div><h2>What would you like<br><em>clarity</em> on?</h2></div><p>Start with what matters most. We'll help you find the right expert, format and time.</p></div>
 <div class="need-grid">
 <button class="need-card active" onclick="selectNeed(this,'Love & Relationship')"><span class="need-icon">♡</span><b>Love & Relationship</b><small>Compatibility, communication & the path ahead</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Marriage')"><span class="need-icon">♢</span><b>Marriage</b><small>Timing, compatibility & married life</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Career & Business')"><span class="need-icon">↗</span><b>Career & Business</b><small>Direction, decisions & opportunities</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Vastu')"><span class="need-icon">⌂</span><b>Vastu</b><small>Home, office & energy alignment</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Numerology')"><span class="need-icon">#</span><b>Numerology</b><small>Names, numbers & personal cycles</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Kundli & Life')"><span class="need-icon">✦</span><b>Kundli & Life</b><small>A deeper reading of your chart</small><i>↗</i></button>
@@ -49,6 +64,17 @@
 <article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=85')"><span>−₹200</span><button onclick="quickAdd('Natural Amethyst Crystal','₹1,499','https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=85')">+</button></div><div class="product-meta"><small>Wellness & Meditation</small><h3>Natural Amethyst Crystal</h3><div><b>₹1,499</b> <del>₹1,699</del></div></div></article><article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1604608672516-f1b4b5a4f4a0?auto=format&fit=crop&w=900&q=85')"><span>−₹500</span><button onclick="quickAdd('Brass Shree Yantra','₹2,499','https://images.unsplash.com/photo-1604608672516-f1b4b5a4f4a0?auto=format&fit=crop&w=900&q=85')">+</button></div><div class="product-meta"><small>Puja & Prosperity</small><h3>Brass Shree Yantra</h3><div><b>₹2,499</b> <del>₹2,999</del></div></div></article><article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1608042314453-ae338d80c427?auto=format&fit=crop&w=900&q=85')"><span>−₹200</span><button onclick="quickAdd('Seven Chakra Bracelet','₹899','https://images.unsplash.com/photo-1608042314453-ae338d80c427?auto=format&fit=crop&w=900&q=85')">+</button></div><div class="product-meta"><small>Energy & Balance</small><h3>Seven Chakra Bracelet</h3><div><b>₹899</b> <del>₹1,099</del></div></div></article><article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=900&q=85')"><span>−₹400</span><button onclick="quickAdd('Vastu Pyramid Set','₹1,999','https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=900&q=85')">+</button></div><div class="product-meta"><small>Home & Vastu</small><h3>Vastu Pyramid Set</h3><div><b>₹1,999</b> <del>₹2,399</del></div></div></article>
 </div><div class="store-cta"><span>PREPAID OFFER</span><b>Pay online & save ₹100 on eligible orders.</b><button class="ghost" onclick="openCart()">View cart →</button></div></section>
 
+<section class="section service-depth">
+    <div class="section-head"><div><div class="eyebrow">05 / GO DEEPER</div><h2>Explore every side of your <em>journey.</em></h2></div><p>From one focused question to a complete life reading, choose the kind of guidance that fits the moment you are in.</p></div>
+    <div class="service-depth-grid">
+      <article><span>01</span><h3>Vedic Astrology</h3><p>Understand planetary patterns, major periods and the themes shaping the phase you are currently moving through. Use a consultation for focused questions or a broader birth-chart reading.</p><b>Birth chart · Dashas · Transits</b></article>
+      <article><span>02</span><h3>Numerology</h3><p>Explore the relationship between numbers, names and personal cycles. Useful when you are evaluating a name, business identity, important date or recurring pattern.</p><b>Name analysis · Life path · Business</b></article>
+      <article><span>03</span><h3>Vastu Guidance</h3><p>Look at the relationship between your space and its use. Get practical direction for homes, offices and important areas without turning the process into unnecessary complexity.</p><b>Home · Office · Directions</b></article>
+      <article><span>04</span><h3>Relationships & Marriage</h3><p>Bring compatibility, timing and communication questions into one private conversation. The goal is perspective you can use, not fear-driven predictions.</p><b>Compatibility · Timing · Partnership</b></article>
+      <article><span>05</span><h3>Career & Business</h3><p>When a decision carries weight, a structured reading can help you examine timing, strengths and recurring patterns before you commit to the next move.</p><b>Career · Business · Decisions</b></article>
+      <article><span>06</span><h3>Remedies & Spiritual Products</h3><p>Explore traditional remedies and curated spiritual products alongside your consultation, with clear product information and a simple prepaid checkout.</p><b>Rudraksha · Crystals · Pooja</b></article>
+    </div>
+  </section>
 <section class="manifesto"><div class="manifesto-orb"></div><div class="eyebrow">A DIFFERENT KIND OF ASTROLOGY PLATFORM</div><h2>Ancient wisdom.<br><em>Modern experience.</em></h2><p>Less noise. More trust. Every screen is designed to make an important decision feel simple.</p></section>
 
 <section class="final-cta"><div><div class="eyebrow">READY WHEN YOU ARE</div><h2>Your next chapter<br>starts with a <em>question.</em></h2></div><button class="primary" onclick="openBooking()">Book a consultation <span>↗</span></button></section>
