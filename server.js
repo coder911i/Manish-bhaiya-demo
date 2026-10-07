@@ -43,10 +43,12 @@ app.post("/api/bookings",(q,r)=>{const parsed=bookingSchema.safeParse(q.body);if
 function sha512(value){return require("crypto").createHash("sha512").update(value,"utf8").digest("hex")}
 function safeEqual(a,b){const crypto=require("crypto");const aa=Buffer.from(String(a||"").toLowerCase());const bb=Buffer.from(String(b||"").toLowerCase());return aa.length===bb.length&&crypto.timingSafeEqual(aa,bb)}
 function payuRequestHash(p,salt){
-  return sha512([p.key,p.txnid,p.amount,p.productinfo,p.firstname,p.email,p.udf1||"",p.udf2||"",p.udf3||"",p.udf4||"",p.udf5||"","","","","","","",salt].join("|"));
+  const hashString=[p.key,p.txnid,p.amount,p.productinfo,p.firstname,p.email,p.udf1||"",p.udf2||"",p.udf3||"",p.udf4||"",p.udf5||""].join("|")+"||||||"+salt;
+  return sha512(hashString);
 }
 function payuResponseHash(p,salt){
-  return sha512([salt,p.status,"","","","","","",p.udf5||"",p.udf4||"",p.udf3||"",p.udf2||"",p.udf1||"",p.email||"",p.firstname||"",p.productinfo||"",p.amount||"",p.txnid||"",p.key||""].join("|"));
+  const hashString=[salt,p.status].join("|")+"||||||"+[p.udf5||"",p.udf4||"",p.udf3||"",p.udf2||"",p.udf1||"",p.email||"",p.firstname||"",p.productinfo||"",p.amount||"",p.txnid||"",p.key||""].join("|");
+  return sha512(hashString);
 }
 function publicBaseUrl(req){return (process.env.PUBLIC_URL||(`${req.protocol}://${req.get("host")}`)).replace(/\\/$/,"")}
 function markPayment(txnid,payload){
