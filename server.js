@@ -79,7 +79,8 @@ function parseCookies(req){
   },{});
 }
 function adminToken(){
-  return String(process.env.ADMIN_SESSION_SECRET||"");
+  // Demo access: any non-empty credentials are accepted. Set ADMIN_SESSION_SECRET in production.
+  return String(process.env.ADMIN_SESSION_SECRET||"demo-admin-session-secret-change-me");
 }
 function makeAdminSession(email){
   const payload=Buffer.from(JSON.stringify({email,exp:Date.now()+12*60*60*1000})).toString("base64url");
@@ -108,8 +109,9 @@ app.post("/api/admin/login",async(q,r)=>{
   try{
     const email=String(q.body?.email||"").trim().toLowerCase();
     const password=String(q.body?.password||"");
-    const expected=String(process.env.ADMIN_EMAIL||"").trim().toLowerCase();
-    if(!email||!password||!expected||email!==expected||!(await passwordMatches(password)))return r.status(401).json({error:"Invalid admin credentials"});
+    // Client demo mode: intentionally accepts any non-empty email/password.
+    // This is NOT real authentication; configure real credentials before production.
+    if(!email||!password)return r.status(401).json({error:"Enter any email and password to continue"});
     if(!adminToken())return r.status(503).json({error:"ADMIN_SESSION_SECRET is not configured"});
     const token=makeAdminSession(email);
     r.setHeader("Set-Cookie","as_admin="+encodeURIComponent(token)+"; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200"+(process.env.NODE_ENV==="production"?"; Secure":""));
