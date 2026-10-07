@@ -54,9 +54,11 @@ setTimeout(enable3DCardDepth,600);
 function initSolarLoader(){
   const host=document.getElementById("solar-loader");
   const loader=document.getElementById("loader");
-  if(!host||!loader||!window.THREE)return;
+  if(!host||!loader)return;
+  const hardStop=setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden"},7000);
+  if(!window.THREE){clearTimeout(hardStop);return;}
   const W=()=>window.innerWidth,H=()=>window.innerHeight;
-  const scene=new THREE.Scene();
+  try{\n  const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(42,W()/H(),.1,220);
   camera.position.set(0,0,26);
   const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
@@ -143,7 +145,7 @@ function initSolarLoader(){
     setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden";done=true;},1100);
   },4800);
 
-  window.addEventListener("resize",()=>{
+  clearTimeout(hardStop);\n  window.addEventListener("resize",()=>{
     camera.aspect=W()/H();camera.updateProjectionMatrix();renderer.setSize(W(),H());
     system.scale.setScalar(scale());
   });
