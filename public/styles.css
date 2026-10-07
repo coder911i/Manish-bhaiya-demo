@@ -212,3 +212,9 @@ body{font-family:"DM Sans",sans-serif}
  .loader-word{font-size:10px!important;letter-spacing:2.5px!important}
  .loader-sub{font-size:7px!important}
 }
+
+
+/* Solar loader rendering fix — keep fallback only when WebGL is unavailable */
+#solar-loader canvas{opacity:1!important;z-index:3!important}
+#solar-loader.webgl-ready .solar-fallback{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+@media(max-width:600px){#solar-loader .fallback-orbit{transform:none!important}}
