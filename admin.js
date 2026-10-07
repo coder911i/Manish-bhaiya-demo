@@ -31,11 +31,11 @@
     d.innerHTML = [
       '<div class="admin-login-card">',
       '<div class="login-brand">ASTROLOGICAL <b>SOLUTIONS</b></div>',
-      "<small>SECURE ADMIN ACCESS</small>",
+      "<small>DEMO ADMIN ACCESS · ANY NON-EMPTY LOGIN WORKS</small>",
       "<h1>Welcome back.</h1>",
       '<input id="loginEmail" type="email" placeholder="Admin email" autocomplete="username">',
       '<input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">',
-      '<button id="loginBtn">Sign in securely</button>',
+      '<button id="loginBtn">Enter Demo Control Center</button>',
       '<p id="loginError"></p>',
       "</div>"
     ].join("");
@@ -205,12 +205,12 @@
   }
 
   async function editProduct(id) {
-    let value = { name: "", slug: "", category: "", description: "", price: 999, compareAt: "", stock: 0, active: true };
+    let value = { name: "", slug: "", category: "", description: "", price: 999, compareAt: "", stock: 0, image: "", badge: "PREPAID", variants: "Standard, Premium", customOptions: "Gift wrap, Personal intention card", active: true };
     if (id) value = (await api("/api/admin/products")).find(x => x.id === id) || value;
     editor("Product", value, async v => {
       await api(id ? "/api/admin/products/" + id : "/api/admin/products", {
         method: id ? "PATCH" : "POST",
-        body: JSON.stringify({ ...v, price: Number(v.price), compareAt: Number(v.compareAt || 0), stock: Number(v.stock) })
+        body: JSON.stringify({ ...v, price: Number(v.price), compareAt: Number(v.compareAt || 0), stock: Number(v.stock), variants: String(v.variants||"").split(",").map(s=>s.trim()).filter(Boolean), customOptions: String(v.customOptions||"").split(",").map(s=>s.trim()).filter(Boolean) })
       });
       closeModal(); toast("Product saved"); await loadProducts();
     });
