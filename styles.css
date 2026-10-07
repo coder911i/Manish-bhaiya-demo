@@ -105,3 +105,6 @@ footer{background:#f4edd9;border-color:#e4dbc1}
 .whatsapp-float:hover span{opacity:1;transform:none}
 #loader.fallback .loader-overlay:after{content:"Loading experience…";font-size:9px;letter-spacing:2px;color:#d8c75d}
 @media(max-width:600px){.whatsapp-float{right:16px;bottom:16px;width:54px;height:54px}.whatsapp-float span{display:none}}
+
+/* Production checkout */
+.checkout-fields{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}.checkout-fields input{width:100%;padding:13px 14px;border-radius:12px;border:1px solid #29283a;background:#11111a;color:#fff;outline:none}.checkout-fields input:focus{border-color:#8066ff;box-shadow:0 0 0 3px #8066ff18}.pay-btn{width:100%;border:0;border-radius:14px;padding:15px 18px;background:#ffd21a;color:#111;font-weight:800;cursor:pointer;margin-top:12px}.pay-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px #ffd21a33}.cart-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #242331}.cart-item img{width:58px;height:58px;border-radius:10px;object-fit:cover;background:#161620}.cart-item small{display:block;color:#777486;margin-top:4px}@media(max-width:600px){.checkout-fields{gap:8px}.checkout-fields input{font-size:16px}}
