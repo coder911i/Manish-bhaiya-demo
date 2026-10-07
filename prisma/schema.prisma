@@ -34,8 +34,10 @@ model Booking {
   amount Int
   paymentStatus PaymentStatus @default(PENDING)
   status BookingStatus @default(PENDING_PAYMENT)
-  razorpayOrderId String?
-  razorpayPaymentId String?
+  payuTxnId String?
+  payuId String?
+  paymentMode String?
+  paymentUpdatedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([consultantId, slot])
