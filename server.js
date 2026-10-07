@@ -16,6 +16,8 @@ const products=[
 {id:"p3",name:"Seven Chakra Bracelet",slug:"seven-chakra-bracelet",price:899,compareAt:1099,category:"Energy & Balance",stock:41},
 {id:"p4",name:"Vastu Pyramid Set",slug:"vastu-pyramid-set",price:1999,compareAt:2399,category:"Home & Vastu",stock:18}];
 let bookings=[],orders=[];
+let offers=[{id:"o1",code:"PREPAID100",title:"₹100 off on prepaid",type:"FIXED",value:100,active:true},{id:"o2",code:"FIRSTCONSULT",title:"10% off first consultation",type:"PERCENT",value:10,active:true}];
+let siteContent={heroTitle:"Clarity for the chapters ahead.",heroSubtitle:"Connect with trusted astrologers, numerologists and vastu experts through a consultation experience designed around you.",announcement:"Pay online & save ₹100 on eligible orders.",seoTitle:"Astrological Solutions — Astrology, Numerology & Vastu Consultations",seoDescription:"Book trusted astrology, numerology and vastu consultations online."};
 
 const bookingSchema=z.object({customerName:z.string().min(2).max(100),customerPhone:z.string().min(10).max(15),customerEmail:z.string().email().optional().or(z.literal("")),concern:z.string().min(2).max(100),consultantId:z.string(),slot:z.string(),amount:z.number().int().positive()});
 const orderSchema=z.object({customerName:z.string().min(2),phone:z.string().min(10).max(15),email:z.string().email().optional().or(z.literal("")),address:z.record(z.any()),items:z.array(z.object({productId:z.string(),quantity:z.number().int().positive()})).min(1),fulfillment:z.enum(["PREPAID","COD"]),couponCode:z.string().optional()});
@@ -34,6 +36,30 @@ app.post("/api/payment/create",async(q,r)=>{const amount=Number(q.body.amount||0
 app.post("/api/orders",(q,r)=>{const parsed=orderSchema.safeParse(q.body);if(!parsed.success)return r.status(400).json({error:"Invalid order data",details:parsed.error.flatten()});const subtotal=parsed.data.items.reduce((s,i)=>{const p=products.find(x=>x.id===i.productId);return s+(p?p.price*i.quantity:0)},0);const discount=parsed.data.fulfillment==="PREPAID"?100:0;const o={id:"ASO-"+(9000+orders.length+1),...parsed.data,subtotal,discount,total:Math.max(0,subtotal-discount),status:parsed.data.fulfillment==="COD"?"CONFIRMATION_PENDING":"PAYMENT_PENDING",paymentStatus:"PENDING",createdAt:new Date().toISOString()};orders.push(o);r.status(201).json(o)});
 
 app.post("/api/payment/verify",(q,r)=>{if(!process.env.RAZORPAY_KEY_SECRET)return r.json({verified:false,mode:"demo",message:"Configure Razorpay secret and signature verification in production."});const crypto=require("crypto");const {orderId,paymentId,signature}=q.body;const expected=crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET).update(orderId+"|"+paymentId).digest("hex");if(signature!==expected)return r.status(400).json({verified:false,error:"Invalid payment signature"});r.json({verified:true})});
+
+
+const id=()=>Math.random().toString(36).slice(2,10);
+app.get("/api/admin/consultants",(q,r)=>r.json(consultants));
+app.post("/api/admin/consultants",(q,r)=>{const x={id:"c"+id(),rating:0,available:true,...q.body};consultants.push(x);r.status(201).json(x)});
+app.patch("/api/admin/consultants/:id",(q,r)=>{const x=consultants.find(x=>x.id===q.params.id);if(!x)return r.status(404).json({error:"Not found"});Object.assign(x,q.body);r.json(x)});
+app.delete("/api/admin/consultants/:id",(q,r)=>{const i=consultants.findIndex(x=>x.id===q.params.id);if(i<0)return r.status(404).json({error:"Not found"});consultants.splice(i,1);r.json({ok:true})});
+
+app.get("/api/admin/products",(q,r)=>r.json(products));
+app.post("/api/admin/products",(q,r)=>{const x={id:"p"+id(),stock:0,active:true,...q.body};products.push(x);r.status(201).json(x)});
+app.patch("/api/admin/products/:id",(q,r)=>{const x=products.find(x=>x.id===q.params.id);if(!x)return r.status(404).json({error:"Not found"});Object.assign(x,q.body);r.json(x)});
+app.delete("/api/admin/products/:id",(q,r)=>{const i=products.findIndex(x=>x.id===q.params.id);if(i<0)return r.status(404).json({error:"Not found"});products.splice(i,1);r.json({ok:true})});
+
+app.get("/api/admin/offers",(q,r)=>r.json(offers));
+app.post("/api/admin/offers",(q,r)=>{const x={id:"o"+id(),active:true,...q.body};offers.push(x);r.status(201).json(x)});
+app.patch("/api/admin/offers/:id",(q,r)=>{const x=offers.find(x=>x.id===q.params.id);if(!x)return r.status(404).json({error:"Not found"});Object.assign(x,q.body);r.json(x)});
+app.delete("/api/admin/offers/:id",(q,r)=>{const i=offers.findIndex(x=>x.id===q.params.id);if(i<0)return r.status(404).json({error:"Not found"});offers.splice(i,1);r.json({ok:true})});
+
+app.get("/api/admin/content",(q,r)=>r.json(siteContent));
+app.patch("/api/admin/content",(q,r)=>{Object.assign(siteContent,q.body);r.json(siteContent)});
+app.get("/api/admin/bookings",(q,r)=>r.json(bookings));
+app.patch("/api/admin/bookings/:id",(q,r)=>{const x=bookings.find(x=>x.id===q.params.id);if(!x)return r.status(404).json({error:"Not found"});Object.assign(x,q.body);r.json(x)});
+app.get("/api/admin/orders",(q,r)=>r.json(orders));
+app.patch("/api/admin/orders/:id",(q,r)=>{const x=orders.find(x=>x.id===q.params.id);if(!x)return r.status(404).json({error:"Not found"});Object.assign(x,q.body);r.json(x)});
 
 app.get("/api/admin/stats",(q,r)=>r.json({revenue:284650,consultations:186,prepaidRate:72.8,conversion:4.82,bookings:bookings.length,orders:orders.length}));
 app.get("/api/admin/bookings",(q,r)=>r.json(bookings));
