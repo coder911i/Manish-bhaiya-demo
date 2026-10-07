@@ -95,3 +95,15 @@ function initSolarLoader(){
   addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 }
 initSolarLoader();
+
+async function loadSiteContent(){
+  try{const x=await api("/api/admin/content");
+    const h=document.querySelector(".hero h1"), p=document.querySelector(".hero-copy>p"), a=document.querySelector(".store-cta b");
+    if(h&&x.heroTitle){const parts=x.heroTitle.split(" ");const cut=Math.max(1,Math.floor(parts.length*.55));h.innerHTML=parts.slice(0,cut).join(" ")+"<br><em>"+parts.slice(cut).join(" ")+"</em>"}
+    if(p&&x.heroSubtitle)p.textContent=x.heroSubtitle;
+    if(a&&x.announcement)a.textContent=x.announcement;
+    if(x.seoTitle)document.title=x.seoTitle;
+    const md=document.querySelector('meta[name="description"]');if(md&&x.seoDescription)md.content=x.seoDescription;
+  }catch(e){console.warn("CMS content fallback",e)}
+}
+loadSiteContent();
