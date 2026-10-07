@@ -1,0 +1,15 @@
+const express=require("express"),cors=require("cors"),path=require("path");const app=express();app.use(cors());app.use(express.json());app.use(express.static(__dirname));
+const consultants=[{id:"c1",name:"Ananya Sharma",type:"Vedic Astrologer",experience:"18 years",rating:4.9,price:899,available:true},{id:"c2",name:"Raghav Mehta",type:"Numerologist",experience:"12 years",rating:4.8,price:699,available:true},{id:"c3",name:"Meera Kapoor",type:"Vastu Consultant",experience:"15 years",rating:4.9,price:999,available:true}];
+const products=[{id:"p1",name:"Natural Amethyst Crystal",price:1499,compareAt:1699,category:"Wellness & Meditation"},{id:"p2",name:"Brass Shree Yantra",price:2499,compareAt:2999,category:"Puja & Prosperity"},{id:"p3",name:"Seven Chakra Bracelet",price:899,compareAt:1099,category:"Energy & Balance"},{id:"p4",name:"Vastu Pyramid Set",price:1999,compareAt:2399,category:"Home & Vastu"}];
+let bookings=[],orders=[];
+app.get("/api/health",(q,r)=>r.json({ok:true,service:"Astrological Solutions"}));
+app.get("/api/consultants",(q,r)=>r.json(consultants.filter(x=>x.available)));
+app.get("/api/consultants/:id",(q,r)=>{const x=consultants.find(x=>x.id===q.params.id);x?r.json(x):r.status(404).json({error:"Not found"})});
+app.get("/api/products",(q,r)=>r.json(products));
+app.get("/api/products/:id",(q,r)=>{const x=products.find(x=>x.id===q.params.id);x?r.json(x):r.status(404).json({error:"Not found"})});
+app.get("/api/slots",(q,r)=>r.json(["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"]));
+app.post("/api/bookings",(q,r)=>{const b={id:"AS-"+(10000+bookings.length+1),...q.body,status:"PENDING_PAYMENT",createdAt:new Date().toISOString()};bookings.push(b);r.status(201).json(b)});
+app.post("/api/payment/create",(q,r)=>r.json({gateway:"DEMO",orderId:"demo_"+Date.now(),amount:q.body.amount||0,status:"created",message:"Demo gateway. Add production Razorpay credentials server-side."}));
+app.post("/api/orders",(q,r)=>{const o={id:"ASO-"+(9000+orders.length+1),...q.body,status:"PAYMENT_PENDING",createdAt:new Date().toISOString()};orders.push(o);r.status(201).json(o)});
+app.get("/api/admin/stats",(q,r)=>r.json({revenue:284650,consultations:186,prepaidRate:72.8,conversion:4.82,bookings:bookings.length,orders:orders.length}));
+app.listen(process.env.PORT||3000,()=>console.log("Astrological Solutions running on http://localhost:"+(process.env.PORT||3000)));
