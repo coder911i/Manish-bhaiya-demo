@@ -116,7 +116,7 @@ function initSolarLoader(){
   if(!loader)return;
   // The CSS solar system is the first frame. WebGL is not required for entry rendering.
   const exit=()=>{loader.classList.add("solar-exit");setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden"},650)};
-  window.setTimeout(exit,1800);
+  window.setTimeout(exit,2400);
 }
 initSolarLoader();
 
