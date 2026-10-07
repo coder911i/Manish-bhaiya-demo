@@ -73,3 +73,35 @@ footer{border-color:var(--line);color:#817765;background:#eee4cf}
   .loader-overlay{width:90vw}
   .loader-word{font-size:9px;letter-spacing:2.4px}
 }
+
+/* BRIGHT YELLOW 3D SYSTEM + NEW TYPOGRAPHY */
+body{font-family:"Inter",sans-serif}
+.hero h1,.section-head h2,.how>h2,.final-cta h2,.manifesto h2,.modal-panel h2,.how-card h3,.expert-info h3{font-family:"DM Serif Display",serif;font-weight:400}
+:root{--ivory:#fffdf5;--paper:#fffefa;--ink:#17150f;--muted:#6d685b;--yellow:#ffd21a;--yellow2:#ffe66a;--line:#e7dfc7}
+html,body{background:#fffdf5;color:#17150f}
+.nav{background:linear-gradient(#fffdf5f5,#fffdf500)}
+.nav-cta{background:#17150f;color:#fffdf5}
+.hero{background:radial-gradient(circle at 76% 42%,#ffd21a38,transparent 31%),radial-gradient(circle at 15% 15%,#fff 0,transparent 34%)}
+.hero h1 em,h2 em{color:#d5a900}
+.eyebrow{color:#a37c00}.eyebrow span{background:#ffd21a}
+.primary{background:#17150f;color:#fffdf5}.ghost{background:#fffefa;border-color:#ddd3b5;color:#17150f}
+.floating-chip{background:#fffef2e8;border-color:#e5ce5a;color:#685514;box-shadow:0 18px 60px #8a6c121c}
+.need-card,.expert-card,.product-card,.how-card{background:linear-gradient(145deg,#fffefa,#f8f0d9);border-color:#e3d9bd}
+.need-card:hover,.need-card.active,.expert-card:hover,.product-card:hover{border-color:#e4bd1e;box-shadow:0 30px 80px #9b7d181c}
+.need-icon,.rating,.expert-bottom button,.rec-badge,.store-cta span{color:#c19300}
+.product-img>span{background:#ffd21a;color:#211b00}
+.product-img button{background:#17150f;color:#fffdf5}
+footer{background:#f4edd9;border-color:#e4dbc1}
+#loader{background:#050505}
+#solar-loader canvas{filter:saturate(1.45) brightness(1.08)}
+.loader-sub{color:#e6d36f}
+.loader-word span{color:#ffd21a}
+.loader-line i{background:#ffd21a}
+.loader-line{background:#403812}
+.whatsapp-float{position:fixed;right:22px;bottom:22px;z-index:80;width:58px;height:58px;border-radius:50%;background:#25D366;color:white;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 35px #147a3d44;text-decoration:none;transition:.3s}
+.whatsapp-float svg{width:29px;height:29px;fill:currentColor}
+.whatsapp-float span{position:absolute;right:66px;white-space:nowrap;background:#17150f;color:#fffdf5;border-radius:20px;padding:8px 12px;font-size:10px;opacity:0;transform:translateX(6px);transition:.25s;pointer-events:none}
+.whatsapp-float:hover{transform:translateY(-4px) scale(1.04)}
+.whatsapp-float:hover span{opacity:1;transform:none}
+#loader.fallback .loader-overlay:after{content:"Loading experience…";font-size:9px;letter-spacing:2px;color:#d8c75d}
+@media(max-width:600px){.whatsapp-float{right:16px;bottom:16px;width:54px;height:54px}.whatsapp-float span{display:none}}
