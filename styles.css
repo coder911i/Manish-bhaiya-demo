@@ -56,3 +56,20 @@ footer{border-color:var(--line);color:#817765;background:#eee4cf}
 .loader-overlay{position:relative;z-index:2;display:grid;place-items:center;align-content:center;gap:14px;text-align:center;pointer-events:none}
 .loader-overlay .loader-line{width:220px}
 @media(max-width:600px){.hero{background:radial-gradient(circle at 70% 25%,#e5b22c28,transparent 42%)}}
+
+/* CENTERED 3D SOLAR SYSTEM LOADER */
+#loader{overflow:hidden;display:block;background:radial-gradient(circle at center,#171208 0%,#090804 42%,#030302 100%);opacity:1;visibility:visible}
+#solar-loader{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center}
+#solar-loader canvas{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:100%!important;height:100%!important}
+.loader-overlay{position:absolute!important;left:50%;top:50%;transform:translate(-50%,-50%);width:min(90vw,420px);display:grid;place-items:center;align-content:center;gap:13px;text-align:center;z-index:5}
+.loader-word{font-weight:700;text-shadow:0 2px 25px #000}
+.loader-sub{font-size:8px;letter-spacing:3px;color:#bba875}
+.solar-exit .loader-overlay{animation:solarTextExit 1.1s ease forwards}
+.solar-exit #solar-loader{animation:solarSceneExit 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes solarTextExit{to{opacity:0;transform:translate(-50%,-50%) scale(.88)}}
+@keyframes solarSceneExit{to{opacity:0;transform:scale(1.12)}}
+@media(max-width:600px){
+  #loader{min-height:100svh}
+  .loader-overlay{width:90vw}
+  .loader-word{font-size:9px;letter-spacing:2.4px}
+}
