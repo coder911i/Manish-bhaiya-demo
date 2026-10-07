@@ -177,7 +177,7 @@ function initSolarLoader(){
 initSolarLoader();
 
 async function loadSiteContent(){
-  try{const x=await api("/api/admin/content");
+  try{const x=await api("/api/site-content");
     const h=document.querySelector(".hero h1"), p=document.querySelector(".hero-copy>p"), a=document.querySelector(".store-cta b");
     if(h&&x.heroTitle){const parts=x.heroTitle.split(" ");const cut=Math.max(1,Math.floor(parts.length*.55));h.innerHTML=parts.slice(0,cut).join(" ")+"<br><em>"+parts.slice(cut).join(" ")+"</em>"}
     if(p&&x.heroSubtitle)p.textContent=x.heroSubtitle;
