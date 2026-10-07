@@ -6,7 +6,12 @@ app.use(cors({origin:process.env.CORS_ORIGIN||true}));
 app.use(express.json({limit:"1mb"}));
 app.use(express.urlencoded({extended:true,limit:"1mb"}));
 app.use(rateLimit({windowMs:60*1000,max:120,standardHeaders:true,legacyHeaders:false}));
+app.use(express.static(path.join(__dirname,"public")));
 app.use(express.static(__dirname));
+
+// Explicit HTML entrypoint for the Vercel Express function.
+// Vercel may hand "/" to the function instead of serving public/index.html directly.
+app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
 
 const consultants=[
 {id:"c1",name:"Ananya Sharma",type:"Vedic Astrologer",experience:"18 years",rating:4.9,price:899,available:true,bio:"Vedic astrology focused on relationships, career and life timing."},
