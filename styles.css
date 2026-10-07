@@ -23,3 +23,36 @@ body{perspective:1400px}
 @keyframes floatA{50%{transform:translate3d(0,-12px,50px)}}@keyframes floatB{50%{transform:translate3d(0,10px,40px)}}
 @keyframes ambientFloat{50%{transform:translate3d(-35px,25px,0) scale(1.08)}}@keyframes orbSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* LUXURY IVORY + SUN GOLD THEME */
+:root{--ivory:#f7f1df;--paper:#fffaf0;--ink:#201b14;--muted:#776d5c;--gold:#d7a928;--gold2:#f1c84b;--line:#ded3b9}
+html,body{background:var(--ivory);color:var(--ink)}
+body{font-family:"DM Sans",sans-serif}
+.noise{opacity:.025;mix-blend-mode:multiply}
+.nav{background:linear-gradient(#f7f1dff2,#f7f1df00);color:var(--ink)}
+.brand{color:var(--ink)}.brand-mark{border-color:var(--gold);color:#b48712}.nav nav a,footer a{color:#655d50}.nav nav a:hover,footer a:hover{color:#111}
+.nav-cta{background:var(--ink);color:#fff8e9}.nav-cta:hover,.primary:hover{box-shadow:0 18px 50px #c59a2d44}
+.primary{background:var(--ink);color:#fff8e9}.ghost{background:#fff9ec;color:var(--ink);border-color:#d8caa8}.ghost:hover{border-color:var(--gold)}
+.hero{background:radial-gradient(circle at 75% 45%,#e6b72c22,transparent 34%),radial-gradient(circle at 15% 15%,#ffffffaa,transparent 35%)}
+.hero h1{color:var(--ink)}.hero h1 em,h2 em{color:#b48712}
+.hero-copy>p,.section-head>p{color:var(--muted)}
+.hero-trust small{color:#817665}.avatars span{border-color:var(--ivory);background:#e6d8b6;color:#594918}
+.floating-chip{border-color:#bda96755;background:#fff9e7d9;color:#62542f;box-shadow:0 18px 50px #6f5b2020}
+.orb-label{color:#8b7b58}.marquee{border-color:var(--line);color:#8b7d65}.marquee i{color:#b48712}
+.need-card,.expert-card,.product-card,.how-card{background:linear-gradient(145deg,#fffaf0,#f0e7d0);border-color:#ded2b7;color:var(--ink);box-shadow:0 10px 35px #8b713019}
+.need-card:hover,.need-card.active,.expert-card:hover,.product-card:hover{border-color:#c9a83d;box-shadow:0 30px 80px #735c251f}
+.need-card:after{background:#d7a92818}.need-icon{color:#b48712}.need-card small{color:#817561}.need-card i{color:#9b8b6b}
+.funnel{color:#8b806d}.funnel-step.active{color:#a77d0c}.funnel-line{background:#d8ccb1}
+.recommend{border-color:#d9cdb3;background:linear-gradient(100deg,#fffaf0,#f1e8d5)}.rec-badge{color:#a77d0c}.recommend p{color:#807565}
+.expert-photo:after{background:linear-gradient(transparent 45%,#f0e7d0)}.online,.float-num{background:#fffaf0cc;border-color:#b9aa83}.online{color:#4d8b59}.expert-info p{color:#807565}.rating{color:#a77d0c}.expert-bottom small{color:#837764}.expert-bottom button{color:#9b7208}
+.how{background:#efe6d3}.how-card{background:#fffaf0}.how-card>span{color:#ad8210}.how-card p{color:#7f7566}.mini-arrow{color:#9d8961}
+.product-img:after{background:linear-gradient(transparent 60%,#f0e7d0)}.product-img>span{background:#f1c84b;color:#3a2c08}.product-img button{background:#201b14;color:#fff8e9}.product-meta small{color:#847864}.product-meta del{color:#8f8472}
+.store-cta{border-color:#d9cdb3;background:#fff8e9}.store-cta span{color:#a77d0c}
+.manifesto{background:radial-gradient(circle at 50% 50%,#d9ad321c,transparent 32%)}.manifesto-orb{border-color:#b88d251c}.final-cta{border-color:var(--line)}
+footer{border-color:var(--line);color:#817765;background:#eee4cf}
+.modal-backdrop{background:#2a241acc}.modal-panel{background:#fff8e9;color:var(--ink);border-color:#d6c8aa}.modal-panel p{color:#786e5e}.modal-close{background:#efe5d0;border-color:#d5c6a5;color:var(--ink)}.slot{border-color:#d8ccb3;background:#f8f0df;color:#786e5d}.slot.active{border-color:#c59a26;color:#35280b;background:#f1dfaa}.pay-box{border-color:#d8cbb0}.pay-box div{color:#766b5b}.pay-box strong{color:var(--ink)}.pay-btn{background:var(--ink);color:#fff8e9}
+#loader{background:#100d07}.loader-word{color:#f8edcf}.loader-word span{color:#e2b735}.loader-sub{font-size:8px;letter-spacing:3px;color:#a99a76}.loader-line{background:#4a3c1e}.loader-line i{background:#e4b936}
+#solar-loader{position:absolute;inset:0}
+.loader-overlay{position:relative;z-index:2;display:grid;place-items:center;align-content:center;gap:14px;text-align:center;pointer-events:none}
+.loader-overlay .loader-line{width:220px}
+@media(max-width:600px){.hero{background:radial-gradient(circle at 70% 25%,#e5b22c28,transparent 42%)}}
