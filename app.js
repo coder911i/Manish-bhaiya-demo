@@ -1,5 +1,5 @@
 let selectedNeed="Love & Relationship", cart=[]; const modal=document.getElementById("modal"), panel=document.getElementById("modalPanel");
-window.addEventListener("load",()=>setTimeout(()=>{document.getElementById("loader").style.opacity=0;document.getElementById("loader").style.visibility="hidden"},2100));
+
 function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"})}
 function selectNeed(el,need){document.querySelectorAll(".need-card").forEach(x=>x.classList.remove("active"));el.classList.add("active");selectedNeed=need;document.getElementById("selectedNeed").textContent=need}
 function closeModal(){modal.classList.remove("open")}
@@ -50,3 +50,48 @@ function enable3DCardDepth(){
   });
 }
 setTimeout(enable3DCardDepth,600);
+
+function initSolarLoader(){
+  const host=document.getElementById("solar-loader");
+  if(!host||!window.THREE)return;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,1000);
+  camera.position.set(0,8,24);
+  const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); host.appendChild(renderer.domElement);
+  const system=new THREE.Group(); scene.add(system);
+  const sun=new THREE.Mesh(new THREE.SphereGeometry(2.25,48,48),new THREE.MeshBasicMaterial({color:0xf2c84b}));
+  system.add(sun);
+  const glow=new THREE.Mesh(new THREE.SphereGeometry(2.7,32,32),new THREE.MeshBasicMaterial({color:0xffdf6b,transparent:true,opacity:.11}));
+  system.add(glow);
+  const planets=[
+    [3.5,.35,0xd7c7a2,.025],[4.7,.52,0xb9a48a,.018],[6,.62,0x6c8c8c,.014],
+    [7.5,.48,0xc98b63,.011],[9,.9,0xd6b06b,.008],[10.8,.78,0xb7a58d,.006]
+  ];
+  planets.forEach((p,i)=>{
+    const orbit=new THREE.Mesh(new THREE.TorusGeometry(p[0],.008,8,160),new THREE.MeshBasicMaterial({color:0xd9bc69,transparent:true,opacity:.28}));
+    orbit.rotation.x=Math.PI/2+(i%2)*.08; system.add(orbit);
+    const planet=new THREE.Mesh(new THREE.SphereGeometry(p[1],24,24),new THREE.MeshStandardMaterial({color:p[2],roughness:.65,metalness:.05}));
+    planet.userData={radius:p[0],speed:p[4]||p[3],angle:i*1.15,tilt:(i-2)*.08};
+    system.add(planet);
+  });
+  const starGeo=new THREE.BufferGeometry(), positions=[];
+  for(let i=0;i<1800;i++){const r=80;positions.push((Math.random()-.5)*r,(Math.random()-.5)*r,(Math.random()-.5)*r)}
+  starGeo.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));
+  system.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xf5df9d,size:.035,transparent:true,opacity:.8})));
+  scene.add(new THREE.AmbientLight(0xffedc4,.45));
+  const light=new THREE.PointLight(0xffd15b,80,70); light.position.set(0,0,0); scene.add(light);
+  let t=0,finished=false;
+  function animate(){
+    if(finished)return; requestAnimationFrame(animate); t+=.008;
+    sun.rotation.y+=.004; glow.scale.setScalar(1+Math.sin(t*2)*.035);
+    system.children.forEach(o=>{if(o.userData?.radius){o.userData.angle+=o.userData.speed*.12;o.position.x=Math.cos(o.userData.angle)*o.userData.radius;o.position.z=Math.sin(o.userData.angle)*o.userData.radius;o.position.y=Math.sin(o.userData.angle*.7)*o.userData.tilt;}});
+    system.rotation.y+=.0015;
+    camera.position.z-=.018;
+    renderer.render(scene,camera);
+  }
+  animate();
+  setTimeout(()=>{const loader=document.getElementById("loader");loader.classList.add("solar-exit");setTimeout(()=>{loader.style.opacity=0;loader.style.visibility="hidden";finished=true},900)},3200);
+  addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+}
+initSolarLoader();
