@@ -1,5 +1,6 @@
 const express=require("express"),cors=require("cors"),path=require("path"),helmet=require("helmet"),rateLimit=require("express-rate-limit"),{z}=require("zod");
 const app=express();
+const crypto=require("crypto");
 app.use(helmet({contentSecurityPolicy:false}));
 app.use(cors({origin:process.env.CORS_ORIGIN||true}));
 app.use(express.json({limit:"1mb"}));
