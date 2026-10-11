@@ -164,5 +164,3 @@ menuButton?.addEventListener("click",()=>{const opened=mainNav?.classList.toggle
 mainNav?.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>{mainNav.classList.remove("is-open");menuButton?.setAttribute("aria-expanded","false");}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 updateCartBadge();loadLiveCatalog();loadSiteContent();initializePreferences();
-const entryLoader=document.getElementById("loader");
-if(entryLoader){window.setTimeout(()=>entryLoader.classList.add("solar-exit"),2100);window.setTimeout(()=>entryLoader.remove(),2850);}
