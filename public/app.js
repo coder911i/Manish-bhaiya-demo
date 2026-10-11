@@ -1,5 +1,5 @@
 "use strict";
-let selectedNeed = "Love & Relationships", cart = [], catalog = [], consultants = [];
+let selectedNeed = "Love & Relationships", cart = [], catalog = [], consultants = [], activeLanguage = "en";
 const modal = document.getElementById("modal"), panel = document.getElementById("modalPanel");
 try { cart = JSON.parse(localStorage.getItem("as-cart-v2") || "[]"); if (!Array.isArray(cart)) cart = []; } catch (_) { cart = []; }
 
@@ -9,8 +9,8 @@ function initializePreferences(){
  let theme="light",language="en";
  try{theme=localStorage.getItem("as-theme")||"light";language=localStorage.getItem("as-language")||"en";}catch(_){}
  function setTheme(next){theme=next;body.classList.toggle("theme-dark",theme==="dark");if(themeButton)themeButton.textContent=theme==="dark"?"Light mode":"Dark mode";try{localStorage.setItem("as-theme",theme);}catch(_){}}
- function setLanguage(next){language=next;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";try{localStorage.setItem("as-language",language);}catch(_){}}
- themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
+ function setLanguage(next){language=next;activeLanguage=language;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";try{localStorage.setItem("as-language",language);}catch(_){}}
+ window.applySiteLanguage=()=>setLanguage(language);\n themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
  langButton?.addEventListener("click",()=>setLanguage(language==="en"?"hi":"en"));
  setTheme(theme);setLanguage(language);
 }
@@ -36,6 +36,11 @@ const imageByCategory = {
  "Perfumes":"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=85"
 };
 function productImage(p) { return p.image || imageByCategory[p.category] || imageByCategory["Crystals"]; }
+function productNameEnglish(name){
+ const names={"1 मुखी रुद्राक्ष":"1 Mukhi Rudraksha","5 मुखी रुद्राक्ष माला":"5 Mukhi Rudraksha Mala","शालिग्राम शिला":"Shaligram Stone","अमेथिस्ट रत्न ब्रेसलेट":"Amethyst Gemstone Bracelet","रत्न ब्रेसलेट":"Gemstone Bracelet","क्रिस्टल पिरामिड":"Crystal Pyramid","वास्तु पिरामिड सेट":"Vastu Pyramid Set","क्रिस्टल वास्तु पिरामिड":"Crystal Vastu Pyramid","सॉलिड परफ्यूम":"Solid Perfume","पुरुषों का परफ्यूम":"Men's Perfume","शंख एवं सीप":"Shankh & Sea Shells","पीतल के दीये":"Brass Diyas"};
+ return names[name]||name;
+}
+function applyRenderedTranslations(){if(window.applySiteLanguage)window.applySiteLanguage();}
 
 function configureProduct(id) {
  const p=catalog.find(x=>x.id===id);
