@@ -1,145 +1,140 @@
-let selectedNeed="Love & Relationship", cart=[]; const modal=document.getElementById("modal"), panel=document.getElementById("modalPanel");
+"use strict";
+let selectedNeed = "प्यार और रिश्ते", cart = [], catalog = [], consultants = [];
+const modal = document.getElementById("modal"), panel = document.getElementById("modalPanel");
+try { cart = JSON.parse(localStorage.getItem("as-cart-v2") || "[]"); if (!Array.isArray(cart)) cart = []; } catch (_) { cart = []; }
 
-function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"})}
-function selectNeed(el,need){document.querySelectorAll(".need-card").forEach(x=>x.classList.remove("active"));el.classList.add("active");selectedNeed=need;document.getElementById("selectedNeed").textContent=need}
-function closeModal(){modal.classList.remove("open")}
-function openDemo(title){panel.innerHTML='<button class="modal-close" onclick="closeModal()">×</button><div class="eyebrow">THE EXPERIENCE</div><h2>'+title+'</h2><p>Three simple steps. No clutter. Pick a need, compare verified experts, choose a slot and pay securely. This demo shows the intended production flow.</p><div class="pay-box"><div><span>01</span><strong>Choose your guidance</strong></div><div><span>02</span><strong>Choose your expert + slot</strong></div><div><span>03</span><strong>Confirm securely</strong></div></div>';modal.classList.add("open")}
-function openBooking(expert="Recommended Expert"){panel.innerHTML='<button class="modal-close" onclick="closeModal()">×</button><div class="eyebrow">CONSULTATION / '+selectedNeed.toUpperCase()+'</div><h2>Book your session.</h2><p>Recommended expert: <b style="color:#fff">'+expert+'</b><br>30 minute private consultation.</p><div class="eyebrow" style="margin-top:28px">SELECT A SLOT</div><div class="slot-grid">'+["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"].map((x,i)=>'<button class="slot '+(i===2?"active":"")+'" onclick="this.parentElement.querySelectorAll(\'.slot\').forEach(s=>s.classList.remove(\'active\'));this.classList.add(\'active\')">'+x+"</button>").join("")+'</div><div class="pay-box"><div><span>Consultation</span><strong>₹899</strong></div><div><span>Prepaid benefit</span><strong style="color:#9f88ff">−₹100</strong></div><hr style="border-color:#22202d;border-width:1px 0 0;margin:10px 0"><div><span>Total</span><strong>₹799</strong></div><button class="pay-btn" onclick="demoPayment()">Pay ₹799 securely →</button></div><p style="font-size:9px;margin-top:18px">Demo checkout — connect Razorpay/your payment gateway keys for production payments.</p>';modal.classList.add("open")}
-function demoPayment(){panel.innerHTML='<div class="success"><div class="check">✓</div><h2>Booking secured.</h2><p>Your demo consultation has been confirmed. In production, this step will trigger payment verification, WhatsApp confirmation and calendar/meeting details.</p><button class="primary" onclick="closeModal()" style="margin-top:20px">Done</button></div>'}
-function getProductConfig(name){return productDefaults[name]||{category:"Spiritual Collection",options:["Standard","Premium"],custom:["Gift wrap","Personal intention card"]}}
-const productDefaults={"Natural Amethyst Crystal":{category:"Crystals",options:["Standard","Premium"],custom:["Gift wrap","Personal intention card"]},"Brass Shree Yantra":{category:"Yantra & Puja",options:["3 inch","5 inch","7 inch"],custom:["Energized","Gift wrap"]},"Seven Chakra Bracelet":{category:"Energy & Balance",options:["6 mm","8 mm","10 mm"],custom:["Gift wrap","Intention card"]},"Vastu Pyramid Set":{category:"Vastu",options:["Brass","Copper"],custom:["Energized","Gift wrap"]},"5 Mukhi Rudraksha Mala":{category:"Rudraksha",options:["108 beads","54 beads"],custom:["Energized","Gift box"]},"Citrine Prosperity Bracelet":{category:"Gemstones",options:["6 mm","8 mm","10 mm"],custom:["Gift wrap","Intention card"]},"Brass Diya Set":{category:"Divine Essentials",options:["Set of 2","Set of 5","Set of 11"],custom:["Gift wrap"]},"Copper Vastu Strip":{category:"Home & Vastu",options:["1 metre","2 metre","5 metre"],custom:["Gift wrap"]}};
-function updateCartBadge(){document.querySelectorAll(".cart-count").forEach(x=>x.textContent=cart.reduce((s,i)=>s+i.qty,0))}
-function configureProduct(name,price,img,id="",meta={}){
- const base=getProductConfig(name),cfg={...base,...(meta||{}),options:meta?.variants||meta?.options||base.options,custom:meta?.customOptions||meta?.custom||base.custom};
- panel.innerHTML='<button class="modal-close" onclick="closeModal()">×</button><div class="eyebrow">THE COLLECTION</div><h2>'+safeText(name)+'</h2><div class="product-config"><img class="config-image" src="'+safeText(img)+'"><div class="config-info"><small>'+safeText(cfg.category)+'</small><p>Choose a variant and customise your order.</p><label>Variant<select id="productVariant">'+(cfg.options||["Standard"]).map(v=>'<option>'+safeText(v)+'</option>').join("")+'</select></label><div class="custom-options"><span>Customise</span>'+((cfg.custom||[]).map(v=>'<label><input type="checkbox" data-custom value="'+safeText(v)+'"> '+safeText(v)+'</label>').join(""))+'</div><div class="config-price">₹'+Number(price).toLocaleString("en-IN")+'</div><button class="pay-btn" id="addConfigBtn">Add to bag</button></div></div>';
- document.getElementById("addConfigBtn").onclick=()=>{const variant=document.getElementById("productVariant").value;const custom=[...document.querySelectorAll("[data-custom]:checked")].map(x=>x.value);const key=id+"|"+variant+"|"+custom.join(",");const found=cart.find(x=>x.key===key);if(found)found.qty++;else cart.push({key,id,name,price,img,variant,custom,qty:1});updateCartBadge();openCart()};
+function scrollToId(id) { document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"}); }
+function safeText(v="") { return String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function numericPrice(v) { const n=Number(String(v??"").replace(/[₹,\s]/g,"")); return Number.isFinite(n)?n:0; }
+function money(v) { return "₹"+Math.round(numericPrice(v)).toLocaleString("en-IN"); }
+function persistCart() { try { localStorage.setItem("as-cart-v2",JSON.stringify(cart)); } catch (_) {} updateCartBadge(); }
+function updateCartBadge() { document.querySelectorAll(".cart-count").forEach(el=>el.textContent=cart.reduce((s,x)=>s+Number(x.qty||0),0)); }
+function closeModal() { modal?.classList.remove("open"); }
+function selectNeed(el,need) { document.querySelectorAll(".need-card").forEach(x=>x.classList.remove("active")); if(el?.classList?.contains("need-card"))el.classList.add("active"); selectedNeed=need; const label=document.getElementById("selectedNeed"); if(label)label.textContent=need; }
+function openDemo() { scrollToId("how"); }
+
+const imageByCategory = {
+ "Rudraksha":"https://images.unsplash.com/photo-1602523961358-f9f03dd557db?auto=format&fit=crop&w=900&q=85",
+ "Shaligram":"https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=85",
+ "Gemstones":"https://images.unsplash.com/photo-1608042314453-ae338d80c427?auto=format&fit=crop&w=900&q=85",
+ "Crystals":"https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=85",
+ "Vastu Products":"https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=900&q=85",
+ "Pooja":"https://images.unsplash.com/photo-1507643179773-3e975d7ac515?auto=format&fit=crop&w=900&q=85",
+ "Shankh Sea Shells":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=85",
+ "Perfumes":"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=85"
+};
+function productImage(p) { return p.image || imageByCategory[p.category] || imageByCategory["Crystals"]; }
+
+function configureProduct(id) {
+ const p=catalog.find(x=>x.id===id);
+ if(!p)return alert("यह उत्पाद अभी उपलब्ध नहीं है। पेज रिफ्रेश करके दोबारा कोशिश करें।");
+ const opts=p.variants||p.options||["Standard","Premium"], customs=p.customOptions||p.custom||["Gift wrap","Personal intention card"], img=productImage(p);
+ panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><div class="eyebrow">आध्यात्मिक दुकान</div><h2>'+safeText(p.name)+'</h2><div class="product-config"><img class="config-image" src="'+safeText(img)+'" alt="'+safeText(p.name)+'"><div class="config-info"><small>'+safeText(p.category||"आध्यात्मिक उत्पाद")+'</small><p>अपना विकल्प चुनें और चाहें तो कस्टमाइज़ करें।</p><label>विकल्प<select id="productVariant">'+opts.map(v=>'<option value="'+safeText(v)+'">'+safeText(v)+'</option>').join("")+'</select></label><div class="custom-options"><span>कस्टमाइज़ करें</span>'+customs.map(v=>'<label><input type="checkbox" data-custom value="'+safeText(v)+'"> '+safeText(v)+'</label>').join("")+'</div><div class="config-price">'+money(p.price)+'</div><button class="pay-btn" id="addConfigBtn">कार्ट में जोड़ें</button></div></div>';
+ panel.querySelector(".modal-close").addEventListener("click",closeModal);
+ panel.querySelector("#addConfigBtn").addEventListener("click",()=>{
+  const variant=panel.querySelector("#productVariant").value, custom=[...panel.querySelectorAll("[data-custom]:checked")].map(x=>x.value), key=p.id+"|"+variant+"|"+custom.join(",");
+  const found=cart.find(x=>x.key===key);
+  if(found)found.qty++;else cart.push({key,id:p.id,name:p.name,price:numericPrice(p.price),img,variant,custom,qty:1});
+  persistCart();openCart();
+ });
  modal.classList.add("open");
 }
-function changeQty(key,delta){const x=cart.find(i=>i.key===key);if(!x)return;x.qty+=delta;if(x.qty<=0)cart=cart.filter(i=>i.key!==key);updateCartBadge();openCart()}
-function removeCartItem(key){cart=cart.filter(i=>i.key!==key);updateCartBadge();openCart()}
-function quickAdd(name,price,img,id="",meta={}){configureProduct(name,price,img,id,meta)}
-function openCart(){
- const total=cart.reduce((s,x)=>s+Number(x.price)*x.qty,0);
- const body=cart.length?cart.map(x=>'<div class="cart-item premium-cart-item"><img src="'+safeText(x.img)+'"><div class="cart-main"><b>'+safeText(x.name)+'</b><small>'+safeText(x.variant)+' · '+(x.custom.length?safeText(x.custom.join(" · ")):"No customisation")+'</small><div class="qty-row"><button onclick="changeQty(\''+safeText(x.key)+'\',-1)">−</button><strong>'+x.qty+'</strong><button onclick="changeQty(\''+safeText(x.key)+'\',1)">+</button><button class="remove-line" onclick="removeCartItem(\''+safeText(x.key)+'\')">Remove</button><b class="line-total">₹'+(Number(x.price)*x.qty).toLocaleString("en-IN")+'</b></div></div></div>').join(""):'<div class="empty-cart"><div>◇</div><h3>Your bag is waiting.</h3><p>Add a spiritual product and customise it before checkout.</p><button class="primary" onclick="closeModal();scrollToId(\'store\')">Explore collection</button></div>';
- panel.innerHTML='<button class="modal-close" onclick="closeModal()">×</button><div class="eyebrow">YOUR BAG · '+cart.reduce((s,i)=>s+i.qty,0)+' ITEMS</div><h2>Your collection.</h2><div class="cart-list">'+body+'</div>'+(cart.length?'<div class="cart-summary"><div><span>Subtotal</span><b>₹'+total.toLocaleString("en-IN")+'</b></div><div><span>Prepaid offer</span><b class="save">−₹100</b></div><div class="cart-grand"><span>Estimated total</span><b>₹'+Math.max(0,total-100).toLocaleString("en-IN")+'</b></div></div><div class="checkout-fields"><input id="shopName" placeholder="Full name"><input id="shopPhone" placeholder="Mobile number" inputmode="tel" maxlength="10"><input id="shopEmail" placeholder="Email address" type="email"><input id="shopAddress" placeholder="Delivery address"></div><button class="pay-btn" onclick="startProductPayU()">Continue to secure checkout →</button>':'');
+function quickAdd(name,price,img,id="",meta={}) {
+ const p=catalog.find(x=>x.id===id||x.name===name);
+ if(p)return configureProduct(p.id);
+ const key=(id||name)+"|Standard|", found=cart.find(x=>x.key===key);
+ if(found)found.qty++;else cart.push({key,id,name,price:numericPrice(price),img,variant:"Standard",custom:[],qty:1});
+ persistCart();openCart();
+}
+function changeQty(key,delta) { const x=cart.find(i=>i.key===key);if(!x)return;x.qty=Number(x.qty||1)+delta;if(x.qty<=0)cart=cart.filter(i=>i.key!==key);persistCart();openCart(); }
+function removeCartItem(key) { cart=cart.filter(x=>x.key!==key);persistCart();openCart(); }
+
+function openCart() {
+ const total=cart.reduce((s,x)=>s+numericPrice(x.price)*Number(x.qty||1),0);
+ const body=cart.length?cart.map((x,i)=>'<div class="cart-item premium-cart-item"><img src="'+safeText(x.img)+'" alt="'+safeText(x.name)+'"><div class="cart-main"><b>'+safeText(x.name)+'</b><small>'+safeText(x.variant||"Standard")+(x.custom?.length?" · "+safeText(x.custom.join(" · ")):"")+'</small><div class="qty-row"><button type="button" data-qty="-1" data-index="'+i+'">−</button><strong>'+Number(x.qty||1)+'</strong><button type="button" data-qty="1" data-index="'+i+'">+</button><button type="button" class="remove-line" data-remove="'+i+'">हटाएँ</button><b class="line-total">'+money(numericPrice(x.price)*Number(x.qty||1))+'</b></div></div></div>').join(""):'<div class="empty-cart"><div>◇</div><h3>आपका कार्ट खाली है</h3><p>दुकान से कोई उत्पाद चुनकर कार्ट में जोड़ें।</p><button class="primary" id="exploreProducts">उत्पाद देखें</button></div>';
+ panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><div class="eyebrow">आपका कार्ट · '+cart.reduce((s,x)=>s+Number(x.qty||0),0)+' आइटम</div><h2>आपके चुने हुए उत्पाद</h2><div class="cart-list">'+body+'</div>'+(cart.length?'<div class="cart-summary"><div><span>कुल कीमत</span><b>'+money(total)+'</b></div><div><span>शिपिंग</span><b>'+(total>=1000?"मुफ़्त":money(99))+'</b></div><div class="cart-grand"><span>अनुमानित कुल</span><b>'+money(total+(total>=1000?0:99))+'</b></div></div><div class="checkout-fields"><input id="shopName" placeholder="पूरा नाम" autocomplete="name"><input id="shopPhone" placeholder="10 अंकों का मोबाइल नंबर" inputmode="tel" maxlength="10" autocomplete="tel"><input id="shopEmail" placeholder="ईमेल (वैकल्पिक)" type="email" autocomplete="email"><input id="shopAddress" placeholder="पूरा डिलीवरी पता" autocomplete="street-address"></div><button class="pay-btn" id="checkoutBtn">ऑर्डर करें और भुगतान करें →</button><p class="checkout-note">भुगतान PayU के सुरक्षित पेज पर होगा।</p>':"");
+ panel.querySelector(".modal-close").addEventListener("click",closeModal);
+ panel.querySelectorAll("[data-qty]").forEach(b=>b.addEventListener("click",()=>changeQty(cart[Number(b.dataset.index)].key,Number(b.dataset.qty))));
+ panel.querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>removeCartItem(cart[Number(b.dataset.remove)].key)));
+ panel.querySelector("#exploreProducts")?.addEventListener("click",()=>{closeModal();scrollToId("store");});
+ panel.querySelector("#checkoutBtn")?.addEventListener("click",startProductPayU);
  modal.classList.add("open");
 }
-function init3D(){
-  const host=document.getElementById("hero-canvas");
-  if(!host||!window.THREE)return;
-  try{
-    const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(42,Math.max(host.clientWidth,1)/Math.max(host.clientHeight,1),.1,200);
-    camera.position.set(0,2.2,15);
-    const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
-    renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.8)); renderer.setSize(host.clientWidth,host.clientHeight);
-    if("outputColorSpace" in renderer&&THREE.SRGBColorSpace)renderer.outputColorSpace=THREE.SRGBColorSpace;
-    else if("outputEncoding" in renderer&&THREE.sRGBEncoding)renderer.outputEncoding=THREE.sRGBEncoding;
-    host.querySelector(".hero-solar-fallback")?.remove();host.innerHTML="";host.appendChild(renderer.domElement);
-    const system=new THREE.Group();scene.add(system);
-    const sun=new THREE.Mesh(new THREE.SphereGeometry(2.0,64,64),new THREE.MeshStandardMaterial({color:0xffc73a,emissive:0xffa300,emissiveIntensity:1.7,roughness:.4}));
-    system.add(sun);
-    system.add(new THREE.Mesh(new THREE.SphereGeometry(2.45,48,48),new THREE.MeshBasicMaterial({color:0xffd65a,transparent:true,opacity:.12,depthWrite:false})));
-    const data=[{r:3.1,s:.24,c:0xb7aa8d,sp:.024},{r:4.2,s:.36,c:0xd2a36d,sp:.019},{r:5.4,s:.46,c:0x718e91,sp:.015},{r:6.8,s:.39,c:0xb86f4e,sp:.012},{r:8.4,s:.7,c:0xd1aa69,sp:.008,ring:true}];
-    const planets=[];
-    data.forEach((p,i)=>{
-      const o=new THREE.Mesh(new THREE.TorusGeometry(p.r,.012,8,180),new THREE.MeshBasicMaterial({color:0xb89438,transparent:true,opacity:.25}));o.rotation.x=Math.PI/2;system.add(o);
-      const m=new THREE.Mesh(new THREE.SphereGeometry(p.s,28,28),new THREE.MeshStandardMaterial({color:p.c,roughness:.72}));m.userData={r:p.r,a:i*1.2,sp:p.sp};system.add(m);planets.push(m);
-      if(p.ring){const rr=new THREE.Mesh(new THREE.RingGeometry(.8,1.2,72),new THREE.MeshStandardMaterial({color:0xb99a62,side:THREE.DoubleSide,transparent:true,opacity:.6}));rr.rotation.x=.5;m.add(rr)}
-    });
-    scene.add(new THREE.AmbientLight(0xffe9bf,.4));const light=new THREE.PointLight(0xffc44b,100,80);scene.add(light);
-    const starsGeo=new THREE.BufferGeometry(),pos=[];for(let i=0;i<1600;i++){const r=45+Math.random()*60,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos.push(r*Math.sin(p)*Math.cos(t),r*Math.sin(p)*Math.sin(t),r*Math.cos(p))}starsGeo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));const stars=new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0x8f7332,size:.045,transparent:true,opacity:.55}));scene.add(stars);
-    let mx=0,my=0;host.addEventListener("pointermove",e=>{const r=host.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5});
-    function tick(){requestAnimationFrame(tick);system.rotation.y+=.001;stars.rotation.y-=.0001;planets.forEach(p=>{p.userData.a+=p.userData.sp;p.position.set(Math.cos(p.userData.a)*p.userData.r,Math.sin(p.userData.a)*.22,Math.sin(p.userData.a)*p.userData.r)});system.rotation.x+=(my*.12-system.rotation.x)*.03;system.rotation.z+=(mx*.08-system.rotation.z)*.03;sun.rotation.y+=.0025;renderer.render(scene,camera)}tick();
-    addEventListener("resize",()=>{camera.aspect=Math.max(host.clientWidth,1)/Math.max(host.clientHeight,1);camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight)});
-  }catch(e){console.warn("3D hero fallback",e)}
+async function api(path,options={}) {
+ const response=await fetch(path,{...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(data.error||"Request failed");
+ return data;
 }
-init3D();
-
-// Production-ready demo integration layer
-async function api(path, options={}){const res=await fetch(path,{headers:{"Content-Type":"application/json",...(options.headers||{})},...options});const data=await res.json();if(!res.ok)throw new Error(data.error||"Request failed");return data}
-async function loadLiveCatalog(){
-  try{
-    const [experts,products]=await Promise.all([api("/api/consultants"),api("/api/products")]);
-    const grid=document.querySelector(".expert-grid");
-    if(grid&&experts.length) grid.innerHTML=experts.map((x,i)=>'<article class="expert-card" onclick="openBooking(\''+x.name.replace(/'/g,"\\'")+'\',\''+x.id+'\')"><div class="expert-photo" style="background-image:url(\''+["https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=900&q=88","https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=88","https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=88"][i%3]+'\')"><span class="online">● AVAILABLE</span><span class="float-num">0'+(i+1)+'</span></div><div class="expert-info"><div><h3>'+x.name+'</h3><p>'+x.type+' · '+x.experience+'</p></div><span class="rating">★ '+x.rating+'</span></div><div class="expert-bottom"><b>₹'+x.price+' <small>/ 30 min</small></b><button>View & book ↗</button></div></article>').join("");
-    const pg=document.querySelector(".product-grid");
-    if(pg&&products.length) pg.innerHTML=products.map((x,i)=>{
-      const imgs=["https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=88","https://images.unsplash.com/photo-1604608672516-f1b4b5a4f4a0?auto=format&fit=crop&w=900&q=88","https://images.unsplash.com/photo-1608042314453-ae338d80c427?auto=format&fit=crop&w=900&q=88","https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=900&q=88"];
-      const img=x.image||imgs[i%imgs.length], safeName=String(x.name||"").replace(/'/g,"\\'");
-      return '<article class="product-card"><div class="product-img" style="background-image:url(\\''+img+'\\')"><span>'+(x.badge||"PREPAID")+'</span><button onclick="configureProduct(\\''+safeName+'\\',\\''+x.price+'\\',\\''+img+'\\',\\''+(x.id||"")+'\\',{variants:x.variants,custom:x.customOptions,category:x.category})">+</button></div><div class="product-meta"><small>'+safeText(x.category)+'</small><h3>'+safeText(x.name)+'</h3><div><b>₹'+Number(x.price).toLocaleString("en-IN")+'</b>'+(x.compareAt?' <del>₹'+Number(x.compareAt).toLocaleString("en-IN")+'</del>':'')+'</div><button class="customize-btn" onclick="configureProduct(\\''+safeName+'\\',\\''+x.price+'\\',\\''+img+'\\',\\''+(x.id||"")+'\\',{variants:x.variants,custom:x.customOptions,category:x.category})">Customise & add</button></div></article>';
-    }).join("");
-  }catch(e){console.warn("Demo catalog fallback",e)}
+async function loadLiveCatalog() {
+ const pg=document.querySelector(".product-grid"), eg=document.querySelector(".expert-grid");
+ try {
+  const result=await Promise.all([api("/api/products"),api("/api/consultants")]);
+  catalog=Array.isArray(result[0])?result[0]:[];consultants=Array.isArray(result[1])?result[1]:[];
+  if(pg)pg.innerHTML=catalog.length?catalog.map(p=>{
+   const img=productImage(p);
+   return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(p.name)+'" loading="lazy"><span>'+safeText(p.category||"दुकान")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="कार्ट में जोड़ें">+</button></div><div class="product-meta"><small>'+safeText(p.category||"आध्यात्मिक उत्पाद")+'</small><h3>'+safeText(p.name)+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'">विकल्प चुनें · कार्ट में जोड़ें</button></div></article>';
+  }).join(""):'<p class="catalog-empty">फिलहाल कोई उत्पाद उपलब्ध नहीं है।</p>';
+  pg?.querySelectorAll("[data-configure]").forEach(b=>b.addEventListener("click",()=>configureProduct(b.dataset.configure)));
+  if(eg)eg.querySelectorAll(".service-choice").forEach((b,i)=>b.addEventListener("click",()=>openBooking(null,consultants[i]?.id||consultants[0]?.id)));
+ } catch(e) {
+  console.error("Catalog could not be loaded",e);
+  if(pg)pg.innerHTML='<p class="catalog-empty">उत्पाद लोड नहीं हो पाए। कनेक्शन जाँचकर पेज दोबारा खोलें।</p>';
+ }
 }
-const oldOpenBooking=openBooking;
-function safeText(v){return String(v??"").replace(/[<>&"']/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&#39;"}[c]))}
-openBooking=async function(expert="Recommended Expert",consultantId="c1"){
-  let experts=[];try{experts=await api("/api/consultants")}catch(e){}
-  const c=experts.find(x=>x.name===expert)||experts.find(x=>x.id===consultantId)||experts[0];
-  const price=c?.price||899, payable=Math.max(0,price-100);
-  panel.innerHTML='<button class="modal-close" onclick="closeModal()">×</button><div class="eyebrow">CONSULTATION / '+safeText(selectedNeed.toUpperCase())+'</div><h2>Book your session.</h2><p>Expert: <b style="color:#fff">'+safeText(c?.name||expert)+'</b><br>'+safeText(c?.type||"Personal consultation")+' · 30 minutes.</p><div class="checkout-fields"><input id="payName" placeholder="Full name" autocomplete="name"><input id="payPhone" placeholder="Mobile number" inputmode="tel" maxlength="10" autocomplete="tel"><input id="payEmail" placeholder="Email address" type="email" autocomplete="email"></div><div class="eyebrow" style="margin-top:22px">SELECT A SLOT</div><div class="slot-grid">'+["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"].map((x,i)=>'<button class="slot '+(i===2?"active":"")+'" data-slot="'+x+'" onclick="this.parentElement.querySelectorAll(\'.slot\').forEach(s=>s.classList.remove(\'active\'));this.classList.add(\'active\')">'+x+"</button>").join("")+'</div><div class="pay-box"><div><span>Consultation</span><strong>₹'+price+'</strong></div><div><span>Prepaid benefit</span><strong style="color:#9f88ff">−₹100</strong></div><hr style="border-color:#22202d;border-width:1px 0 0;margin:10px 0"><div><span>Total</span><strong>₹'+payable+'</strong></div><button class="pay-btn" id="consultPayBtn">Pay ₹'+payable+' securely with PayU →</button></div><p style="font-size:9px;margin-top:18px">Secure PayU hosted checkout. Your card/UPI details are entered only on PayU.</p>';
-  document.getElementById("consultPayBtn").onclick=()=>createBookingAndPay(c?.id||consultantId,payable);
+async function openBooking(expertName=null,consultantId=null) {
+ try {
+  if(!consultants.length)consultants=await api("/api/consultants");
+  const chosen=consultants.find(c=>c.id===consultantId)||consultants.find(c=>c.name===expertName)||consultants[0];
+  if(!chosen)throw new Error("अभी कोई सलाहकार उपलब्ध नहीं है।");
+  panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><div class="eyebrow">ऑनलाइन परामर्श</div><h2>अपनी सलाह बुक करें</h2><p>विषय: <b>'+safeText(selectedNeed)+'</b></p><label class="booking-label">सलाहकार<select id="bookingConsultant">'+consultants.map(c=>'<option value="'+safeText(c.id)+'" data-price="'+numericPrice(c.price)+'" '+(c.id===chosen.id?"selected":"")+'>'+safeText(c.type||c.name)+' · '+money(c.price)+'</option>').join("")+'</select></label><div class="checkout-fields"><input id="payName" placeholder="पूरा नाम" autocomplete="name"><input id="payPhone" placeholder="10 अंकों का मोबाइल नंबर" inputmode="tel" maxlength="10" autocomplete="tel"><input id="payEmail" placeholder="ईमेल" type="email" autocomplete="email"></div><label class="booking-label">समय चुनें<select id="bookingSlot">'+["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"].map((s,i)=>'<option '+(i===2?"selected":"")+'>'+s+'</option>').join("")+'</select></label><div class="pay-box"><div><span>परामर्श शुल्क</span><strong id="consultPrice">'+money(chosen.price)+'</strong></div><div><span>ऑफ़र</span><strong>₹100</strong></div><div class="cart-grand"><span>देय राशि</span><strong id="consultTotal">'+money(Math.max(0,numericPrice(chosen.price)-100))+'</strong></div><button class="pay-btn" id="consultPayBtn">PayU से सुरक्षित भुगतान करें →</button></div>';
+  panel.querySelector(".modal-close").addEventListener("click",closeModal);
+  const updateAmount=()=>{const o=panel.querySelector("#bookingConsultant").selectedOptions[0],price=numericPrice(o.dataset.price);panel.querySelector("#consultPrice").textContent=money(price);panel.querySelector("#consultTotal").textContent=money(Math.max(0,price-100));};
+  panel.querySelector("#bookingConsultant").addEventListener("change",updateAmount);
+  panel.querySelector("#consultPayBtn").addEventListener("click",()=>{const o=panel.querySelector("#bookingConsultant").selectedOptions[0];createBookingAndPay(panel.querySelector("#bookingConsultant").value,Math.max(0,numericPrice(o.dataset.price)-100));});
   modal.classList.add("open");
+ } catch(e) {
+  panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><h2>अभी बुकिंग शुरू नहीं हो पाई</h2><p>'+safeText(e.message)+'</p>';
+  panel.querySelector(".modal-close").addEventListener("click",closeModal);modal.classList.add("open");
+ }
 }
-async function createBookingAndPay(consultantId,amount){
-  try{
-    const name=document.getElementById("payName")?.value.trim(),phone=document.getElementById("payPhone")?.value.trim(),email=document.getElementById("payEmail")?.value.trim();
-    if(!name||phone.length!==10||!email)return alert("Please enter valid name, 10-digit mobile and email.");
-    const slot=document.querySelector(".slot.active")?.dataset.slot||"2:30 PM";
-    const b=await api("/api/bookings",{method:"POST",body:JSON.stringify({customerName:name,customerPhone:phone,customerEmail:email,concern:selectedNeed,consultantId,slot,amount})});
-    const p=await api("/api/payu/create",{method:"POST",body:JSON.stringify({bookingId:b.id,amount,productinfo:"Astrological Solutions Consultation",firstname:name,phone,email,udf1:"consultation",udf2:b.id})});
-    submitPayU(p.endpoint,p.params);
-  }catch(e){panel.innerHTML='<div class="success"><h2>Unable to start payment.</h2><p>'+safeText(e.message)+'</p><button class="ghost" onclick="closeModal()">Close</button></div>'}
+async function createBookingAndPay(consultantId,amount) {
+ try {
+  const name=panel.querySelector("#payName")?.value.trim(),phone=panel.querySelector("#payPhone")?.value.trim(),email=panel.querySelector("#payEmail")?.value.trim();
+  if(!name||!/^\d{10}$/.test(phone||"")||!email)return alert("कृपया नाम, 10 अंकों का मोबाइल नंबर और ईमेल भरें।");
+  const slot=panel.querySelector("#bookingSlot")?.value||"2:30 PM";
+  const booking=await api("/api/bookings",{method:"POST",body:JSON.stringify({customerName:name,customerPhone:phone,customerEmail:email,concern:selectedNeed,consultantId,slot,amount})});
+  const payment=await api("/api/payu/create",{method:"POST",body:JSON.stringify({bookingId:booking.id,amount,productinfo:"Astrological Solutions Consultation",firstname:name,phone,email,udf1:"consultation",udf2:booking.id})});
+  submitPayU(payment.endpoint,payment.params);
+ } catch(e) { alert(e.message); }
 }
-function submitPayU(endpoint,params){
-  const form=document.createElement("form");form.method="POST";form.action=endpoint;form.style.display="none";
-  Object.entries(params||{}).forEach(([k,v])=>{const input=document.createElement("input");input.type="hidden";input.name=k;input.value=v??"";form.appendChild(input)});
-  document.body.appendChild(form);form.submit();
+function submitPayU(endpoint,params) {
+ if(!endpoint||!params)throw new Error("PayU अभी कॉन्फ़िगर नहीं है।");
+ const form=document.createElement("form");form.method="POST";form.action=endpoint;form.style.display="none";
+ Object.entries(params).forEach(([k,v])=>{const input=document.createElement("input");input.type="hidden";input.name=k;input.value=v??"";form.appendChild(input);});
+ document.body.appendChild(form);form.submit();
 }
-async function startProductPayU(){
-  try{
-    if(!cart.length)return;
-    const name=document.getElementById("shopName")?.value.trim(),phone=document.getElementById("shopPhone")?.value.trim(),email=document.getElementById("shopEmail")?.value.trim(),address=document.getElementById("shopAddress")?.value.trim();
-    if(!name||phone.length!==10||!email||!address)return alert("Please complete name, 10-digit mobile, email and delivery address.");
-    const catalog=await api("/api/products");
-    const items=cart.map(x=>{const p=catalog.find(v=>v.name===x.name);return {productId:p?.id,quantity:1}});
-    if(items.some(x=>!x.productId))return alert("One product is no longer available. Please refresh the collection.");
-    const o=await api("/api/orders",{method:"POST",body:JSON.stringify({customerName:name,phone,email,address:{line1:address,country:"India"},items,fulfillment:"PREPAID"})});
-    const p=await api("/api/payu/create",{method:"POST",body:JSON.stringify({orderId:o.id,amount:o.total,productinfo:"Astrological Solutions Store Order",firstname:name,phone,email,udf1:"store",udf2:o.id})});
-    submitPayU(p.endpoint,p.params);
-  }catch(e){alert(e.message)}
+async function startProductPayU() {
+ try {
+  if(!cart.length)return;
+  const name=panel.querySelector("#shopName")?.value.trim(),phone=panel.querySelector("#shopPhone")?.value.trim(),email=panel.querySelector("#shopEmail")?.value.trim(),address=panel.querySelector("#shopAddress")?.value.trim();
+  if(!name||!/^\d{10}$/.test(phone||"")||!address)return alert("कृपया नाम, 10 अंकों का मोबाइल नंबर और पूरा पता भरें।");
+  const items=cart.map(x=>({productId:x.id,quantity:Number(x.qty||1),variant:x.variant||"Standard",customization:Array.isArray(x.custom)?x.custom:[]}));
+  if(items.some(x=>!x.productId||!catalog.some(p=>p.id===x.productId)))return alert("कार्ट में कोई उत्पाद उपलब्ध नहीं है। पेज रिफ्रेश करके फिर कोशिश करें।");
+  const order=await api("/api/orders",{method:"POST",body:JSON.stringify({customerName:name,phone,email:email||"",address:{line1:address,country:"India"},items,fulfillment:"PREPAID"})});
+  const payment=await api("/api/payu/create",{method:"POST",body:JSON.stringify({orderId:order.id,amount:order.total,productinfo:"Astrological Solutions Store Order",firstname:name,phone,email:email||"",udf1:"store",udf2:order.id})});
+  submitPayU(payment.endpoint,payment.params);
+ } catch(e) { alert(e.message||"ऑर्डर पूरा नहीं हो पाया।"); }
 }
-loadLiveCatalog();
-
-/* Premium pointer-driven 3D card depth */
-function enable3DCardDepth(){
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  document.querySelectorAll(".need-card,.expert-card,.product-card,.how-card").forEach(card=>{
-    card.addEventListener("pointermove",e=>{
-      const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform="perspective(900px) rotateX("+(-y*5)+"deg) rotateY("+(x*6)+"deg) translateY(-7px) translateZ(8px)";
-    });
-    card.addEventListener("pointerleave",()=>card.style.transform="");
-  });
+async function loadSiteContent() {
+ try {
+  const x=await api("/api/site-content"),a=document.querySelector(".store-cta b");
+  if(a&&x.announcement)a.textContent=x.announcement;
+  if(x.seoTitle)document.title=x.seoTitle;
+  const md=document.querySelector('meta[name="description"]');if(md&&x.seoDescription)md.content=x.seoDescription;
+ } catch(e) { console.warn("CMS content unavailable",e); }
 }
-setTimeout(enable3DCardDepth,600);
-
-function initSolarLoader(){
-  const loader=document.getElementById("loader");
-  if(!loader)return;
-  // The CSS solar system is the first frame. WebGL is not required for entry rendering.
-  const exit=()=>{loader.classList.add("solar-exit");setTimeout(()=>{loader.style.opacity="0";loader.style.visibility="hidden"},650)};
-  window.setTimeout(exit,2400);
-}
-initSolarLoader();
-
-async function loadSiteContent(){
-  try{const x=await api("/api/site-content");
-    const h=document.querySelector(".hero h1"), p=document.querySelector(".hero-copy>p"), a=document.querySelector(".store-cta b");
-    if(h&&x.heroTitle){const parts=x.heroTitle.split(" ");const cut=Math.max(1,Math.floor(parts.length*.55));h.innerHTML=parts.slice(0,cut).join(" ")+"<br><em>"+parts.slice(cut).join(" ")+"</em>"}
-    if(p&&x.heroSubtitle)p.textContent=x.heroSubtitle;
-    if(a&&x.announcement)a.textContent=x.announcement;
-    if(x.seoTitle)document.title=x.seoTitle;
-    const md=document.querySelector('meta[name="description"]');if(md&&x.seoDescription)md.content=x.seoDescription;
-  }catch(e){console.warn("CMS content fallback",e)}
-}
-loadSiteContent();
+document.querySelectorAll(".need-card").forEach(card=>card.addEventListener("click",()=>{const title=card.querySelector("b")?.textContent.trim();if(title)selectNeed(card,title);}));
+document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",closeModal));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+updateCartBadge();loadLiveCatalog();loadSiteContent();
