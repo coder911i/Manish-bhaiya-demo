@@ -76,7 +76,7 @@ async function loadLiveCatalog() {
    return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(p.name)+'" loading="lazy"><span>'+safeText(p.category||"दुकान")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="कार्ट में जोड़ें">+</button></div><div class="product-meta"><small>'+safeText(p.category||"आध्यात्मिक उत्पाद")+'</small><h3>'+safeText(p.name)+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'">विकल्प चुनें · कार्ट में जोड़ें</button></div></article>';
   }).join(""):'<p class="catalog-empty">फिलहाल कोई उत्पाद उपलब्ध नहीं है।</p>';
   pg?.querySelectorAll("[data-configure]").forEach(b=>b.addEventListener("click",()=>configureProduct(b.dataset.configure)));
-  if(eg)eg.querySelectorAll(".service-choice").forEach((b,i)=>b.addEventListener("click",()=>openBooking(null,consultants[i]?.id||consultants[0]?.id)));
+  
  } catch(e) {
   console.error("Catalog could not be loaded",e);
   if(pg)pg.innerHTML='<p class="catalog-empty">उत्पाद लोड नहीं हो पाए। कनेक्शन जाँचकर पेज दोबारा खोलें।</p>';
@@ -85,7 +85,7 @@ async function loadLiveCatalog() {
 async function openBooking(expertName=null,consultantId=null) {
  try {
   if(!consultants.length)consultants=await api("/api/consultants");
-  const chosen=consultants.find(c=>c.id===consultantId)||consultants.find(c=>c.name===expertName)||consultants[0];
+  const chosen=consultants.find(c=>c.id===consultantId)||consultants.find(c=>c.name===expertName)||consultants.find(c=>selectedNeed.includes("अंक")&&/Numerolog/i.test(c.type||""))||consultants.find(c=>selectedNeed.includes("वास्तु")&&/Vastu/i.test(c.type||""))||consultants[0];
   if(!chosen)throw new Error("अभी कोई सलाहकार उपलब्ध नहीं है।");
   panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><div class="eyebrow">ऑनलाइन परामर्श</div><h2>अपनी सलाह बुक करें</h2><p>विषय: <b>'+safeText(selectedNeed)+'</b></p><label class="booking-label">सलाहकार<select id="bookingConsultant">'+consultants.map(c=>'<option value="'+safeText(c.id)+'" data-price="'+numericPrice(c.price)+'" '+(c.id===chosen.id?"selected":"")+'>'+safeText(c.type||c.name)+' · '+money(c.price)+'</option>').join("")+'</select></label><div class="checkout-fields"><input id="payName" placeholder="पूरा नाम" autocomplete="name"><input id="payPhone" placeholder="10 अंकों का मोबाइल नंबर" inputmode="tel" maxlength="10" autocomplete="tel"><input id="payEmail" placeholder="ईमेल" type="email" autocomplete="email"></div><label class="booking-label">समय चुनें<select id="bookingSlot">'+["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"].map((s,i)=>'<option '+(i===2?"selected":"")+'>'+s+'</option>').join("")+'</select></label><div class="pay-box"><div><span>परामर्श शुल्क</span><strong id="consultPrice">'+money(chosen.price)+'</strong></div><div><span>ऑफ़र</span><strong>₹100</strong></div><div class="cart-grand"><span>देय राशि</span><strong id="consultTotal">'+money(Math.max(0,numericPrice(chosen.price)-100))+'</strong></div><button class="pay-btn" id="consultPayBtn">PayU से सुरक्षित भुगतान करें →</button></div>';
   panel.querySelector(".modal-close").addEventListener("click",closeModal);
