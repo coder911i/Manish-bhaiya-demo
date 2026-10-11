@@ -296,7 +296,7 @@ app.post("/api/payu/callback",(q,r)=>{
   const p=q.body||{}; 
   if(!process.env.PAYU_SALT)return r.status(503).send("Payment configuration missing");
   if(!p.hash||!p.txnid||!p.status||!safeEqual(p.hash,payuResponseHash(p,process.env.PAYU_SALT)))return r.status(400).send("Invalid PayU response");
-  markPayment(p.txnid,p);
+  const accepted=markPayment(p.txnid,p);if(!accepted)return r.status(400).send("Payment details did not match a pending booking or order");
   const success=p.status==="success";
   r.status(200).send(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment ${success?"Successful":"Failed"}</title></head><body style="font-family:Arial;text-align:center;padding:60px;background:#fffaf0;color:#10243b"><h1>${success?"Payment successful":"Payment not completed"}</h1><p>Transaction: ${String(p.txnid).replace(/[<>]/g,"")}</p><p>You can close this page.</p><script>setTimeout(()=>location.href="/payment-result.html?status=${success?"success":"failed"}&txnid=${encodeURIComponent(p.txnid)}",1200)</script></body></html>`);
 });
@@ -305,7 +305,7 @@ app.post("/api/payu/webhook",(q,r)=>{
   const p=q.body||{};
   if(!process.env.PAYU_SALT||!p.hash)return r.status(400).json({ok:false});
   if(!safeEqual(p.hash,payuResponseHash(p,process.env.PAYU_SALT)))return r.status(401).json({ok:false,error:"Invalid hash"});
-  markPayment(p.txnid,p); r.json({ok:true});
+  const accepted=markPayment(p.txnid,p);if(!accepted)return r.status(400).json({ok:false,error:"Transaction not found or amount mismatch"});r.json({ok:true});
 });
 
 app.post("/api/payment/verify",(q,r)=>{
@@ -313,8 +313,8 @@ app.post("/api/payment/verify",(q,r)=>{
   if(!txnid||!status||!hash||!process.env.PAYU_SALT)return r.status(400).json({verified:false});
   const payload={...q.body,txnid,status};
   const ok=safeEqual(hash,payuResponseHash(payload,process.env.PAYU_SALT));
-  if(ok)markPayment(txnid,payload);
-  r.status(ok?200:400).json({verified:ok});
+  const accepted=ok&&markPayment(txnid,payload);
+  r.status(accepted?200:400).json({verified:accepted});
 });
 
 // Vercel/Node serverless entrypoint: export the Express application.
