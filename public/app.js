@@ -9,8 +9,9 @@ function initializePreferences(){
  let theme="light",language="en";
  try{theme=localStorage.getItem("as-theme")||"light";language=localStorage.getItem("as-language")||"en";}catch(_){}
  function setTheme(next){theme=next;body.classList.toggle("theme-dark",theme==="dark");if(themeButton)themeButton.textContent=theme==="dark"?"Light mode":"Dark mode";try{localStorage.setItem("as-theme",theme);}catch(_){}}
- function setLanguage(next){language=next;activeLanguage=language;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";try{localStorage.setItem("as-language",language);}catch(_){}}
- window.applySiteLanguage=()=>setLanguage(language);\n themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
+ function setLanguage(next){language=next;activeLanguage=language;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=language==="en"?"Book astrology, horoscope, numerology and vastu consultations. Explore spiritual essentials online.":"ज्योतिष, कुंडली, अंक ज्योतिष और वास्तु के लिए व्यक्तिगत सलाह और आध्यात्मिक उत्पाद देखें।";document.title=language==="en"?"Astrological Solutions | Astrology, Horoscope & Vastu":"Astrological Solutions | ज्योतिष, कुंडली और वास्तु";try{localStorage.setItem("as-language",language);}catch(_){}}
+ window.applySiteLanguage=()=>setLanguage(language);
+ themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
  langButton?.addEventListener("click",()=>setLanguage(language==="en"?"hi":"en"));
  setTheme(theme);setLanguage(language);
 }
@@ -98,7 +99,7 @@ async function loadLiveCatalog() {
    const img=productImage(p);
    return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(p.name)+'" loading="lazy"><span>'+safeText(p.category||"Store")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="Add to bag">+</button></div><div class="product-meta"><small>'+safeText(p.category||"Spiritual essentials")+'</small><h3>'+safeText(p.name)+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'">Choose options · Add to bag</button></div></article>';
   }).join(""):'<p class="catalog-empty">No products are available right now.</p>';
-  pg?.querySelectorAll("[data-configure]").forEach(b=>b.addEventListener("click",()=>configureProduct(b.dataset.configure)));
+  pg?.querySelectorAll("[data-configure]").forEach(b=>b.addEventListener("click",()=>configureProduct(b.dataset.configure)));applyRenderedTranslations();
   renderExperts();
  } catch(e) {
   console.error("Catalog could not be loaded",e);
