@@ -139,6 +139,9 @@ async function loadSiteContent() {
 }
 document.querySelectorAll(".need-card").forEach(card=>card.addEventListener("click",()=>{const title=card.querySelector("b")?.textContent.trim();if(title)selectNeed(card,title);}));
 document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",closeModal));
+const menuButton=document.querySelector(".menu"),mainNav=document.querySelector(".nav-left nav");
+menuButton?.addEventListener("click",()=>{const opened=mainNav?.classList.toggle("is-open");menuButton.setAttribute("aria-expanded",String(Boolean(opened)));});
+mainNav?.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>{mainNav.classList.remove("is-open");menuButton?.setAttribute("aria-expanded","false");}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 updateCartBadge();loadLiveCatalog();loadSiteContent();
 const entryLoader=document.getElementById("loader");
