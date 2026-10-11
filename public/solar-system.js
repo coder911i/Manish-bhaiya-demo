@@ -33,7 +33,7 @@
     renderer.toneMappingExposure=1.25;
     const scene=new THREE.Scene();
     const camera=new THREE.PerspectiveCamera(34,1,.1,100);
-    camera.position.set(0,entry?2.5:2.15,entry?13.8:13.1);
+    camera.position.set(0,entry?2.5:2.15,entry?21.5:18.5);
     camera.lookAt(0,0,0);
     const system=new THREE.Group();system.rotation.x=-.22;system.rotation.z=-.06;scene.add(system);
     scene.add(new THREE.AmbientLight(0xffffff,.72));
@@ -75,7 +75,7 @@
       const w=Math.max(1,Math.floor(rect.width)),h=Math.max(1,Math.floor(rect.height));
       if(!w||!h)return;
       if(w===width&&h===height)return;width=w;height=h;
-      renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=entry?36:39;camera.position.z=entry?13.7:(w<600?14.4:12.8);camera.position.y=entry?2.4:2.15;camera.updateProjectionMatrix();
+      renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=entry?36:39;camera.position.z=entry?21.5:(w<600?20.5:18.5);camera.position.y=entry?2.4:2.15;camera.updateProjectionMatrix();
     }
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(canvas);resize();
     const clock=new THREE.Clock();
