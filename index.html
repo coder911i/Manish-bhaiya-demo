@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#070711">
@@ -10,60 +10,47 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="loader" aria-label="Astrological Solutions loading"><div class="entry-mandala" aria-hidden="true"><i class="mandala-ring ring-one"></i><i class="mandala-ring ring-two"></i><i class="mandala-ring ring-three"></i><i class="mandala-star star-one">✦</i><i class="mandala-star star-two">✧</i><i class="mandala-star star-three">✦</i><div class="mandala-center">ॐ</div></div><div class="loader-overlay"><div class="loader-word">ASTROLOGICAL <span>SOLUTIONS</span></div><div class="loader-sub">आपके सवालों के लिए सही मार्गदर्शन</div><div class="loader-line"><i></i></div></div></div><script>document.documentElement.classList.add("entry-ready");</script>
+<div id="loader" aria-label="Astrological Solutions loading"><canvas id="entry-solar-canvas" aria-label="A three-dimensional solar system"></canvas><div class="entry-label"><span>ASTROLOGICAL SOLUTIONS</span><strong>Explore your universe.</strong><small>ASTROLOGY · GUIDANCE · WELLNESS</small><div class="entry-progress"><i></i></div></div><button class="skip-intro" id="skipIntro" type="button">Skip intro ↗</button></div>
 <div class="noise"></div>
 <header class="nav">
   <div class="nav-left">
     <button class="menu" aria-label="Open menu">☰</button>
-    <nav><a href="#consult">परामर्श</a><a href="#experts">ज्योतिष सेवाएँ</a><a href="#zodiac">राशिफल</a><a href="#store">दुकान</a><a href="/admin.html">Admin</a></nav>
+    <nav><a href="#consult" data-en="Consultations" data-hi="परामर्श">Consultations</a><a href="#experts" data-en="Our experts" data-hi="हमारे विशेषज्ञ">Our experts</a><a href="#zodiac" data-en="Horoscope" data-hi="राशिफल">Horoscope</a><a href="#store" data-en="Shop" data-hi="दुकान">Shop</a></nav>
   </div>
   <a class="brand brand-center" href="#" aria-label="Astrological Solutions home"><span class="brand-mark">✦</span><span>ASTROLOGICAL<br><b>SOLUTIONS</b></span></a>
-  <div class="nav-right"><a href="#about" class="nav-extra">हमारे बारे में</a><a href="/admin.html" class="nav-extra admin-entry">Admin</a><button class="nav-extra cart-nav" onclick="openCart()">कार्ट <span class="cart-count">0</span></button><button class="nav-cta" onclick="scrollToId('consult')">सलाह लें <span>↗</span></button></div>
+  <div class="nav-right"><div class="site-controls" aria-label="Display settings"><button type="button" id="themeToggle" class="setting-toggle" aria-label="Switch theme">Light mode</button><button type="button" id="languageToggle" class="setting-toggle" aria-label="Switch language">हिन्दी</button></div><a href="/admin.html" class="nav-extra admin-entry">Admin</a><button class="nav-extra cart-nav" onclick="openCart()">Bag <span class="cart-count">0</span></button><button class="nav-cta" onclick="scrollToId('consult')" data-en="Talk to an expert ↗" data-hi="सलाह लें ↗">Talk to an expert ↗</button></div>
 </header>
 
 <main>
-<section class="hero">
-<div class="hero-copy"><div class="eyebrow"><span></span> ज्योतिष · कुंडली · वास्तु</div>
-<h1>आपके सवाल,<br><em>सही मार्गदर्शन।</em></h1>
-<p>प्यार, शादी, करियर या घर-वास्तु—अपना सवाल चुनें और अनुभवी सलाहकार से बात करें। आध्यात्मिक उत्पाद भी आसानी से मँगाएँ।</p>
-<div class="hero-actions"><button class="primary" onclick="scrollToId('consult')">सलाह लेने के लिए आगे बढ़ें <span>→</span></button><button class="ghost" onclick="scrollToId('how')">कैसे काम करता है <span>↓</span></button></div></div>
-<div class="hero-visual"><div id="hero-canvas"><div class="celestial-art" aria-label="धीरे घूमता ज्योतिष चक्र"><div class="celestial-aura"></div><div class="celestial-ring ring-a"></div><div class="celestial-ring ring-b"></div><div class="celestial-ring ring-c"></div><div class="celestial-cross"></div><div class="celestial-center">ॐ</div><span class="celestial-glyph g1">♈</span><span class="celestial-glyph g2">♉</span><span class="celestial-glyph g3">♊</span><span class="celestial-glyph g4">♋</span><span class="celestial-glyph g5">♌</span><span class="celestial-glyph g6">♍</span><span class="celestial-glyph g7">♎</span><span class="celestial-glyph g8">♏</span><span class="celestial-glyph g9">♐</span><span class="celestial-glyph g10">♑</span><span class="celestial-glyph g11">♒</span><span class="celestial-glyph g12">♓</span></div></div></div>
-</section>
-
-<section class="astro-quickbar" aria-label="Popular astrology services">
-  <div class="astro-proof"><span class="proof-dot"></span><span><b>आपके सवाल का जवाब</b><small>सरल और व्यक्तिगत सलाह</small></span></div>
-  <a href="#consult"><i>☏</i><span><b>किसी ज्योतिषी से बात करें</b><small>अपनी समस्या बताएँ</small></span><em>↗</em></a>
-  <a href="#zodiac"><i>☼</i><span><b>आज का राशिफल</b><small>12 राशियाँ देखें</small></span><em>↗</em></a>
-  <a href="#store"><i>✧</i><span><b>आध्यात्मिक दुकान</b><small>पूजा और ज्योतिष उत्पाद</small></span><em>↗</em></a>
-  <a href="#how"><i>◉</i><span><b>कैसे लें सलाह?</b><small>आसान तीन चरण</small></span><em>↗</em></a>
-</section>
+<section class="hero"><div class="hero-copy"><div class="eyebrow"><span></span><span data-en="ASTROLOGY · HOROSCOPE · VASTU" data-hi="ज्योतिष · कुंडली · वास्तु">ASTROLOGY · HOROSCOPE · VASTU</span></div><h1 data-en="Guidance for every chapter." data-hi="हर मोड़ पर सही मार्गदर्शन।">Guidance for every chapter.</h1><p data-en="Relationships, career, marriage or your birth chart — talk to an expert who understands your questions. Explore spiritual essentials in our store." data-hi="रिश्ते, करियर, शादी या जन्म कुंडली—अपने सवालों के लिए विशेषज्ञ से बात करें। हमारी दुकान में आध्यात्मिक उत्पाद भी देखें।">Relationships, career, marriage or your birth chart — talk to an expert who understands your questions. Explore spiritual essentials in our store.</p><div class="hero-actions"><button class="primary" onclick="scrollToId('consult')" data-en="Talk to an expert ↗" data-hi="विशेषज्ञ से बात करें ↗">Talk to an expert ↗</button><button class="ghost" onclick="scrollToId('how')" data-en="How it works ↓" data-hi="कैसे काम करता है ↓">How it works ↓</button></div><div class="hero-trust"><span>01 <b>Personal consultations</b></span><span>02 <b>Clear per-minute pricing</b></span><span>03 <b>Spiritual store</b></span></div></div><div class="hero-visual"><canvas id="hero-solar-canvas" aria-label="Animated three-dimensional solar system"></canvas><div class="solar-caption"><span>OUR CELESTIAL NEIGHBOURHOOD</span><b>The universe, in motion.</b></div></div></section>
+<section class="astro-quickbar" aria-label="Popular services"><a href="#consult"><span><b data-en="Talk to an expert" data-hi="विशेषज्ञ से बात करें">Talk to an expert</b><small data-en="Personal consultation" data-hi="व्यक्तिगत परामर्श">Personal consultation</small></span><em>↗</em></a><a href="#zodiac"><span><b data-en="Daily horoscope" data-hi="आज का राशिफल">Daily horoscope</b><small data-en="Explore all 12 signs" data-hi="सभी 12 राशियाँ">Explore all 12 signs</small></span><em>↗</em></a><a href="#store"><span><b data-en="Spiritual store" data-hi="आध्यात्मिक दुकान">Spiritual store</b><small data-en="Rudraksha, crystals & more" data-hi="रुद्राक्ष, क्रिस्टल और अन्य">Rudraksha, crystals & more</small></span><em>↗</em></a><a href="#how"><span><b data-en="How it works" data-hi="कैसे काम करता है">How it works</b><small data-en="Three simple steps" data-hi="तीन आसान चरण">Three simple steps</small></span><em>↗</em></a></section>
 
 
 
 <section class="zodiac-section" id="zodiac">
   <div class="zodiac-heading">
-    <div class="eyebrow">THE CELESTIAL WHEEL · 12 SIGNS</div>
+    <div class="eyebrow" data-en="THE CELESTIAL WHEEL · 12 SIGNS" data-hi="राशि चक्र · 12 राशियाँ">THE CELESTIAL WHEEL · 12 SIGNS</div>
     <h2>A universe of <em>possibilities.</em></h2>
     <p>Twelve signs. One connected sky. Explore the zodiac in a slow, seamless celestial rotation.</p>
   </div>
   <div class="zodiac-stage" aria-label="A slowly rotating wheel featuring all twelve zodiac signs">
     <div class="zodiac-halo halo-one"></div><div class="zodiac-halo halo-two"></div>
     <div class="zodiac-wheel">
-      <span class="zodiac-sign" style="--angle:0deg"><i>♈️</i><small>मेष</small></span>
-      <span class="zodiac-sign" style="--angle:30deg"><i>♉️</i><small>वृषभ</small></span>
-      <span class="zodiac-sign" style="--angle:60deg"><i>♊️</i><small>मिथुन</small></span>
-      <span class="zodiac-sign" style="--angle:90deg"><i>♋️</i><small>कर्क</small></span>
-      <span class="zodiac-sign" style="--angle:120deg"><i>♌️</i><small>सिंह</small></span>
-      <span class="zodiac-sign" style="--angle:150deg"><i>♍️</i><small>कन्या</small></span>
-      <span class="zodiac-sign" style="--angle:180deg"><i>♎️</i><small>तुला</small></span>
-      <span class="zodiac-sign" style="--angle:210deg"><i>♏️</i><small>वृश्चिक</small></span>
-      <span class="zodiac-sign" style="--angle:240deg"><i>♐️</i><small>धनु</small></span>
-      <span class="zodiac-sign" style="--angle:270deg"><i>♑️</i><small>मकर</small></span>
-      <span class="zodiac-sign" style="--angle:300deg"><i>♒️</i><small>कुंभ</small></span>
-      <span class="zodiac-sign" style="--angle:330deg"><i>♓️</i><small>मीन</small></span>
+      <span class="zodiac-sign" style="--angle:0deg"><i>♈</i><small data-en="Aries" data-hi="मेष">Aries</small></span>
+      <span class="zodiac-sign" style="--angle:30deg"><i>♉</i><small data-en="Taurus" data-hi="वृषभ">Taurus</small></span>
+      <span class="zodiac-sign" style="--angle:60deg"><i>♊</i><small data-en="Gemini" data-hi="मिथुन">Gemini</small></span>
+      <span class="zodiac-sign" style="--angle:90deg"><i>♋</i><small data-en="Cancer" data-hi="कर्क">Cancer</small></span>
+      <span class="zodiac-sign" style="--angle:120deg"><i>♌</i><small data-en="Leo" data-hi="सिंह">Leo</small></span>
+      <span class="zodiac-sign" style="--angle:150deg"><i>♍</i><small data-en="Virgo" data-hi="कन्या">Virgo</small></span>
+      <span class="zodiac-sign" style="--angle:180deg"><i>♎</i><small data-en="Libra" data-hi="तुला">Libra</small></span>
+      <span class="zodiac-sign" style="--angle:210deg"><i>♏</i><small data-en="Scorpio" data-hi="वृश्चिक">Scorpio</small></span>
+      <span class="zodiac-sign" style="--angle:240deg"><i>♐</i><small data-en="Sagittarius" data-hi="धनु">Sagittarius</small></span>
+      <span class="zodiac-sign" style="--angle:270deg"><i>♑</i><small data-en="Capricorn" data-hi="मकर">Capricorn</small></span>
+      <span class="zodiac-sign" style="--angle:300deg"><i>♒</i><small data-en="Aquarius" data-hi="कुंभ">Aquarius</small></span>
+      <span class="zodiac-sign" style="--angle:330deg"><i>♓</i><small data-en="Pisces" data-hi="मीन">Pisces</small></span>
     </div>
-    <div class="zodiac-core"><div class="core-star">✦</div><span>राशि चक्र</span><small>आपकी ज्योतिष जानकारी</small></div>
-    <div class="zodiac-caption">ज्योतिष जानकारी <span>✧</span> आपके लिए</div>
+    <div class="zodiac-core"><div class="core-star">✦</div><span data-en="THE ZODIAC" data-hi="राशि चक्र">THE ZODIAC</span><small data-en="Explore your sign" data-hi="अपनी राशि देखें">Explore your sign</small></div>
+    <div class="zodiac-caption" data-en="Astrology for you" data-hi="आपके लिए ज्योतिष">Astrology for you</div>
   </div>
   <div class="zodiac-foot"><span>01 — FIRE</span><span>02 — EARTH</span><span>03 — AIR</span><span>04 — WATER</span></div>
 </section>
@@ -72,27 +59,26 @@
 
 <section class="cosmic-intro section">
     <div class="cosmic-copy" id="about">
-      <div class="eyebrow">हमारी सेवाएँ</div>
-      <h2>ज्योतिष और वास्तु की <em>आसान सलाह।</em></h2>
-      <p>रिश्ते, शादी, करियर, अंक ज्योतिष या घर के वास्तु से जुड़ा सवाल चुनें। अपनी ज़रूरत के हिसाब से सलाहकार से समय लेकर बात करें।</p>
-      <p>हमारा उद्देश्य है कि सेवाएँ और उत्पाद साफ़ तरीके से समझ आएँ—ताकि आप बिना उलझन के सही विकल्प चुन सकें।</p>
+      <div class="eyebrow" data-en="ABOUT OUR SERVICES" data-hi="हमारी सेवाएँ">ABOUT OUR SERVICES</div>
+      <h2 data-en="Astrology and Vastu, <em>made approachable.</em>" data-hi="ज्योतिष और वास्तु की <em>आसान सलाह।</em>">Astrology and Vastu, <em>made approachable.</em></h2>
+      <p data-en="Choose a question about relationships, marriage, career, numerology or vastu. Find an expert and book a time that works for you." data-hi="रिश्ते, शादी, करियर, अंक ज्योतिष या घर के वास्तु से जुड़ा सवाल चुनें। अपनी ज़रूरत के हिसाब से सलाहकार से समय लेकर बात करें।">Choose a question about relationships, marriage, career, numerology or vastu. Find an expert and book a time that works for you.</p>
+      <p data-en="Our aim is to make services and products easy to understand, so you can choose confidently." data-hi="हमारा उद्देश्य है कि सेवाएँ और उत्पाद साफ़ तरीके से समझ आएँ—ताकि आप बिना उलझन के सही विकल्प चुन सकें।">Our aim is to make services and products easy to understand, so you can choose confidently.</p>
       <div class="cosmic-points"><span><b>01</b> अपनी समस्या चुनें</span><span><b>02</b> समय तय करें</span><span><b>03</b> भुगतान करें</span></div>
     </div>
     <div class="cosmic-stage simple-yantra"><div class="yantra-art">ॐ<span>✦</span></div><span>ज्योतिष · कुंडली · वास्तु<br><b>व्यक्तिगत मार्गदर्शन</b></span></div>
   </section>
-<section id="consult" class="section consult"><div class="section-head"><div><div class="eyebrow">01 / परामर्श</div><h2>आप किस विषय पर<br><em>सलाह चाहते हैं?</em></h2></div><p>अपनी ज़रूरत चुनें, समय तय करें और सलाहकार से बात करने की बुकिंग करें।</p></div>
+<section id="consult" class="section consult"><div class="section-head"><div><div class="eyebrow">01 / CONSULTATIONS</div><h2 data-en="What would you like guidance on?" data-hi="आप किस विषय पर सलाह चाहते हैं?">What would you like guidance on?</h2></div><p data-en="Choose a topic to see the right experts, their per-minute rates and available consultation options." data-hi="विषय चुनें और विशेषज्ञ, प्रति मिनट शुल्क और उपलब्ध परामर्श विकल्प देखें।">Choose a topic to see the right experts, their per-minute rates and available consultation options.</p></div>
 <div class="need-grid">
-<button class="need-card active" onclick="selectNeed(this,'Love & Relationship')"><span class="need-icon">♡</span><b>प्यार और रिश्ते</b><small>रिश्तों और तालमेल पर सलाह</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Marriage')"><span class="need-icon">♢</span><b>शादी</b><small>विवाह और कुंडली मिलान</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Career & Business')"><span class="need-icon">↗</span><b>करियर और व्यापार</b><small>काम और फैसलों पर मार्गदर्शन</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Vastu')"><span class="need-icon">⌂</span><b>वास्तु</b><small>घर और दफ्तर के लिए सलाह</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Numerology')"><span class="need-icon">#</span><b>अंक ज्योतिष</b><small>नाम और अंकों का विश्लेषण</small><i>↗</i></button><button class="need-card " onclick="selectNeed(this,'Kundli & Life')"><span class="need-icon">✦</span><b>कुंडली और जीवन</b><small>जन्म कुंडली से जुड़ी सलाह</small><i>↗</i></button>
+<button class="need-card" onclick="selectNeed(this,'Love & Relationship');openBooking()"><span class="need-icon">♡</span><b data-en="Love & Relationships" data-hi="प्यार और रिश्ते">Love & Relationships</b><small data-en="Love, compatibility and communication" data-hi="प्यार, तालमेल और बातचीत">Love, compatibility and communication</small><i>↗</i></button><button class="need-card" onclick="selectNeed(this,'Marriage');openBooking()"><span class="need-icon">◇</span><b data-en="Marriage & Matchmaking" data-hi="शादी और कुंडली मिलान">Marriage & Matchmaking</b><small data-en="Compatibility and birth-chart matching" data-hi="अनुकूलता और कुंडली मिलान">Compatibility and birth-chart matching</small><i>↗</i></button><button class="need-card" onclick="selectNeed(this,'Career & Business');openBooking()"><span class="need-icon">↗</span><b data-en="Career & Business" data-hi="करियर और व्यापार">Career & Business</b><small data-en="Work, decisions and new opportunities" data-hi="काम, फैसले और नए अवसर">Work, decisions and new opportunities</small><i>↗</i></button><button class="need-card" onclick="selectNeed(this,'Vastu');openBooking()"><span class="need-icon">⌂</span><b data-en="Vastu" data-hi="वास्तु">Vastu</b><small data-en="Home, office and commercial spaces" data-hi="घर, दफ्तर और व्यवसाय">Home, office and commercial spaces</small><i>↗</i></button><button class="need-card" onclick="selectNeed(this,'Numerology');openBooking()"><span class="need-icon">#</span><b data-en="Numerology" data-hi="अंक ज्योतिष">Numerology</b><small data-en="Names, numbers and personal cycles" data-hi="नाम, अंक और व्यक्तिगत चक्र">Names, numbers and personal cycles</small><i>↗</i></button><button class="need-card" onclick="selectNeed(this,'Kundli & Life');openBooking()"><span class="need-icon">✦</span><b data-en="Birth Chart & Life" data-hi="जन्म कुंडली और जीवन">Birth Chart & Life</b><small data-en="Planetary placements and life themes" data-hi="ग्रहों की स्थिति और जीवन के विषय">Planetary placements and life themes</small><i>↗</i></button>
 </div>
 <div class="funnel"><div class="funnel-step active"><span>01</span> विषय</div><div class="funnel-line"></div><div class="funnel-step"><span>02</span> सलाहकार</div><div class="funnel-line"></div><div class="funnel-step"><span>03</span> समय</div><div class="funnel-line"></div><div class="funnel-step"><span>04</span> भुगतान</div></div>
-<div class="recommend"><div><span class="rec-badge">आपके लिए</span><h3 id="selectedNeed">प्यार और रिश्ते</h3><p>अगले चरण में सलाहकार चुनें और अपनी सुविधा का समय तय करें।</p></div><button class="primary" onclick="openBooking()">Continue <span>→</span></button></div>
+<div class="recommend"><div><span class="rec-badge">YOUR NEXT STEP</span><h3 id="selectedNeed">Choose a topic above</h3><p data-en="Select a topic to start your booking, or browse the expert profiles below." data-hi="बुकिंग शुरू करने के लिए विषय चुनें या नीचे विशेषज्ञों की प्रोफ़ाइल देखें।">Select a topic to start your booking, or browse the expert profiles below.</p></div><button class="primary" onclick="openBooking()" data-en="Find an expert →" data-hi="विशेषज्ञ चुनें →">Find an expert →</button></div>
 </section>
+<section id="experts" class="section experts"><div class="section-head"><div><div class="eyebrow">02 / MEET OUR EXPERTS</div><h2 data-en="Guidance from people who listen." data-hi="अनुभवी विशेषज्ञों से सलाह लें।">Guidance from people who listen.</h2></div><p data-en="Explore expert profiles, specialties and transparent per-minute pricing. Pick the person who fits your question." data-hi="विशेषज्ञों की प्रोफ़ाइल, अनुभव और प्रति मिनट शुल्क देखें। अपने सवाल के अनुसार चुनें।">Explore expert profiles, specialties and transparent per-minute pricing. Pick the person who fits your question.</p></div><div class="expert-grid" id="expertGrid"><article class="expert-loading">Loading expert profiles…</article></div><div class="expert-footnote" data-en="Consultations are billed by the selected duration and displayed per-minute rate." data-hi="परामर्श चुनी गई अवधि और प्रति मिनट शुल्क के अनुसार होगा।">Consultations are billed by the selected duration and displayed per-minute rate.</div></section>
 
-<section id="experts" class="section experts"><div class="section-head"><div><div class="eyebrow">02 / सेवाएँ</div><h2>किसी ज्योतिषी से <em>बात करें।</em></h2></div><p>अपनी ज़रूरत के अनुसार सेवा चुनें। बुकिंग के समय उपलब्ध सलाहकार और समय दिखेगा।</p></div><div class="expert-grid"><button class="expert-card service-choice" onclick="selectNeed(this,'वैदिक ज्योतिष');openBooking()"><span class="service-symbol">ॐ</span><h3>वैदिक ज्योतिष</h3><p>कुंडली, ग्रहों की स्थिति और जीवन से जुड़े सवाल</p><b>सलाह लें ↗</b></button><button class="expert-card service-choice" onclick="selectNeed(this,'अंक ज्योतिष');openBooking()"><span class="service-symbol">१२</span><h3>अंक ज्योतिष</h3><p>नाम, तारीख और अंकों से जुड़ी जानकारी</p><b>सलाह लें ↗</b></button><button class="expert-card service-choice" onclick="selectNeed(this,'वास्तु');openBooking()"><span class="service-symbol">⌂</span><h3>वास्तु सलाह</h3><p>घर, दुकान और दफ्तर के लिए मार्गदर्शन</p><b>सलाह लें ↗</b></button></div></section>
+<section id="how" class="section how"><div class="eyebrow">03 / HOW IT WORKS</div><h2 data-en="Your consultation, in three steps." data-hi="परामर्श के तीन आसान चरण।">Your consultation, in three steps.</h2><div class="how-grid"><div class="how-card"><span>01</span><h3 data-en="Choose your topic" data-hi="अपना विषय चुनें">Choose your topic</h3><p data-en="Select love, marriage, career, birth chart or vastu." data-hi="प्यार, शादी, करियर, कुंडली या वास्तु में से चुनें।">Select love, marriage, career, birth chart or vastu.</p><div class="mini-arrow">↗</div></div><div class="how-card"><span>02</span><h3 data-en="Pick a time" data-hi="समय तय करें">Pick a time</h3><p data-en="Enter your details and choose an available time." data-hi="अपनी जानकारी भरें और उपलब्ध समय चुनें।">Enter your details and choose an available time.</p><div class="mini-arrow">↗</div></div><div class="how-card"><span>03</span><h3 data-en="Confirm your booking" data-hi="बुकिंग पूरी करें">Confirm your booking</h3><p data-en="Complete payment to confirm your consultation." data-hi="भुगतान के बाद आपकी बुकिंग की जानकारी दिखाई जाएगी।">Complete payment to confirm your consultation.</p><div class="mini-arrow">↗</div></div></div></section>
 
-<section id="how" class="section how"><div class="eyebrow">03 / कैसे काम करता है</div><h2>तीन आसान <em>चरण।</em></h2><div class="how-grid"><div class="how-card"><span>01</span><h3>अपना विषय चुनें</h3><p>प्यार, शादी, करियर, कुंडली या वास्तु में से चुनें।</p><div class="mini-arrow">↗</div></div><div class="how-card"><span>02</span><h3>समय तय करें</h3><p>अपनी जानकारी भरें और उपलब्ध समय चुनें।</p><div class="mini-arrow">↗</div></div><div class="how-card"><span>03</span><h3>बुकिंग पूरी करें</h3><p>भुगतान के बाद आपकी बुकिंग की जानकारी दिखाई जाएगी।</p><div class="mini-arrow">↗</div></div></div></section>
-
-<section id="store" class="section store"><div class="section-head"><div><div class="eyebrow">04 / आध्यात्मिक दुकान</div><h2>पूजा और ज्योतिष <em>उत्पाद।</em></h2></div><p>रुद्राक्ष, क्रिस्टल, पूजा सामग्री और वास्तु उत्पाद देखें। प्रोडक्ट चुनें, विकल्प जोड़ें और कार्ट से ऑर्डर करें।</p></div>
+<section id="store" class="section store"><div class="section-head"><div><div class="eyebrow">04 / SPIRITUAL STORE</div><h2 data-en="Meaningful essentials for your space." data-hi="आपके लिए आध्यात्मिक उत्पाद।">Meaningful essentials for your space.</h2></div><p data-en="Browse rudraksha, crystals, puja essentials and vastu products. Choose a variant, customise it and check out from your bag." data-hi="रुद्राक्ष, क्रिस्टल, पूजा सामग्री और वास्तु उत्पाद देखें। विकल्प चुनें, कस्टमाइज़ करें और कार्ट से ऑर्डर करें।">Browse rudraksha, crystals, puja essentials and vastu products. Choose a variant, customise it and check out from your bag.</p></div>
 <div class="product-grid" aria-live="polite"><p class="catalog-loading">उत्पाद लोड हो रहे हैं…</p>
 <article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=88')"><span>−₹200</span><button onclick="quickAdd('Natural Amethyst Crystal','₹1,499','https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=88')">+</button></div><div class="product-meta"><small>Crystals</small><h3>Natural Amethyst Crystal</h3><div><b>₹1,499</b> <del>₹1,699</del></div></div></article>
 <article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1604608672516-f1b4b5a4f4a0?auto=format&fit=crop&w=900&q=88')"><span>−₹500</span><button onclick="quickAdd('Brass Shree Yantra','₹2,499','https://images.unsplash.com/photo-1604608672516-f1b4b5a4f4a0?auto=format&fit=crop&w=900&q=88')">+</button></div><div class="product-meta"><small>Yantra & Puja</small><h3>Brass Shree Yantra</h3><div><b>₹2,499</b> <del>₹2,999</del></div></div></article>
@@ -102,10 +88,10 @@
 <article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=88')"><span>NEW</span><button onclick="quickAdd('Citrine Prosperity Bracelet','₹1,099','https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=88')">+</button></div><div class="product-meta"><small>Gemstones</small><h3>Citrine Prosperity Bracelet</h3><div><b>₹1,099</b></div></div></article>
 <article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1507643179773-3e975d7ac515?auto=format&fit=crop&w=900&q=88')"><span>PUJA</span><button onclick="quickAdd('Brass Diya Set','₹699','https://images.unsplash.com/photo-1507643179773-3e975d7ac515?auto=format&fit=crop&w=900&q=88')">+</button></div><div class="product-meta"><small>Divine Essentials</small><h3>Brass Diya Set</h3><div><b>₹699</b></div></div></article>
 <article class="product-card"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=88')"><span>VASTU</span><button onclick="quickAdd('Copper Vastu Strip','₹549','https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=88')">+</button></div><div class="product-meta"><small>Home & Vastu</small><h3>Copper Vastu Strip</h3><div><b>₹549</b></div></div></article>
-</div><div class="store-cta"><span>ऑनलाइन भुगतान</span><b>कार्ट में उत्पाद जोड़ें और ऑर्डर पूरा करें।</b><button class="ghost" onclick="openCart()">कार्ट देखें →</button></div></section>
+</div><div class="store-cta"><span data-en="SECURE CHECKOUT" data-hi="सुरक्षित भुगतान">SECURE CHECKOUT</span><b data-en="Add products to your bag and complete your order." data-hi="कार्ट में उत्पाद जोड़ें और ऑर्डर पूरा करें।">Add products to your bag and complete your order.</b><button class="ghost" onclick="openCart()" data-en="View bag →" data-hi="कार्ट देखें →">View bag →</button></div></section>
 
 <section class="section service-depth">
-    <div class="section-head"><div><div class="eyebrow">05 / और सेवाएँ</div><h2>आपके लिए <em>ज्योतिष सेवाएँ।</em></h2></div><p>कुंडली, अंक ज्योतिष, वास्तु, रिश्ते और करियर से जुड़ी सलाह चुनें।</p></div>
+    <div class="section-head"><div><div class="eyebrow">05 / MORE SERVICES</div><h2 data-en="Explore our <em>astrology services.</em>" data-hi="आपके लिए <em>ज्योतिष सेवाएँ।</em>">Explore our <em>astrology services.</em></h2></div><p data-en="Choose guidance for birth charts, numerology, vastu, relationships and career." data-hi="कुंडली, अंक ज्योतिष, वास्तु, रिश्ते और करियर से जुड़ी सलाह चुनें।">Choose guidance for birth charts, numerology, vastu, relationships and career.</p></div>
     <div class="service-depth-grid">
       <article><span>01</span><h3>Vedic Astrology</h3><p>Understand planetary patterns, major periods and the themes shaping the phase you are currently moving through. Use a consultation for focused questions or a broader birth-chart reading.</p><b>Birth chart · Dashas · Transits</b></article>
       <article><span>02</span><h3>Numerology</h3><p>Explore the relationship between numbers, names and personal cycles. Useful when you are evaluating a name, business identity, important date or recurring pattern.</p><b>Name analysis · Life path · Business</b></article>
@@ -115,14 +101,14 @@
       <article><span>06</span><h3>Remedies & Spiritual Products</h3><p>Explore traditional remedies and curated spiritual products alongside your consultation, with clear product information and a simple prepaid checkout.</p><b>Rudraksha · Crystals · Pooja</b></article>
     </div>
   </section>
-<section class="manifesto"><div class="manifesto-orb"></div><div class="eyebrow">ASTROLOGICAL SOLUTIONS</div><h2>परंपरागत ज्ञान,<br><em>आसान अनुभव।</em></h2><p>अपनी ज़रूरत समझें, सही सेवा चुनें और बुकिंग या ऑर्डर एक ही जगह पूरा करें।</p></section>
+<section class="manifesto"><div class="manifesto-orb"></div><div class="eyebrow">ASTROLOGICAL SOLUTIONS</div><h2 data-en="Traditional wisdom,<br><em>a clearer experience.</em>" data-hi="परंपरागत ज्ञान,<br><em>आसान अनुभव।</em>">Traditional wisdom,<br><em>a clearer experience.</em></h2><p data-en="Find the right service and complete your consultation or order in one place." data-hi="अपनी ज़रूरत समझें, सही सेवा चुनें और बुकिंग या ऑर्डर एक ही जगह पूरा करें।">Find the right service and complete your consultation or order in one place.</p></section>
 
-<section class="final-cta"><div><div class="eyebrow">जब चाहें सलाह लें</div><h2>अपना सवाल चुनें,<br><em>बात शुरू करें।</em></h2></div><button class="primary" onclick="scrollToId('consult')">परामर्श बुक करें <span>↗</span></button></section>
+<section class="final-cta"><div><div class="eyebrow">जब चाहें सलाह लें</div><h2 data-en="Start with your question.<br><em>We’ll help you explore.</em>" data-hi="अपना सवाल चुनें,<br><em>बात शुरू करें।</em>">Start with your question.<br><em>We’ll help you explore.</em></h2></div><button class="primary" onclick="scrollToId('consult')" data-en="Book a consultation ↗" data-hi="परामर्श बुक करें ↗">Book a consultation ↗</button></section>
 </main>
 <a class="whatsapp-float" href="https://wa.me/?text=Hi%20Astrological%20Solutions%2C%20I%20want%20to%20book%20a%20consultation." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2A12.8 12.8 0 0 0 5 22.5L3.2 28.8l6.5-1.7A12.8 12.8 0 1 0 16 3.2Zm0 23.3c-2.1 0-4.1-.6-5.8-1.8l-.4-.3-3.8 1 1-3.7-.3-.4a10.3 10.3 0 1 1 9.3 5.2Zm5.7-7.7c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2.1-.4 0-.6-.1-.2-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.7s1.2 3.1 1.4 3.3c.2.2 2.3 3.5 5.5 4.9 2 .9 2.8 1 3.8.8.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.5-.3Z"/></svg><span>WhatsApp</span></a><footer><div class="brand"><span class="brand-mark">✦</span><span>ASTROLOGICAL<br><b>SOLUTIONS</b></span></div><p>© 2026 Astrological Solutions. All rights reserved.</p><div><a href="#about">हमारे बारे में</a><a href="#consult">परामर्श</a><a href="/admin.html">Admin</a></div></footer>
 
 <div id="modal" class="modal"><div class="modal-backdrop" onclick="closeModal()"></div><div class="modal-panel" id="modalPanel"></div></div>
 
 <script>window.addEventListener("error",function(e){if(e.message&&e.message.includes("THREE")){var l=document.getElementById("loader");if(l){l.classList.add("fallback");setTimeout(function(){l.style.opacity="0";l.style.visibility="hidden"},700)}}});</script>
-<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script><script src="solar-system.js"></script><script src="app.js"></script>
 </body></html>
