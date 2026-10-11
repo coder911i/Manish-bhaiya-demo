@@ -444,3 +444,10 @@ body{background:#fbfaf7;color:#302943}
  .cart-item>img{width:68px;height:68px}.line-total{margin-left:0}.loader-overlay{top:auto;bottom:12vh}.entry-mandala{width:min(76vw,350px)}
 }
 @media(prefers-reduced-motion:reduce){.entry-mandala,.mandala-ring,.mandala-center,.mandala-star,.celestial-art,.celestial-ring,.zodiac-wheel,.zodiac-sign i,.zodiac-sign small{animation:none!important}html{scroll-behavior:auto}}
+
+@media(max-width:900px){
+ .nav-left{position:relative}
+ .nav-left nav.is-open{display:flex!important;position:absolute;left:0;top:52px;min-width:210px;flex-direction:column;gap:0;padding:8px;background:#fff;border:1px solid #e9e0f0;border-radius:14px;box-shadow:0 18px 40px #3b2a4b20}
+ .nav-left nav.is-open a{padding:13px 14px;color:#453653;border-radius:8px}
+ .nav-left nav.is-open a:hover{background:#f4eef9}
+}
