@@ -212,3 +212,73 @@ body{font-family:"DM Sans",sans-serif}
  .loader-word{font-size:10px!important;letter-spacing:2.5px!important}
  .loader-sub{font-size:7px!important}
 }
+
+/* ── Ivory celestial redesign + steady zodiac wheel ── */
+:root{--paper:#fbf9f4;--ink:#26233a;--muted:#777286;--violet:#7662ad;--line:#e9e3ef;--lilac:#eee8f7}
+html{background:var(--paper);scroll-padding-top:90px}
+body{background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}
+.noise{opacity:.12;mix-blend-mode:multiply;z-index:1}
+.nav{background:linear-gradient(#fbf9f4f5,#fbf9f4e8);border-bottom:1px solid #e9e3efaa;backdrop-filter:blur(18px)}
+.brand{color:#302943}.brand-mark{border-color:#c5b4de;color:#7964a8}
+.nav nav a,footer a{color:#726b7f}.nav nav a:hover,footer a:hover{color:#7662ad}
+.nav-cta{background:#322a43;color:#fff}.menu{color:#322a43}
+.hero{background:radial-gradient(ellipse at 76% 43%,#e8def7 0%,transparent 38%),radial-gradient(ellipse at 12% 10%,#f0e8db 0%,transparent 35%),#fbf9f4}
+.eyebrow{color:#8870b0}.eyebrow span{background:#a18bc8}
+.hero h1{color:#29243a}.hero h1 em,h2 em{color:#8a70b2}
+.hero-copy>p,.section-head>p,.cosmic-copy p,.how-card p,.service-depth-grid p{color:#777286}
+.primary{background:#342b47;color:#fff}.primary:hover{box-shadow:0 12px 36px #8a70b233}
+.ghost{background:#f5f0f9;color:#453955;border-color:#e3d8ee}
+.ghost:hover{border-color:#a895c8}
+.hero-trust small{color:#8a8495}.avatars span{border-color:#fbf9f4;background:#e7def2;color:#594970}
+.floating-chip,.orb-label{border-color:#e3d9ee;background:#fffaf1dc;color:#6f657f;box-shadow:0 12px 32px #4d3a6810}
+.hero-solar-fallback .hero-sun,.hero-sun{box-shadow:0 0 45px #f0b45c80}
+.marquee{border-color:#e9e3ef;color:#928a9d;background:#f7f3f9}
+.marquee i{color:#9b83c4}
+.section{border-color:#e9e3ef}
+.cosmic-intro{background:#f4efe8}
+.cosmic-stage{background:radial-gradient(circle,#e8dff4,#f7f1e8 67%,transparent 68%)}
+.need-card,.expert-card,.how-card,.service-depth-grid article{background:#fffdf9;border-color:#e9e3ef;color:#302943;box-shadow:0 10px 35px #4a3b6410}
+.need-card:hover,.need-card.active{background:#f2ecf8;border-color:#bca9d8}
+.need-card small,.expert-info p,.product-meta small{color:#8a8394}
+.funnel-step{color:#898295}.funnel-step.active{color:#8a70b2}
+.recommend{background:#f0e9f7;border-color:#e0d5ed}.recommend h3{color:#302943}.recommend p{color:#797187}
+.expert-photo{background-color:#e9e0ee}.online{background:#fbf9f4;color:#554a65}.rating{color:#8a70b2}
+.expert-bottom{border-color:#eee7f1}.expert-bottom button{color:#7962a7}
+.product-card{background:#fffdf9;border:1px solid #ece5ef;border-radius:18px;overflow:hidden}
+.product-meta h3{color:#302943}.product-meta>div b{color:#302943}.product-meta del{color:#9991a0}
+.store-cta{background:#f0e9f7;border-color:#e0d5ed}.store-cta b{color:#302943}
+.how-card{background:#f8f4f9}.mini-arrow{color:#8a70b2}
+.service-depth-grid article{background:#fdfbf7}
+.manifesto{background:radial-gradient(ellipse at 50% 0%,#e9def5,#f7f0e7 55%,#f4efe8);color:#302943}
+.manifesto p{color:#777286}.manifesto-orb{border-color:#c9b8df}
+.final-cta{background:#f0e9f7;color:#302943}
+footer{background:#f5f0e9;border-top:1px solid #e9e3ef;color:#81798d}
+.modal-panel{background:#fffdf9;color:#302943;border-color:#e6dced}
+.modal-panel p{color:#777286}.modal-close{color:#50445f}.slot{background:#f6f1f9;color:#453955;border-color:#e6dced}.slot.active{background:#e8def4;border-color:#a995ca}
+.pay-box{background:#f7f2f8;border-color:#e8deee}.pay-box strong{color:#302943}
+.pay-btn{background:#342b47;color:white}
+.zodiac-section{position:relative;overflow:hidden;padding:105px 6vw 76px;background-color:#f9f6f0;background-image:radial-gradient(#b8a6cc35 .7px,transparent .7px),linear-gradient(135deg,#fbf9f4,#f4eef7 55%,#fbf7ef);background-size:16px 16px,100% 100%;border-top:1px solid #e9e3ef;border-bottom:1px solid #e9e3ef;text-align:center}
+.zodiac-heading{max-width:650px;margin:0 auto 20px;position:relative;z-index:2}
+.zodiac-heading h2{font:500 clamp(36px,5vw,64px)/1.1 "Playfair Display",serif;letter-spacing:-1.5px;margin:18px 0;color:#302943}
+.zodiac-heading h2 em{font-style:italic}.zodiac-heading p{font-size:14px;line-height:1.8;color:#777286;max-width:470px;margin:0 auto}
+.zodiac-stage{height:510px;max-width:780px;margin:12px auto 0;position:relative;display:grid;place-items:center;isolation:isolate}
+.zodiac-halo{position:absolute;border:1px solid #cbbbdc;border-radius:50%;pointer-events:none}
+.halo-one{width:390px;height:390px;box-shadow:0 0 0 18px #ffffff40,0 0 70px #b7a2d51c}
+.halo-two{width:475px;height:475px;border-style:dashed;border-color:#d9cde4;animation:halo-drift 90s linear infinite}
+.zodiac-wheel{width:1px;height:1px;position:absolute;animation:zodiac-rotate 100s linear infinite;will-change:transform}
+.zodiac-sign{position:absolute;left:0;top:0;width:82px;height:82px;margin:-41px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;border:1px solid #e3d8ec;border-radius:50%;background:#fffdf9ed;box-shadow:0 7px 24px #54416a0c;transform:rotate(var(--angle)) translateY(-195px) rotate(calc(var(--angle) * -1));color:#7963a6}
+.zodiac-sign i{font-style:normal;font-size:27px;line-height:1;animation:zodiac-counter 100s linear infinite}
+.zodiac-sign small{font-size:7px;letter-spacing:1px;color:#898094;font-weight:700;animation:zodiac-counter 100s linear infinite}
+.zodiac-core{position:relative;z-index:1;width:148px;height:148px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 25%,#fffefa,#e8dff2 72%,#d9cbe9);border:1px solid #cbb9df;box-shadow:0 0 0 10px #ffffff70,0 14px 44px #7d649e20;color:#5d4a79}
+.core-star{font-size:26px;color:#9d7fc4;margin-bottom:2px;animation:core-glow 4s ease-in-out infinite}
+.zodiac-core>span{font:600 17px "Playfair Display",serif;letter-spacing:3px}
+.zodiac-core small{font-size:7px;letter-spacing:1.5px;line-height:1.6;margin-top:5px}
+.zodiac-caption{position:absolute;bottom:2px;font-size:8px;letter-spacing:2px;color:#898094}
+.zodiac-caption span{color:#a38ac4;padding:0 12px}
+.zodiac-foot{display:flex;justify-content:center;gap:clamp(14px,4vw,55px);font-size:8px;letter-spacing:1.5px;color:#8b8197}
+@keyframes zodiac-rotate{to{transform:rotate(360deg)}}
+@keyframes zodiac-counter{to{transform:rotate(-360deg)}}
+@keyframes halo-drift{to{transform:rotate(-360deg)}}
+@keyframes core-glow{0%,100%{opacity:.7;transform:scale(.96)}50%{opacity:1;transform:scale(1.06)}}
+@media(max-width:700px){.zodiac-section{padding:78px 18px 48px}.zodiac-stage{height:370px;transform:scale(.82);transform-origin:top center;margin-bottom:-55px}.halo-one{width:280px;height:280px}.halo-two{width:340px;height:340px}.zodiac-sign{width:62px;height:62px;margin:-31px}.zodiac-sign{transform:rotate(var(--angle)) translateY(-140px) rotate(calc(var(--angle) * -1))}.zodiac-sign i{font-size:22px}.zodiac-sign small{font-size:6px}.zodiac-core{width:110px;height:110px}.zodiac-foot{gap:12px;font-size:7px;letter-spacing:.7px}.hero{padding-top:120px}.hero-visual{height:410px}.nav nav{gap:12px}.nav nav a{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.zodiac-wheel,.zodiac-sign i,.zodiac-sign small,.halo-two,.core-star{animation:none!important}.marquee div{animation:none!important}html{scroll-behavior:auto}}
