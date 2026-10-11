@@ -187,12 +187,12 @@ app.get("/api/admin/stats",adminGuard,(q,r)=>{
 app.get("/api/admin/consultants",adminGuard,(q,r)=>r.json(consultants.map(adminConsultant)));
 app.post("/api/admin/consultants",adminGuard,(q,r)=>{
   const v=q.body||{}; if(!v.name)return r.status(400).json({error:"Name is required"});
-  const x={id:"c"+Date.now(),name:String(v.name),type:String(v.type||"Vedic Astrologer"),experience:String(v.experience||"0 years"),rating:Number(v.rating||0),price:Math.max(1,Math.round(Number(v.price||0))),available:v.available!=="false"&&v.available!==false,bio:String(v.bio||"")};
+  const x={id:"c"+Date.now(),name:String(v.name),type:String(v.type||"Vedic Astrologer"),experience:String(v.experience||"0 years"),rating:Number(v.rating||0),price:Math.max(1,Math.round(Number(v.price||0))),pricePerMinute:Math.max(1,Math.round(Number(v.price||0))),available:v.available!=="false"&&v.available!==false,bio:String(v.bio||""),languages:["English","Hindi"],specialty:String(v.specialty||v.type||"Personal guidance"),photo:String(v.photo||"")};
   consultants.push(x);r.status(201).json(x);
 });
 app.patch("/api/admin/consultants/:id",adminGuard,(q,r)=>{
   const x=consultants.find(v=>v.id===q.params.id);if(!x)return r.status(404).json({error:"Consultant not found"});
-  Object.assign(x,{...q.body,id:x.id,price:Math.max(1,Math.round(Number(q.body.price??x.price))),rating:Number(q.body.rating??x.rating),available:q.body.available==="false"?false:q.body.available===false?false:true});
+  const nextPrice=Math.max(1,Math.round(Number(q.body.price??x.pricePerMinute??x.price)));Object.assign(x,{...q.body,id:x.id,price:nextPrice,pricePerMinute:nextPrice,rating:Number(q.body.rating??x.rating),available:q.body.available==="false"?false:q.body.available===false?false:true});
   r.json(x);
 });
 app.delete("/api/admin/consultants/:id",adminGuard,(q,r)=>{
