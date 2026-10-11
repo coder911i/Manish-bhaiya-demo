@@ -130,6 +130,9 @@ async function loadSiteContent() {
  try {
   const x=await api("/api/site-content"),a=document.querySelector(".store-cta b");
   if(a&&x.announcement)a.textContent=x.announcement;
+  const heroTitle=document.querySelector(".hero h1"),heroSubtitle=document.querySelector(".hero-copy>p");
+  if(heroTitle&&x.heroTitle){const words=String(x.heroTitle).split(/\s+/),cut=Math.max(1,Math.ceil(words.length/2));heroTitle.innerHTML=safeText(words.slice(0,cut).join(" "))+"<br><em>"+safeText(words.slice(cut).join(" "))+"</em>";}
+  if(heroSubtitle&&x.heroSubtitle)heroSubtitle.textContent=x.heroSubtitle;
   if(x.seoTitle)document.title=x.seoTitle;
   const md=document.querySelector('meta[name="description"]');if(md&&x.seoDescription)md.content=x.seoDescription;
  } catch(e) { console.warn("CMS content unavailable",e); }
@@ -138,3 +141,5 @@ document.querySelectorAll(".need-card").forEach(card=>card.addEventListener("cli
 document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",closeModal));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 updateCartBadge();loadLiveCatalog();loadSiteContent();
+const entryLoader=document.getElementById("loader");
+if(entryLoader){window.setTimeout(()=>entryLoader.classList.add("solar-exit"),2100);window.setTimeout(()=>entryLoader.remove(),2850);}
