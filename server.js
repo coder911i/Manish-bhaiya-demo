@@ -40,8 +40,8 @@ const orderSchema=z.object({customerName:z.string().min(2),phone:z.string().min(
 app.get("/api/health",(q,r)=>r.json({ok:true,service:"Astrological Solutions",mode:"in-memory-demo",payment:process.env.PAYU_KEY&&process.env.PAYU_SALT?"payu-configured":"not-configured",spreadsheet:process.env.GOOGLE_SHEETS_WEBHOOK_URL&&process.env.GOOGLE_SHEETS_WEBHOOK_SECRET?"configured":"not-configured",admin:process.env.ADMIN_EMAIL&&process.env.ADMIN_PASSWORD_HASH&&process.env.ADMIN_SESSION_SECRET?"configured":"not-configured"}));
 app.get("/api/consultants",(q,r)=>r.json(consultants.filter(x=>x.available)));
 app.get("/api/consultants/:id",(q,r)=>{const x=consultants.find(x=>x.id===q.params.id);x?r.json(x):r.status(404).json({error:"Not found"})});
-app.get("/api/products",(q,r)=>r.json(products.filter(x=>x.stock>0)));
-app.get("/api/products/:id",(q,r)=>{const x=products.find(x=>x.id===q.params.id);x?r.json(x):r.status(404).json({error:"Not found"})});
+app.get("/api/products",(q,r)=>r.json(products.filter(x=>x.stock>0&&x.active!==false)));
+app.get("/api/products/:id",(q,r)=>{const x=products.find(x=>x.id===q.params.id&&x.stock>0&&x.active!==false);x?r.json(x):r.status(404).json({error:"Not found"})});
 app.get("/api/slots",(q,r)=>r.json(["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"]));
 
 
