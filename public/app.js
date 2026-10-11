@@ -130,7 +130,7 @@ async function createBookingAndPay(consultantId,amount,duration=10) {
   if(!name||!/^\d{10}$/.test(phone||"")||!email)return alert("Please enter your name, 10-digit mobile number and email.");
   const slot=panel.querySelector("#bookingSlot")?.value||"2:30 PM";
   const booking=await api("/api/bookings",{method:"POST",body:JSON.stringify({customerName:name,customerPhone:phone,customerEmail:email,concern:selectedNeed,consultantId,slot,amount,duration})});
-  const payment=await api("/api/payu/create",{method:"POST",body:JSON.stringify({bookingId:booking.id,amount,productinfo:"Astrological Solutions Consultation",firstname:name,phone,email,udf1:"consultation",udf2:booking.id})});
+  const payment=await api("/api/payu/create",{method:"POST",body:JSON.stringify({bookingId:booking.id,amount:booking.amount,productinfo:"Astrological Solutions Consultation",firstname:name,phone,email,udf1:"consultation",udf2:booking.id})});
   submitPayU(payment.endpoint,payment.params);
  } catch(e) { alert(e.message); }
 }
