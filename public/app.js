@@ -1,7 +1,19 @@
 "use strict";
-let selectedNeed = "प्यार और रिश्ते", cart = [], catalog = [], consultants = [];
+let selectedNeed = "Love & Relationships", cart = [], catalog = [], consultants = [];
 const modal = document.getElementById("modal"), panel = document.getElementById("modalPanel");
 try { cart = JSON.parse(localStorage.getItem("as-cart-v2") || "[]"); if (!Array.isArray(cart)) cart = []; } catch (_) { cart = []; }
+
+
+function initializePreferences(){
+ const body=document.body,themeButton=document.getElementById("themeToggle"),langButton=document.getElementById("languageToggle");
+ let theme="light",language="en";
+ try{theme=localStorage.getItem("as-theme")||"light";language=localStorage.getItem("as-language")||"en";}catch(_){}
+ function setTheme(next){theme=next;body.classList.toggle("theme-dark",theme==="dark");if(themeButton)themeButton.textContent=theme==="dark"?"Light mode":"Dark mode";try{localStorage.setItem("as-theme",theme);}catch(_){}}
+ function setLanguage(next){language=next;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.textContent=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";try{localStorage.setItem("as-language",language);}catch(_){}}
+ themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
+ langButton?.addEventListener("click",()=>setLanguage(language==="en"?"hi":"en"));
+ setTheme(theme);setLanguage(language);
+}
 
 function scrollToId(id) { document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"}); }
 function safeText(v="") { return String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
@@ -66,42 +78,50 @@ async function api(path,options={}) {
  if(!response.ok)throw new Error(data.error||"Request failed");
  return data;
 }
+function renderExperts() {
+ const grid=document.getElementById("expertGrid"); if(!grid)return;
+ if(!consultants.length){grid.innerHTML='<article class="expert-loading">Expert profiles are temporarily unavailable. Please try again shortly.</article>';return;}
+ grid.innerHTML=consultants.map(c=>'<button type="button" class="expert-card" data-expert="'+safeText(c.id)+'"><div class="expert-photo-wrap"><img class="expert-photo-real" src="'+safeText(c.photo||"")+'" alt="'+safeText(c.name)+'" loading="lazy"><span class="expert-online"><i></i> Available for booking</span></div><div class="expert-content"><span class="expert-type">'+safeText(c.type)+'</span><h3 class="expert-name">'+safeText(c.name)+'</h3><div class="expert-rating"><strong>★ '+safeText(c.rating||"4.8")+'</strong> · '+safeText(c.experience||"Experienced")+' · English / Hindi</div><p class="expert-bio">'+safeText(c.bio||"Personalised consultation for your questions.")+'</p><div class="expert-specialty">'+safeText(c.specialty||"Personal guidance")+'</div><div class="expert-card-bottom"><span class="expert-price">'+money(c.pricePerMinute||c.price)+' <small>/ min</small></span><span class="expert-book">Book a call ↗</span></div></div></button>').join("");
+ grid.querySelectorAll("[data-expert]").forEach(card=>card.addEventListener("click",()=>{selectedNeed=selectedNeed||"General guidance";openBooking(null,card.dataset.expert);}));
+}
 async function loadLiveCatalog() {
- const pg=document.querySelector(".product-grid"), eg=document.querySelector(".expert-grid");
+ const pg=document.querySelector(".product-grid");
  try {
   const result=await Promise.all([api("/api/products"),api("/api/consultants")]);
   catalog=Array.isArray(result[0])?result[0]:[];consultants=Array.isArray(result[1])?result[1]:[];
   if(pg)pg.innerHTML=catalog.length?catalog.map(p=>{
    const img=productImage(p);
-   return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(p.name)+'" loading="lazy"><span>'+safeText(p.category||"दुकान")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="कार्ट में जोड़ें">+</button></div><div class="product-meta"><small>'+safeText(p.category||"आध्यात्मिक उत्पाद")+'</small><h3>'+safeText(p.name)+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'">विकल्प चुनें · कार्ट में जोड़ें</button></div></article>';
-  }).join(""):'<p class="catalog-empty">फिलहाल कोई उत्पाद उपलब्ध नहीं है।</p>';
+   return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(p.name)+'" loading="lazy"><span>'+safeText(p.category||"Store")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="Add to bag">+</button></div><div class="product-meta"><small>'+safeText(p.category||"Spiritual essentials")+'</small><h3>'+safeText(p.name)+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'">Choose options · Add to bag</button></div></article>';
+  }).join(""):'<p class="catalog-empty">No products are available right now.</p>';
   pg?.querySelectorAll("[data-configure]").forEach(b=>b.addEventListener("click",()=>configureProduct(b.dataset.configure)));
-  
+  renderExperts();
  } catch(e) {
   console.error("Catalog could not be loaded",e);
-  if(pg)pg.innerHTML='<p class="catalog-empty">उत्पाद लोड नहीं हो पाए। कनेक्शन जाँचकर पेज दोबारा खोलें।</p>';
+  if(pg)pg.innerHTML='<p class="catalog-empty">Products could not be loaded. Check your connection and try again.</p>';
+  const eg=document.getElementById("expertGrid");if(eg)eg.innerHTML='<article class="expert-loading">Expert profiles could not be loaded. Please refresh to try again.</article>';
  }
 }
 async function openBooking(expertName=null,consultantId=null) {
  try {
   if(!consultants.length)consultants=await api("/api/consultants");
-  const chosen=consultants.find(c=>c.id===consultantId)||consultants.find(c=>c.name===expertName)||consultants.find(c=>selectedNeed.includes("अंक")&&/Numerolog/i.test(c.type||""))||consultants.find(c=>selectedNeed.includes("वास्तु")&&/Vastu/i.test(c.type||""))||consultants[0];
-  if(!chosen)throw new Error("अभी कोई सलाहकार उपलब्ध नहीं है।");
-  panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><div class="eyebrow">ऑनलाइन परामर्श</div><h2>अपनी सलाह बुक करें</h2><p>विषय: <b>'+safeText(selectedNeed)+'</b></p><label class="booking-label">सलाहकार<select id="bookingConsultant">'+consultants.map(c=>'<option value="'+safeText(c.id)+'" data-price="'+numericPrice(c.price)+'" '+(c.id===chosen.id?"selected":"")+'>'+safeText(c.type||c.name)+' · '+money(c.price)+'</option>').join("")+'</select></label><div class="checkout-fields"><input id="payName" placeholder="पूरा नाम" autocomplete="name"><input id="payPhone" placeholder="10 अंकों का मोबाइल नंबर" inputmode="tel" maxlength="10" autocomplete="tel"><input id="payEmail" placeholder="ईमेल" type="email" autocomplete="email"></div><label class="booking-label">समय चुनें<select id="bookingSlot">'+["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"].map((s,i)=>'<option '+(i===2?"selected":"")+'>'+s+'</option>').join("")+'</select></label><div class="pay-box"><div><span>परामर्श शुल्क</span><strong id="consultPrice">'+money(chosen.price)+'</strong></div><div><span>ऑफ़र</span><strong>₹100</strong></div><div class="cart-grand"><span>देय राशि</span><strong id="consultTotal">'+money(Math.max(0,numericPrice(chosen.price)-100))+'</strong></div><button class="pay-btn" id="consultPayBtn">PayU से सुरक्षित भुगतान करें →</button></div>';
+  const chosen=consultants.find(c=>c.id===consultantId)||consultants.find(c=>c.name===expertName)||consultants.find(c=>selectedNeed.toLowerCase().includes("numer")&&/numerolog/i.test(c.type||""))||consultants.find(c=>selectedNeed.toLowerCase().includes("vastu")&&/vastu/i.test(c.type||""))||consultants[0];
+  if(!chosen)throw new Error("No experts are available right now.");
+  const rate=numericPrice(chosen.pricePerMinute||chosen.price);
+  panel.innerHTML='<button class="modal-close" aria-label="Close">×</button><div class="eyebrow">PRIVATE CONSULTATION</div><h2>Book your consultation</h2><p>Topic: <b>'+safeText(selectedNeed)+'</b></p><label class="booking-label">Choose your expert<select id="bookingConsultant">'+consultants.map(c=>'<option value="'+safeText(c.id)+'" data-rate="'+numericPrice(c.pricePerMinute||c.price)+'" '+(c.id===chosen.id?"selected":"")+'>'+safeText(c.name)+' · '+money(c.pricePerMinute||c.price)+'/min</option>').join("")+'</select></label><div class="checkout-fields"><input id="payName" placeholder="Full name" autocomplete="name"><input id="payPhone" placeholder="10-digit mobile number" inputmode="tel" maxlength="10" autocomplete="tel"><input id="payEmail" placeholder="Email address" type="email" autocomplete="email"></div><label class="booking-label">Consultation duration<select id="bookingDuration"><option value="5">5 minutes</option><option value="10" selected>10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option></select></label><label class="booking-label">Preferred time<select id="bookingSlot">'+["10:30 AM","12:00 PM","2:30 PM","4:00 PM","6:30 PM","8:00 PM"].map((s,i)=>'<option '+(i===2?"selected":"")+'>'+s+'</option>').join("")+'</select></label><div class="pay-box consultation-total"><div><span>Rate per minute</span><strong id="consultRate">'+money(rate)+'</strong></div><div><span>Duration</span><strong id="consultDurationText">10 minutes</strong></div><div class="cart-grand"><span>Total consultation fee</span><strong id="consultTotal">'+money(rate*10)+'</strong></div><button class="pay-btn" id="consultPayBtn">Continue to secure payment →</button><p class="checkout-note">You will be redirected to PayU for payment. Live checkout requires server credentials.</p></div>';
   panel.querySelector(".modal-close").addEventListener("click",closeModal);
-  const updateAmount=()=>{const o=panel.querySelector("#bookingConsultant").selectedOptions[0],price=numericPrice(o.dataset.price);panel.querySelector("#consultPrice").textContent=money(price);panel.querySelector("#consultTotal").textContent=money(Math.max(0,price-100));};
-  panel.querySelector("#bookingConsultant").addEventListener("change",updateAmount);
-  panel.querySelector("#consultPayBtn").addEventListener("click",()=>{const o=panel.querySelector("#bookingConsultant").selectedOptions[0];createBookingAndPay(panel.querySelector("#bookingConsultant").value,Math.max(0,numericPrice(o.dataset.price)-100));});
+  const updateAmount=()=>{const o=panel.querySelector("#bookingConsultant").selectedOptions[0],duration=Number(panel.querySelector("#bookingDuration").value),perMinute=numericPrice(o.dataset.rate);panel.querySelector("#consultRate").textContent=money(perMinute);panel.querySelector("#consultDurationText").textContent=duration+" minutes";panel.querySelector("#consultTotal").textContent=money(perMinute*duration);};
+  panel.querySelector("#bookingConsultant").addEventListener("change",updateAmount);panel.querySelector("#bookingDuration").addEventListener("change",updateAmount);
+  panel.querySelector("#consultPayBtn").addEventListener("click",()=>{const duration=Number(panel.querySelector("#bookingDuration").value),o=panel.querySelector("#bookingConsultant").selectedOptions[0];createBookingAndPay(panel.querySelector("#bookingConsultant").value,numericPrice(o.dataset.rate)*duration,duration);});
   modal.classList.add("open");
  } catch(e) {
-  panel.innerHTML='<button class="modal-close" aria-label="बंद करें">×</button><h2>अभी बुकिंग शुरू नहीं हो पाई</h2><p>'+safeText(e.message)+'</p>';
+  panel.innerHTML='<button class="modal-close" aria-label="Close">×</button><h2>Booking is temporarily unavailable</h2><p>'+safeText(e.message)+'</p>';
   panel.querySelector(".modal-close").addEventListener("click",closeModal);modal.classList.add("open");
  }
 }
-async function createBookingAndPay(consultantId,amount) {
+async function createBookingAndPay(consultantId,amount,duration=10) {
  try {
   const name=panel.querySelector("#payName")?.value.trim(),phone=panel.querySelector("#payPhone")?.value.trim(),email=panel.querySelector("#payEmail")?.value.trim();
-  if(!name||!/^\d{10}$/.test(phone||"")||!email)return alert("कृपया नाम, 10 अंकों का मोबाइल नंबर और ईमेल भरें।");
+  if(!name||!/^\d{10}$/.test(phone||"")||!email)return alert("Please enter your name, 10-digit mobile number and email.");
   const slot=panel.querySelector("#bookingSlot")?.value||"2:30 PM";
   const booking=await api("/api/bookings",{method:"POST",body:JSON.stringify({customerName:name,customerPhone:phone,customerEmail:email,concern:selectedNeed,consultantId,slot,amount})});
   const payment=await api("/api/payu/create",{method:"POST",body:JSON.stringify({bookingId:booking.id,amount,productinfo:"Astrological Solutions Consultation",firstname:name,phone,email,udf1:"consultation",udf2:booking.id})});
@@ -118,9 +138,9 @@ async function startProductPayU() {
  try {
   if(!cart.length)return;
   const name=panel.querySelector("#shopName")?.value.trim(),phone=panel.querySelector("#shopPhone")?.value.trim(),email=panel.querySelector("#shopEmail")?.value.trim(),address=panel.querySelector("#shopAddress")?.value.trim();
-  if(!name||!/^\d{10}$/.test(phone||"")||!address)return alert("कृपया नाम, 10 अंकों का मोबाइल नंबर और पूरा पता भरें।");
+  if(!name||!/^\d{10}$/.test(phone||"")||!address)return alert("Please enter your name, 10-digit mobile number and full address.");
   const items=cart.map(x=>({productId:x.id,quantity:Number(x.qty||1),variant:x.variant||"Standard",customization:Array.isArray(x.custom)?x.custom:[]}));
-  if(items.some(x=>!x.productId||!catalog.some(p=>p.id===x.productId)))return alert("कार्ट में कोई उत्पाद उपलब्ध नहीं है। पेज रिफ्रेश करके फिर कोशिश करें।");
+  if(items.some(x=>!x.productId||!catalog.some(p=>p.id===x.productId)))return alert("A product in your bag is unavailable. Refresh and try again.");
   const order=await api("/api/orders",{method:"POST",body:JSON.stringify({customerName:name,phone,email:email||"",address:{line1:address,country:"India"},items,fulfillment:"PREPAID"})});
   const payment=await api("/api/payu/create",{method:"POST",body:JSON.stringify({orderId:order.id,amount:order.total,productinfo:"Astrological Solutions Store Order",firstname:name,phone,email:email||"",udf1:"store",udf2:order.id})});
   submitPayU(payment.endpoint,payment.params);
@@ -137,12 +157,12 @@ async function loadSiteContent() {
   const md=document.querySelector('meta[name="description"]');if(md&&x.seoDescription)md.content=x.seoDescription;
  } catch(e) { console.warn("CMS content unavailable",e); }
 }
-document.querySelectorAll(".need-card").forEach(card=>card.addEventListener("click",()=>{const title=card.querySelector("b")?.textContent.trim();if(title)selectNeed(card,title);}));
+
 document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",closeModal));
 const menuButton=document.querySelector(".menu"),mainNav=document.querySelector(".nav-left nav");
 menuButton?.addEventListener("click",()=>{const opened=mainNav?.classList.toggle("is-open");menuButton.setAttribute("aria-expanded",String(Boolean(opened)));});
 mainNav?.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>{mainNav.classList.remove("is-open");menuButton?.setAttribute("aria-expanded","false");}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
-updateCartBadge();loadLiveCatalog();loadSiteContent();
+updateCartBadge();loadLiveCatalog();loadSiteContent();initializePreferences();
 const entryLoader=document.getElementById("loader");
 if(entryLoader){window.setTimeout(()=>entryLoader.classList.add("solar-exit"),2100);window.setTimeout(()=>entryLoader.remove(),2850);}
