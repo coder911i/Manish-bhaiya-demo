@@ -9,7 +9,7 @@ function initializePreferences(){
  let theme="light",language="en";
  try{theme=localStorage.getItem("as-theme")||"light";language=localStorage.getItem("as-language")||"en";}catch(_){}
  function setTheme(next){theme=next;body.classList.toggle("theme-dark",theme==="dark");if(themeButton)themeButton.textContent=theme==="dark"?"Light mode":"Dark mode";try{localStorage.setItem("as-theme",theme);}catch(_){}}
- function setLanguage(next){language=next;activeLanguage=language;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=language==="en"?"Book astrology, horoscope, numerology and vastu consultations. Explore spiritual essentials online.":"ज्योतिष, कुंडली, अंक ज्योतिष और वास्तु के लिए व्यक्तिगत सलाह और आध्यात्मिक उत्पाद देखें।";document.title=language==="en"?"Astrological Solutions | Astrology, Horoscope & Vastu":"Astrological Solutions | ज्योतिष, कुंडली और वास्तु";try{localStorage.setItem("as-language",language);}catch(_){}}
+ function setLanguage(next){language=next;activeLanguage=language;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=language==="en"?(meta.dataset.cmsDescription||"Book astrology, horoscope, numerology and vastu consultations. Explore spiritual essentials online."):"ज्योतिष, कुंडली, अंक ज्योतिष और वास्तु के लिए व्यक्तिगत सलाह और आध्यात्मिक उत्पाद देखें।";document.title=language==="en"?"Astrological Solutions | Astrology, Horoscope & Vastu":"Astrological Solutions | ज्योतिष, कुंडली और वास्तु";try{localStorage.setItem("as-language",language);}catch(_){}}
  window.applySiteLanguage=()=>setLanguage(language);
  themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
  langButton?.addEventListener("click",()=>setLanguage(language==="en"?"hi":"en"));
@@ -97,7 +97,7 @@ async function loadLiveCatalog() {
   catalog=Array.isArray(result[0])?result[0]:[];consultants=Array.isArray(result[1])?result[1]:[];
   if(pg)pg.innerHTML=catalog.length?catalog.map(p=>{
    const img=productImage(p);
-   return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(p.name)+'" loading="lazy"><span>'+safeText(p.category||"Store")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="Add to bag">+</button></div><div class="product-meta"><small>'+safeText(p.category||"Spiritual essentials")+'</small><h3>'+safeText(p.name)+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'">Choose options · Add to bag</button></div></article>';
+   return '<article class="product-card"><div class="product-img"><img src="'+safeText(img)+'" alt="'+safeText(productNameEnglish(p.name))+'" loading="lazy"><span>'+safeText(p.category||"Store")+'</span><button type="button" data-configure="'+safeText(p.id)+'" aria-label="Add to bag">+</button></div><div class="product-meta"><small>'+safeText(p.category||"Spiritual essentials")+'</small><h3>'+safeText(productNameEnglish(p.name))+'</h3><div><b>'+money(p.price)+'</b>'+(p.compareAt?' <del>'+money(p.compareAt)+'</del>':'')+'</div><button type="button" class="customize-btn" data-configure="'+safeText(p.id)+'" data-en="Choose options · Add to bag" data-hi="विकल्प चुनें · कार्ट में जोड़ें">Choose options · Add to bag</button></div></article>';
   }).join(""):'<p class="catalog-empty">No products are available right now.</p>';
   pg?.querySelectorAll("[data-configure]").forEach(b=>b.addEventListener("click",()=>configureProduct(b.dataset.configure)));applyRenderedTranslations();
   renderExperts();
@@ -155,15 +155,11 @@ async function startProductPayU() {
 async function loadSiteContent() {
  try {
   const x=await api("/api/site-content"),a=document.querySelector(".store-cta b");
-  if(a&&x.announcement)a.textContent=x.announcement;
-  const heroTitle=document.querySelector(".hero h1"),heroSubtitle=document.querySelector(".hero-copy>p");
-  if(heroTitle&&x.heroTitle){const words=String(x.heroTitle).split(/\s+/),cut=Math.max(1,Math.ceil(words.length/2));heroTitle.innerHTML=safeText(words.slice(0,cut).join(" "))+"<br><em>"+safeText(words.slice(cut).join(" "))+"</em>";}
-  if(heroSubtitle&&x.heroSubtitle)heroSubtitle.textContent=x.heroSubtitle;
-  if(x.seoTitle)document.title=x.seoTitle;
-  const md=document.querySelector('meta[name="description"]');if(md&&x.seoDescription)md.content=x.seoDescription;
+  if(a&&x.announcement){a.dataset.en=x.announcement;if(activeLanguage==="en")a.textContent=x.announcement;}
+  const md=document.querySelector('meta[name="description"]');
+  if(md&&x.seoDescription)md.dataset.cmsDescription=x.seoDescription;
  } catch(e) { console.warn("CMS content unavailable",e); }
 }
-
 document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",closeModal));
 const menuButton=document.querySelector(".menu"),mainNav=document.querySelector(".nav-left nav");
 menuButton?.addEventListener("click",()=>{const opened=mainNav?.classList.toggle("is-open");menuButton.setAttribute("aria-expanded",String(Boolean(opened)));});
