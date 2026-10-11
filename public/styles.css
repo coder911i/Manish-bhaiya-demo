@@ -451,3 +451,7 @@ body{background:#fbfaf7;color:#302943}
  .nav-left nav.is-open a{padding:13px 14px;color:#453653;border-radius:8px}
  .nav-left nav.is-open a:hover{background:#f4eef9}
 }
+
+.product-img:after{pointer-events:none;z-index:1}
+.product-img>span{z-index:2}
+.product-img>button{z-index:3}
