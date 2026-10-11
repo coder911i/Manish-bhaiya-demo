@@ -9,7 +9,7 @@ function initializePreferences(){
  let theme="light",language="en";
  try{theme=localStorage.getItem("as-theme")||"light";language=localStorage.getItem("as-language")||"en";}catch(_){}
  function setTheme(next){theme=next;body.classList.toggle("theme-dark",theme==="dark");if(themeButton)themeButton.textContent=theme==="dark"?"Light mode":"Dark mode";try{localStorage.setItem("as-theme",theme);}catch(_){}}
- function setLanguage(next){language=next;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.textContent=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";try{localStorage.setItem("as-language",language);}catch(_){}}
+ function setLanguage(next){language=next;document.documentElement.lang=language;document.querySelectorAll("[data-en][data-hi]").forEach(el=>{const value=el.dataset[language];if(value!==undefined)el.innerHTML=value;});if(langButton)langButton.textContent=language==="en"?"हिन्दी":"English";try{localStorage.setItem("as-language",language);}catch(_){}}
  themeButton?.addEventListener("click",()=>setTheme(theme==="dark"?"light":"dark"));
  langButton?.addEventListener("click",()=>setLanguage(language==="en"?"hi":"en"));
  setTheme(theme);setLanguage(language);
