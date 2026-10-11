@@ -37,7 +37,7 @@ let siteContent={heroTitle:"आपके सवाल, सही मार्ग
 const bookingSchema=z.object({customerName:z.string().min(2).max(100),customerPhone:z.string().min(10).max(15),customerEmail:z.string().email().optional().or(z.literal("")),concern:z.string().min(2).max(100),consultantId:z.string(),slot:z.string(),amount:z.number().int().positive()});
 const orderSchema=z.object({customerName:z.string().min(2),phone:z.string().min(10).max(15),email:z.string().email().optional().or(z.literal("")),address:z.record(z.any()),items:z.array(z.object({productId:z.string(),quantity:z.number().int().positive(),variant:z.string().optional(),customization:z.array(z.string()).optional()})).min(1),fulfillment:z.enum(["PREPAID","COD"]),couponCode:z.string().optional()});
 
-app.get("/api/health",(q,r)=>r.json({ok:true,service:"Astrological Solutions",mode:process.env.DATABASE_URL?"database-enabled":"demo",payment:process.env.PAYU_KEY?"payu-configured":"not-configured"}));
+app.get("/api/health",(q,r)=>r.json({ok:true,service:"Astrological Solutions",mode:"in-memory-demo",payment:process.env.PAYU_KEY&&process.env.PAYU_SALT?"payu-configured":"not-configured",spreadsheet:process.env.GOOGLE_SHEETS_WEBHOOK_URL&&process.env.GOOGLE_SHEETS_WEBHOOK_SECRET?"configured":"not-configured",admin:process.env.ADMIN_EMAIL&&process.env.ADMIN_PASSWORD_HASH&&process.env.ADMIN_SESSION_SECRET?"configured":"not-configured"}));
 app.get("/api/consultants",(q,r)=>r.json(consultants.filter(x=>x.available)));
 app.get("/api/consultants/:id",(q,r)=>{const x=consultants.find(x=>x.id===q.params.id);x?r.json(x):r.status(404).json({error:"Not found"})});
 app.get("/api/products",(q,r)=>r.json(products.filter(x=>x.stock>0)));
