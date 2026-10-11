@@ -88,8 +88,15 @@
     }
     animate();instances.push({renderer,scene,camera});
   }
-  makeSystem(document.getElementById("entry-solar-canvas"),true);
-  makeSystem(document.getElementById("hero-solar-canvas"),false);
+  try {
+    makeSystem(document.getElementById("entry-solar-canvas"),true);
+    makeSystem(document.getElementById("hero-solar-canvas"),false);
+  } catch(error) {
+    console.warn("3D solar system unavailable",error);
+    const fallback=document.getElementById("loader");
+    if(fallback){setTimeout(()=>fallback.classList.add("solar-exit"),1200);setTimeout(()=>fallback.remove(),2200);}
+    return;
+  }
   const loader=document.getElementById("loader"),skip=document.getElementById("skipIntro");
   function finish(){if(!loader)return;loader.classList.add("solar-exit");setTimeout(()=>loader.remove(),1000);}
   skip?.addEventListener("click",finish);
