@@ -79,8 +79,10 @@ function parseCookies(req){
   },{});
 }
 function adminToken(){
-  // Demo access: any non-empty credentials are accepted. Set ADMIN_SESSION_SECRET in production.
-  return String(process.env.ADMIN_SESSION_SECRET||"demo-admin-session-secret-change-me");
+  // No fallback secret: admin sessions must use a strong server-side secret.
+  const secret=String(process.env.ADMIN_SESSION_SECRET||"");
+  if(secret.length<32 || secret==="long-random-server-secret") return "";
+  return secret;
 }
 function makeAdminSession(email){
   const payload=Buffer.from(JSON.stringify({email,exp:Date.now()+12*60*60*1000})).toString("base64url");
@@ -105,16 +107,17 @@ async function passwordMatches(password){
   const bcrypt=require("bcryptjs");
   return bcrypt.compare(String(password||""),hash);
 }
-app.post("/api/admin/login",async(q,r)=>{
+app.post("/api/admin/login",rateLimit({windowMs:15*60*1000,max:10,standardHeaders:true,legacyHeaders:false}),async(q,r)=>{
   try{
     const email=String(q.body?.email||"").trim().toLowerCase();
     const password=String(q.body?.password||"");
-    // Client demo mode: intentionally accepts any non-empty email/password.
-    // This is NOT real authentication; configure real credentials before production.
-    if(!email||!password)return r.status(401).json({error:"Enter any email and password to continue"});
-    if(!adminToken())return r.status(503).json({error:"ADMIN_SESSION_SECRET is not configured"});
+    const configuredEmail=String(process.env.ADMIN_EMAIL||"").trim().toLowerCase();
+    if(!adminToken()||!configuredEmail||!process.env.ADMIN_PASSWORD_HASH)
+      return r.status(503).json({error:"Admin authentication is not configured on the server"});
+    if(!email||!password||email!==configuredEmail||!(await passwordMatches(password)))
+      return r.status(401).json({error:"Invalid email or password"});
     const token=makeAdminSession(email);
-    r.setHeader("Set-Cookie","as_admin="+encodeURIComponent(token)+"; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200"+(process.env.NODE_ENV==="production"?"; Secure":""));
+    r.setHeader("Set-Cookie","as_admin="+encodeURIComponent(token)+"; Path=/; HttpOnly; SameSite=Strict; Max-Age=43200"+(process.env.NODE_ENV==="production"?"; Secure":""));
     r.json({ok:true});
   }catch(e){r.status(500).json({error:"Unable to sign in"})}
 });
