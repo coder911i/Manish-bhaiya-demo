@@ -68,8 +68,54 @@ app.post("/api/orders",(q,r)=>{
   const total=Math.max(0,subtotal-discount+shipping);
   const o={id:"ASO-"+(10000+orders.length+1),...data,items:lineItems,subtotal,discount,shipping,total,status:"PAYMENT_PENDING",paymentStatus:"PENDING",createdAt:new Date().toISOString()};
   orders.push(o);
+
+  // Best-effort spreadsheet sync. The order is accepted independently so a temporary
+  // Google Sheets outage never loses the customer's checkout response.
+  void syncOrderToSpreadsheet(o).catch((err)=>{
+    console.error("Order spreadsheet sync failed", {orderId:o.id, error:err.message});
+  });
   r.status(201).json(o);
 });
+
+
+// -------------------- Order spreadsheet export --------------------
+// Configure a deployed Google Apps Script Web App URL and a shared secret
+// on the server. Never put these values in frontend JavaScript.
+async function syncOrderToSpreadsheet(order){
+  const endpoint=String(process.env.GOOGLE_SHEETS_WEBHOOK_URL||"").trim();
+  const secret=String(process.env.GOOGLE_SHEETS_WEBHOOK_SECRET||"");
+  if(!endpoint || !secret) return; // Integration intentionally disabled until configured.
+  const payload={
+    secret,
+    orderId:order.id,
+    createdAt:order.createdAt,
+    customerName:order.customerName,
+    phone:order.phone,
+    email:order.email||"",
+    address:order.address,
+    fulfillment:order.fulfillment,
+    items:order.items.map(item=>{
+      const product=products.find(p=>p.id===item.productId);
+      return {productId:item.productId, name:product?.name||item.productId, quantity:item.quantity, unitPrice:item.unitPrice, lineTotal:item.quantity*item.unitPrice};
+    }),
+    subtotal:order.subtotal,
+    discount:order.discount,
+    shipping:order.shipping,
+    total:order.total,
+    couponCode:order.couponCode||"",
+    paymentStatus:order.paymentStatus,
+    status:order.status
+  };
+  const response=await fetch(endpoint,{
+    method:"POST",
+    headers:{"content-type":"application/json"},
+    body:JSON.stringify(payload),
+    signal:AbortSignal.timeout(8000)
+  });
+  if(!response.ok) throw new Error("Sheets webhook returned HTTP "+response.status);
+  const result=await response.json().catch(()=>({}));
+  if(result.ok!==true) throw new Error(result.error||"Sheets webhook rejected the order");
+}
 
 // -------------------- Admin authentication --------------------
 function parseCookies(req){
