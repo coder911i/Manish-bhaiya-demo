@@ -18,24 +18,24 @@ const consultants=[
 {id:"c2",name:"Raghav Mehta",type:"Numerologist",experience:"12 years",rating:4.8,price:699,available:true,bio:"Numerology guidance for names, business decisions and personal cycles."},
 {id:"c3",name:"Meera Kapoor",type:"Vastu Consultant",experience:"15 years",rating:4.9,price:999,available:true,bio:"Practical vastu consultations for homes, offices and commercial spaces."}];
 const products=[
-{id:"p1",name:"1 Mukhi Rudraksh",slug:"1-mukhi-rudraksh",price:2344.99,compareAt:null,category:"Rudraksha",stock:20},
-{id:"p2",name:"5 Mukhi Rudraksh | Panch Mukhi Rudraksha",slug:"5-mukhi-rudraksh",price:699,compareAt:1199,category:"Rudraksha",stock:40},
-{id:"p3",name:"Sudarshan Shaligram",slug:"sudarshan-shaligram",price:400,compareAt:null,category:"Shaligram",stock:25},
-{id:"p4",name:"Jupiter Necklace",slug:"jupiter-necklace",price:2000,compareAt:null,category:"Gemstones",stock:15},
-{id:"p5",name:"necklaces",slug:"necklaces",price:299,compareAt:null,category:"Gemstones",stock:35},
-{id:"p6",name:"crystal pyramid",slug:"crystal-pyramid",price:799,compareAt:null,category:"Crystals",stock:30},
-{id:"p7",name:"vnexxx",slug:"vnexxx",price:2345,compareAt:null,category:"Vastu Products",stock:12},
-{id:"p8",name:"crystal vastu remedies",slug:"crystal-vastu-remedies",price:344,compareAt:null,category:"Vastu Products",stock:30},
-{id:"p9",name:"solid perfumes",slug:"solid-perfumes",price:322,compareAt:null,category:"Perfumes",stock:30},
-{id:"p10",name:"Fragrance for Men",slug:"fragrance-for-men",price:569,compareAt:null,category:"Perfumes",stock:25},
-{id:"p11",name:"Shankh & Sea Shells",slug:"shankh-sea-shells",price:1299,compareAt:null,category:"Shankh Sea Shells",stock:20},
-{id:"p12",name:"Diyas",slug:"diyas",price:499,compareAt:null,category:"Pooja",stock:40}];
+{id:"p1",name:"1 मुखी रुद्राक्ष",slug:"1-mukhi-rudraksha",price:2345,compareAt:null,category:"Rudraksha",stock:20,image:"https://images.unsplash.com/photo-1602523961358-f9f03dd557db?auto=format&fit=crop&w=900&q=85",variants:["एक दाना","प्रमाणपत्र सहित"],customOptions:["गिफ्ट पैक"]},
+{id:"p2",name:"5 मुखी रुद्राक्ष माला",slug:"5-mukhi-rudraksha-mala",price:699,compareAt:1199,category:"Rudraksha",stock:40,image:"https://images.unsplash.com/photo-1602523961358-f9f03dd557db?auto=format&fit=crop&w=900&q=85",variants:["54 दाने","108 दाने"],customOptions:["गिफ्ट पैक"]},
+{id:"p3",name:"शालिग्राम शिला",slug:"sudarshan-shaligram",price:400,compareAt:null,category:"Shaligram",stock:25,image:"https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=85",variants:["स्टैंडर्ड"],customOptions:["पूजा पैक"]},
+{id:"p4",name:"गुरु ग्रह रत्न माला",slug:"jupiter-necklace",price:2000,compareAt:null,category:"Gemstones",stock:15,image:"https://images.unsplash.com/photo-1608042314453-ae338d80c427?auto=format&fit=crop&w=900&q=85",variants:["स्टैंडर्ड","प्रीमियम"],customOptions:["गिफ्ट पैक"]},
+{id:"p5",name:"रत्न ब्रेसलेट",slug:"gemstone-bracelet",price:299,compareAt:null,category:"Gemstones",stock:35,image:"https://images.unsplash.com/photo-1608042314453-ae338d80c427?auto=format&fit=crop&w=900&q=85",variants:["6 mm","8 mm","10 mm"],customOptions:["गिफ्ट पैक"]},
+{id:"p6",name:"क्रिस्टल पिरामिड",slug:"crystal-pyramid",price:799,compareAt:null,category:"Crystals",stock:30,image:"https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?auto=format&fit=crop&w=900&q=85",variants:["छोटा","बड़ा"],customOptions:["गिफ्ट पैक"]},
+{id:"p7",name:"वास्तु पिरामिड सेट",slug:"vastu-pyramid-set",price:2345,compareAt:null,category:"Vastu Products",stock:12,image:"https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=900&q=85",variants:["ब्रास","कॉपर"],customOptions:["पूजा पैक"]},
+{id:"p8",name:"क्रिस्टल वास्तु उपाय",slug:"crystal-vastu-remedies",price:344,compareAt:null,category:"Vastu Products",stock:30,image:"https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=900&q=85",variants:["स्टैंडर्ड"],customOptions:["गिफ्ट पैक"]},
+{id:"p9",name:"सॉलिड परफ्यूम",slug:"solid-perfume",price:322,compareAt:null,category:"Perfumes",stock:30,image:"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=85",variants:["स्टैंडर्ड"],customOptions:["गिफ्ट पैक"]},
+{id:"p10",name:"पुरुषों का परफ्यूम",slug:"fragrance-for-men",price:569,compareAt:null,category:"Perfumes",stock:25,image:"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=85",variants:["50 ml","100 ml"],customOptions:["गिफ्ट पैक"]},
+{id:"p11",name:"शंख एवं सीप",slug:"shankh-sea-shells",price:1299,compareAt:null,category:"Shankh Sea Shells",stock:20,image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=85",variants:["स्टैंडर्ड"],customOptions:["पूजा पैक"]},
+{id:"p12",name:"पीतल के दीये",slug:"brass-diyas",price:499,compareAt:null,category:"Pooja",stock:40,image:"https://images.unsplash.com/photo-1507643179773-3e975d7ac515?auto=format&fit=crop&w=900&q=85",variants:["2 का सेट","5 का सेट"],customOptions:["गिफ्ट पैक"]}];
 let bookings=[],orders=[];
 let offers=[{id:"o1",code:"PREPAID100",title:"₹100 off on prepaid",type:"FIXED",value:100,active:true},{id:"o2",code:"FIRSTCONSULT",title:"10% off first consultation",type:"PERCENT",value:10,active:true}];
-let siteContent={heroTitle:"Clarity for the chapters ahead.",heroSubtitle:"Connect with trusted astrologers, numerologists and vastu experts through a consultation experience designed around you.",announcement:"Free shipping on orders INR1000 and more.",seoTitle:"Astrological Solutions — Astrology, Numerology & Vastu Consultations",seoDescription:"Book trusted astrology, numerology and vastu consultations online."};
+let siteContent={heroTitle:"आपके सवाल, सही मार्गदर्शन।",heroSubtitle:"प्यार, शादी, करियर या घर-वास्तु—अपना सवाल चुनें और सलाहकार से बात करें।",announcement:"₹1,000 या उससे अधिक के ऑर्डर पर मुफ़्त शिपिंग।",seoTitle:"Astrological Solutions | ज्योतिष, कुंडली और वास्तु",seoDescription:"ज्योतिष, कुंडली, अंक ज्योतिष और वास्तु के लिए व्यक्तिगत सलाह।"};
 
 const bookingSchema=z.object({customerName:z.string().min(2).max(100),customerPhone:z.string().min(10).max(15),customerEmail:z.string().email().optional().or(z.literal("")),concern:z.string().min(2).max(100),consultantId:z.string(),slot:z.string(),amount:z.number().int().positive()});
-const orderSchema=z.object({customerName:z.string().min(2),phone:z.string().min(10).max(15),email:z.string().email().optional().or(z.literal("")),address:z.record(z.any()),items:z.array(z.object({productId:z.string(),quantity:z.number().int().positive()})).min(1),fulfillment:z.enum(["PREPAID","COD"]),couponCode:z.string().optional()});
+const orderSchema=z.object({customerName:z.string().min(2),phone:z.string().min(10).max(15),email:z.string().email().optional().or(z.literal("")),address:z.record(z.any()),items:z.array(z.object({productId:z.string(),quantity:z.number().int().positive(),variant:z.string().optional(),customization:z.array(z.string()).optional()})).min(1),fulfillment:z.enum(["PREPAID","COD"]),couponCode:z.string().optional()});
 
 app.get("/api/health",(q,r)=>r.json({ok:true,service:"Astrological Solutions",mode:process.env.DATABASE_URL?"database-enabled":"demo",payment:process.env.PAYU_KEY?"payu-configured":"not-configured"}));
 app.get("/api/consultants",(q,r)=>r.json(consultants.filter(x=>x.available)));
@@ -56,7 +56,7 @@ app.post("/api/orders",(q,r)=>{
   for(const item of data.items){
     const p=products.find(x=>x.id===item.productId && x.stock>=item.quantity);
     if(!p)return r.status(409).json({error:"Product unavailable or insufficient stock"});
-    lineItems.push({productId:p.id,quantity:item.quantity,unitPrice:Math.round(Number(p.price))});
+    lineItems.push({productId:p.id,quantity:item.quantity,unitPrice:Math.round(Number(p.price)),variant:item.variant||"Standard",customization:item.customization||[]});
   }
   const subtotal=lineItems.reduce((s,i)=>s+i.unitPrice*i.quantity,0);
   const offer=data.couponCode?offers.find(x=>x.active&&x.code.toLowerCase()===data.couponCode.toLowerCase()):null;
@@ -96,7 +96,7 @@ async function syncOrderToSpreadsheet(order){
     fulfillment:order.fulfillment,
     items:order.items.map(item=>{
       const product=products.find(p=>p.id===item.productId);
-      return {productId:item.productId, name:product?.name||item.productId, quantity:item.quantity, unitPrice:item.unitPrice, lineTotal:item.quantity*item.unitPrice};
+      return {productId:item.productId, name:product?.name||item.productId, quantity:item.quantity, unitPrice:item.unitPrice, lineTotal:item.quantity*item.unitPrice, variant:item.variant||"Standard", customization:item.customization||[]};
     }),
     subtotal:order.subtotal,
     discount:order.discount,
